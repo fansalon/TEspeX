@@ -1,6 +1,6 @@
-# TExspec
+# TEspeX
 
-TExspec (Transposable Elements eXpression SPECific) is a tool for the TE expression quantification from RNA-seq data.
+TEspeX (Transposable Elements SPEific eXpression) is a tool for the TE expression quantification from RNA-seq data.
 
 # How to install
 open Terminal and type 'git clone https://github.com/fansalon/TExspec'
