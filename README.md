@@ -6,7 +6,7 @@ If you are curious abou the use of this pipeline, you can take a look here where
 
 The pipeline has been written in python3 so YOU MUST use python3 and it has been tested on Ubuntu, CentOS and Mac OS X systems.
 
-# How to install
+# How to install TEspeX
 
 open a Terminal and type 'git clone https://github.com/fansalon/TEspeX
 
