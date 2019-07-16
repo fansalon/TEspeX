@@ -2,7 +2,7 @@
 
 TEspeX (Transposable Elements SPEific eXpression) is a tool for the TE expression quantification from RNA-seq data. The rationale of this pipeline is to map reads against TE consensus sequences, coding transcripts and non-coding transcripts and to select and count reads mapping with best alignment score only against TE consensus sequences. This should avoid the quantification of reads that may be generated from TE-fragments embedded in coding and non-coding annotated transcripts (39% of human protein coding genes contain TE-fragments). 
 
-If you are curious abou the use of this pipeline, you can take a look here where it has been tested on a C. elegans embyonic dataset (Ansaloni F., et al - BMC Bioinformatics, 2019).
+If you are curious abou the use of this pipeline, you can take a look here where it has been tested on a *C. elegans* embyonic dataset (Ansaloni F., et al - BMC Bioinformatics, 2019).
 
 The pipeline has been written in python3 so **YOU MUST** use python3 and it has been tested on Ubuntu, CentOS and Mac OS X systems.
 
@@ -33,11 +33,11 @@ If you can see the TEspeX/ directory type:
 cd TEspeX/\
 python3 ./TEspeX.py --help\
 
-This command shows the help that should be something very simalr to:\
+This command shows the help that should be something very simalr to:
 
 usage: TExspec_v0.1.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE
                       --paired PAIRED --length LENGTH --out OUT
-                       [--num_threads NUM_THREADS] [--remove REMOVE]\
+                       [--num_threads NUM_THREADS] [--remove REMOVE]
 
 arguments:\
   **-h**, --help            show this help message and exit\
@@ -58,7 +58,15 @@ arguments:\
   **--num_threads NUM_THREADS**
                         number of threads used by STAR and samtools [2]\
   **--remove REMOVE**       if this parameter is set to T all the bam files are
-                        removed. If it is F they are not removed [T]\
+                        removed. If it is F they are not removed [T]
+                        
+All the arguments, except fot --num_threads and --remove, are required. We suggest to use as argument of --TE file a fasta file containing TE consensus sequences (from RepBase?) and as arguments of the --cdna and --ncrna the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse).\
+--num_threads if not specified is set to 2 while --remove is set to T by  default (meaning all the bam files are removed).
+
+In the folder 'example' you can find a copy of the files used to perform the TE expression analysis in a sample of *C. elegans*
+
+To test the pipeline launch the following command:
+
 
 
 # TEspeX in wrapper mode
