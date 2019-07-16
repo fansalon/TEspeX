@@ -31,7 +31,35 @@ If the installation was successful you should have locally a copy of the folder 
 If you can see the TEspeX/ directory type:
 
 cd TEspeX/\
-python3 ./TEspeX.py --help
+python3 ./TEspeX.py --help\
+
+This command shows the help that should be something very simalr to:\
+
+usage: TExspec_v0.1.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE\
+                       --paired PAIRED --length LENGTH --out OUT\
+                       [--num_threads NUM_THREADS] [--remove REMOVE]\
+
+optional arguments:\
+  -h, --help            show this help message and exit\
+  --TE TE               fa/fa.gz file containing TE consensus sequences
+                        [required]\
+  --cdna CDNA           fa/fa.gz file containing cdna Ensembl sequences
+                        [required]\
+  --ncrna NCRNA         fa/fa.gz file containing ncrna Ensembl sequences
+                        [required]\
+  --sample SAMPLE       txt file containing fq/fq.gz FULL PATHS. If reads are
+                        single end, one path should be written in each line.
+                        If reads are paired end the two mates should be
+                        written in the same line separated by \t [required]\
+  --paired PAIRED       T (true) or F (false) [required]\
+  --length LENGTH       length of the read given as input. This is used to
+                        calculate STAR index parameters [required]\
+  --out OUT             directory where the output files will be written\
+  --num_threads NUM_THREADS
+                        number of threads used by STAR and samtools [2]\
+  --remove REMOVE       if this parameter is set to T all the bam files are
+                        removed. If it is F they are not removed [T]\
+
 
 # TEspeX in wrapper mode
 
