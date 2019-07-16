@@ -23,7 +23,7 @@ pip3 install pysam==0.14.1
 Please install pandas and pysam even if they are already installed in your machine. TEspeX has been tested on these specific versions.
 
 # How to run TEspeX
-TEspeX can be run calling directly the script or through a wrapper (wrapper.py file, contained in the 'master' folder). You should usethe wrapper ONLY IF you dispose of a queue managment system.
+TEspeX can be run calling directly the script or through a wrapper (wrapper.py file, contained in the 'master' folder). You should use the wrapper ONLY IF you dispose of a queue managment system.
   
 # TEspeX in standard mode
 If the installation was successful you should have locally a copy of the folder containing TEspeX. Typing 'ls' you should see a folder called 'TEspeX' o something similar. If not, your installation failed for some reasons. (Are you sure be in the directory in which you call the command 'git clone https://github.com/fansalon/TEspeX' ?)
