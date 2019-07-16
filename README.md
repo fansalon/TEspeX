@@ -8,7 +8,7 @@ The pipeline has been written in python3 so YOU MUST use python3 and it has been
 
 # How to install TEspeX
 
-open a Terminal and type 'git clone https://github.com/fansalon/TEspeX
+open a Terminal and type git clone https://github.com/fansalon/TEspeX
 
 Within the downoloaded folder you should have a folder called 'bin/' that contains all the executables file of the required programs (STAR, samtools, Picard and bedtools). The pipeline is written in order to refer to these executables and it is not advisible to change the location of these folders and files. The use of different version of these softwares may generate different and unpredictable results.
 
@@ -17,6 +17,7 @@ All these libraries except for pysam and pandas are python standard libraries an
 To install pysam and pandas please open a terminal and type:
 
 pip3 install pandas==0.23.0
+
 pip3 install pysam==0.14.1
 
 Please install pandas and pysam even if they are already installed in your machine. TEspeX has been tested on these specific versions.
