@@ -79,6 +79,7 @@ def help():
 # 2.
 # this function writes the message to the log file in the output directory
 def writeLog(message):
+  print(message)
   with open(dir+"/Log.file.out", 'a') as logfile:
     logfile.write("[%s] " % (time.asctime()))
     logfile.write("%s\n" % (message))
@@ -262,7 +263,7 @@ def star_aln(fq_list, bedReference, pair, rm):
 
     # 7.4
     # usem picard to extract alignmets corresponing to reads mapping specifically on TEs
-      picard = bin_path + "jre1.8.0_144/bin/java -jar " + bin_path + "picard/picard.jar FilterSamReads I="+filename+"_mappedPrim.bam O="+filename+"_specificTE.bam FILTER=includeReadList RLF=specificTE.txt"
+      picard = "java -jar " + bin_path + "picard/picard.jar FilterSamReads I="+filename+"_mappedPrim.bam O="+filename+"_specificTE.bam FILTER=includeReadList RLF=specificTE.txt"
       bash(picard)
 
     # 7.5
