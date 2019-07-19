@@ -36,20 +36,33 @@ If the picard help is printed everything is fine, if an error rises it may be th
 Now all the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.14.1) should be installed in the bin/ directory within the TEspeX/ directory.\
 Please install STAR, samtools, pandas and pysam even if they are  already installed on your machina. TEspeX has been tested on these specific versions  and the use of different version of these softwares may generate different and unpredictable results.
 
-install STAR2.6.0c: \
+install STAR2.6.0c:
 ```
 cd $tespex/bin
-wget -O STAR-2.6.0c.tar.gz "https://github.com/alexdobin/STAR/archive/2.6.0c.tar.gz"
+wget -O STAR-2.6.0c.tar.gz https://github.com/alexdobin/STAR/archive/2.6.0c.tar.gz
 tar -zxvf STAR-2.6.0c.tar.gz
 cd STAR-2.6.0c/bin/Linux_x86_64_static/
 ./STAR --version
 ```
 'STAR_2.6.0c' should be printed to screen.
 
-install samtools-1.3.1\
+install samtools-1.3.1
+```
 cd $tespex/bin
-
-
+wget -O samtools-1.3.1.tar.bz2 https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2
+tar xjf samtools-1.3.1.tar.bz2
+cd samtools-1.3.1
+./configure --prefix=$PWD/
+make
+make install
+bin/samtools --version
+```
+this should return something like:
+```
+samtools 1.3.1
+Using htslib 1.3.1
+Copyright (C) 2016 Genome Research Ltd.
+```
 
 
 
