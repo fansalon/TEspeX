@@ -15,13 +15,13 @@ This should install TEspeX.
 Open a terminal, copy the downoloaded folder in the directory in which you wish to install TEspeX, move to that directory and type:
 
 cd TEspex/bin\
-ls
+ls\
 ls picard/
 
 If the installation was succesfully a file called 'picard.jar' should be contained in the 'picard' directory.\
 To check java is properly installed on your machine and picard is working, type:
 
-cd picard
+cd picard\
 java -jar picard.jar
 
 If the picard help is printed everything is fine, if an error rises it may be that java is not installed on your machine. Install it and retry.
