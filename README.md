@@ -10,7 +10,10 @@ The pipeline has been written in python3 so **YOU MUST** use python3 and it has 
 
 **Unix**
 
-open a Terminal and type 'git clone https://github.com/fansalon/TEspeX'
+open a Terminal and type:\
+```
+git clone https://github.com/fansalon/TEspeX
+```
 
 This should install TEspeX.
 
