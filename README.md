@@ -15,13 +15,13 @@ open a Terminal and type:
 git clone https://github.com/fansalon/TEspeX
 ```
 
-This should install TEspeX.
+This should download locally TEspeX.
 
 Copy the downoloaded folder in the directory in which you wish to install TEspeX, move to that directory and type:
 ```
 cd TEspex/
 tespex=$PWD
-cd  bin
+cd bin
 ls
 ls picard
 ```
@@ -44,7 +44,8 @@ tar -zxvf STAR-2.6.0c.tar.gz
 cd STAR-2.6.0c/bin/Linux_x86_64_static/
 ./STAR --version
 ```
-'STAR_2.6.0c' should be printed to screen.
+this should return:
+```STAR_2.6.0c``` 
 
 install samtools-1.3.1
 ```
@@ -69,7 +70,7 @@ All these libraries except for pysam and pandas are python standard libraries an
 
 To install pysam and pandas please open a terminal and type:
 ```
-pip3 install pandas==0.23.0\
+pip3 install pandas==0.23.0
 pip3 install pysam==0.14.1
 ```
 
@@ -78,15 +79,16 @@ pip3 install pysam==0.14.1
 TEspeX can be run calling directly the script or through a wrapper (wrapper.py file, contained in the 'master' folder). You should use the wrapper ONLY IF you dispose of a queue managment system.
   
 # TEspeX in standard mode
-If the installation was successful you should have locally a copy of the folder containing TEspeX. Typing 'ls' you should see a folder called 'TEspeX' o something similar. If not, your installation failed for some reasons. (Are you sure be in the directory in which you call the command 'git clone https://github.com/fansalon/TEspeX' ?)
+If the installation was successful you should have locally a copy of the folder containing TEspeX. Change to the  directory containing TEspeX and typing 'ls' you should see a folder called 'TEspeX' o something similar. 
 
-If you can see the TEspeX/ directory type:
-
+Now type:
+```
 cd TEspeX/\
 python3 ./TEspeX.py --help\
+```
 
 This command shows the help that should be something very simalr to:
-
+```
 usage: TExspec_v0.1.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE
                       --paired PAIRED --length LENGTH --out OUT
                        [--num_threads NUM_THREADS] [--remove REMOVE]
@@ -111,7 +113,8 @@ arguments:\
                         number of threads used by STAR and samtools [2]\
   **--remove REMOVE**       if this parameter is set to T all the bam files are
                         removed. If it is F they are not removed [T]
-                        
+```
+
 All the arguments, except fot --num_threads and --remove, are required. We suggest to use as argument of --TE file a fasta file containing TE consensus sequences (from RepBase?) and as arguments of the --cdna and --ncrna the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse).\
 --num_threads if not specified is set to 2 while --remove is set to T by  default (meaning all the bam files are removed).
 
