@@ -84,7 +84,7 @@ If the installation was successful you should have locally a copy of the folder 
 Now type:
 ```
 cd $tespex
-python3 TEspeX.py --help\
+python3 TEspeX.py --help
 ```
 
 This command shows the help that should be something very simalr to:
@@ -92,7 +92,7 @@ This command shows the help that should be something very simalr to:
 usage: TExspec_v0.1.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE --paired PAIRED --length LENGTH --out OUT
                        [--num_threads NUM_THREADS] [--remove REMOVE]
 
-arguments:\
+arguments:
   -h, --help                  show this help message and exit
   --TE TE                     fa/fa.gz file containing TE consensus sequences [required]
   --cdna CDNA                 fa/fa.gz file containing cdna Ensembl sequences [required]
@@ -110,8 +110,15 @@ All the arguments, except fot --num_threads and --remove, are required. We sugge
 
 In the folder 'example' you can find a copy of the files used to perform the TE expression analysis in a sample of *C. elegans*
 
-To test the pipeline launch the following command:
-
+To test the pipeline first create the sample file typing
+```
+ls $PWD/example/SRR3170296_partial.fastq.gz > $PWD/example/reads.txt
+```
+Then launch the following command:
+```
+python3 TEspeX_v0.1.py --TE example/RepBase_single_line.fa.gz --cdna example/Caenorhabditis_elegans.WBcel235.cdna.all.fa.gz \
+--ncrna example/Caenorhabditis_elegans.WBcel235.ncrna.fa.gz --sample example/reads.txt --paired F --length 50 --out test
+```
 
 
 # TEspeX in wrapper mode
