@@ -89,8 +89,7 @@ python3 ./TEspeX.py --help\
 
 This command shows the help that should be something very simalr to:
 ```
-usage: TExspec_v0.1.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE
-                      --paired PAIRED --length LENGTH --out OUT
+usage: TExspec_v0.1.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE --paired PAIRED --length LENGTH --out OUT
                        [--num_threads NUM_THREADS] [--remove REMOVE]
 
 arguments:\
