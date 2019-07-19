@@ -116,8 +116,10 @@ ls $PWD/example/SRR3170296_partial.fastq.gz > $PWD/example/reads.txt
 ```
 Then launch the following command:
 ```
-python3 TEspeX_v0.1.py --TE example/RepBase_single_line.fa.gz --cdna example/Caenorhabditis_elegans.WBcel235.cdna.all.fa.gz \
---ncrna example/Caenorhabditis_elegans.WBcel235.ncrna.fa.gz --sample example/reads.txt --paired F --length 50 --out test
+python3 TEspeX_v0.1.py --TE example/RepBase_single_line.fa.gz \
+--cdna example/Caenorhabditis_elegans.WBcel235.cdna.all.fa.gz \
+--ncrna example/Caenorhabditis_elegans.WBcel235.ncrna.fa.gz \
+--sample example/reads.txt --paired F --length 50 --out test
 ```
 
 
