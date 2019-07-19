@@ -10,7 +10,7 @@ The pipeline has been written in python3 so **YOU MUST** use python3 and it has 
 
 **Unix**
 
-open a Terminal and type: \
+open a Terminal and type:
 ```
 git clone https://github.com/fansalon/TEspeX
 ```
@@ -19,16 +19,16 @@ This should install TEspeX.
 
 Copy the downoloaded folder in the directory in which you wish to install TEspeX, move to that directory and type:
 ```
-cd TEspex/\
-tespex=$PWD\
-cd  bin\
-ls\
-ls picard/
+cd TEspex/
+tespex=$PWD
+cd  bin
+ls
+ls picard
 ```
 If the installation was succesfully a file called 'picard.jar' should be contained in the 'picard' directory.\
 To check java is properly installed on your machine and picard is working, type:
 ```
-cd picard\
+cd picard
 java -jar picard.jar
 ```
 If the picard help is printed everything is fine, if an error rises it may be that java is not installed on your machine. Install Java and retry.
@@ -38,9 +38,9 @@ Now all the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.
 install STAR2.6.0c: \
 ```
 cd $tespex/bin
-wget -O STAR-2.6.0c.tar.gz "https://github.com/alexdobin/STAR/archive/2.6.0c.tar.gz"\
-tar -zxvf STAR-2.6.0c.tar.gz\
-cd STAR-2.6.0c/bin/Linux_x86_64_static/\
+wget -O STAR-2.6.0c.tar.gz "https://github.com/alexdobin/STAR/archive/2.6.0c.tar.gz"
+tar -zxvf STAR-2.6.0c.tar.gz
+cd STAR-2.6.0c/bin/Linux_x86_64_static/
 ./STAR --version
 ```
 'STAR_2.6.0c' should be printed to screen.
