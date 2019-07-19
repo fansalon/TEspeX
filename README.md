@@ -64,19 +64,14 @@ Using htslib 1.3.1
 Copyright (C) 2016 Genome Research Ltd.
 ```
 
-
-
-
-Within the downoloaded folder you should have a folder called 'bin/' that contains all the executables file of the required programs (STAR, samtools, Picard and bedtools). The pipeline is written in order to refer to these executables and it is not advisible to change the location of these folders and files. The use of different version of these softwares may generate different and unpredictable results.
-
 TEspeX takes also advantage of the python3 libraries: sys, time, os, argparse, gzip, subprocess, math, pysam and pandas.
 All these libraries except for pysam and pandas are python standard libraries and should not require installation while pysam and pandas do require an installation.
 
 To install pysam and pandas please open a terminal and type:
-
+```
 pip3 install pandas==0.23.0\
 pip3 install pysam==0.14.1
-
+```
 
 
 # How to run TEspeX
