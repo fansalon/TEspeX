@@ -8,13 +8,17 @@ The pipeline has been written in python3 so **YOU MUST** use python3 and it has 
 
 # How to install TEspeX
 
+**Unix**
+
 open a Terminal and type 'git clone https://github.com/fansalon/TEspeX'
 
 This should install TEspeX.
 
 Open a terminal, copy the downoloaded folder in the directory in which you wish to install TEspeX, move to that directory and type:
 
-cd TEspex/bin\
+cd TEspex/\
+tespex=$PWD\
+cd  bin\
 ls\
 ls picard/
 
@@ -24,9 +28,24 @@ To check java is properly installed on your machine and picard is working, type:
 cd picard\
 java -jar picard.jar
 
-If the picard help is printed everything is fine, if an error rises it may be that java is not installed on your machine. Install it and retry.
+If the picard help is printed everything is fine, if an error rises it may be that java is not installed on your machine. Install Java and retry.
 
-Now all the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.14.1) should be installed in the bin/ directory within the TEspeX/ directory.
+Now all the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.14.1) should be installed in the bin/ directory within the TEspeX/ directory.\Please install STAR, samtools, pandas and pysam even if they are  already installed on your machina. TEspeX has been tested on these specific versions  and the use of different version of these softwares may generate different and unpredictable results.
+
+install STAR2.6.0c:\
+cd $tespex/bin
+wget -O STAR-2.6.0c.tar.gz "https://github.com/alexdobin/STAR/archive/2.6.0c.tar.gz"\
+tar -zxvf STAR-2.6.0c.tar.gz\
+cd STAR-2.6.0c/bin/Linux_x86_64_static/\
+./STAR --version
+
+'STAR_2.6.0c' should be printed to screen.
+
+install samtools-1.3.1\
+cd $tespex/bin
+
+
+
 
 
 
@@ -40,7 +59,7 @@ To install pysam and pandas please open a terminal and type:
 pip3 install pandas==0.23.0\
 pip3 install pysam==0.14.1
 
-Please install pandas and pysam even if they are already installed in your machine. TEspeX has been tested on these specific versions.
+
 
 # How to run TEspeX
 TEspeX can be run calling directly the script or through a wrapper (wrapper.py file, contained in the 'master' folder). You should use the wrapper ONLY IF you dispose of a queue managment system.
