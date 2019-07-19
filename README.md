@@ -83,8 +83,8 @@ If the installation was successful you should have locally a copy of the folder 
 
 Now type:
 ```
-cd TEspeX/\
-python3 ./TEspeX.py --help\
+cd $tespex
+python3 TEspeX.py --help\
 ```
 
 This command shows the help that should be something very simalr to:
