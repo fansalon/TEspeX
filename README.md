@@ -122,6 +122,17 @@ python3 TEspeX_v0.1.py --TE example/RepBase_single_line.fa.gz \
 --sample example/reads.txt --paired F --length 50 --out test
 ```
 
+The pipeline creates 6 files(TE_transc_reference.fa, TE_transc_reference.fa.fai, TE_transc_reference.fa.bed, Log.file.out, outfile.txt and mapping_stats.txt) and 2 directories (index/ and SRR3170296_partial) within the out directory.
+To check the pipeline run correctly type:
+```
+cd $tespex
+diff test/outfile.txt example/outfile
+diff test/mapping_stats.txt example/mapping_stats.txt
+```
+If nothing is printed it means all went fine.
+add description out files.
+
+**Mac OS**
 
 # TEspeX in wrapper mode
 
