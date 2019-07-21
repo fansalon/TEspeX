@@ -107,13 +107,13 @@ arguments:
 All the arguments, except fot --num_threads and --remove, are required. We suggest to use as argument of --TE argument a fasta file containing TE consensus sequences (from RepBase?) and as arguments of the --cdna and --ncrna arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse).\
 --num_threads if not specified is set to 2 while --remove is set to T by  default (meaning all the bam files are removed).
 
-In the folder 'example' you can find a copy of the files used to perform the TE expression analysis in a sample of *C. elegans*
+In the folder 'example' you can find a copy of the files used to perform the TE expression analysis in a sample of *C. elegans*. To test the pipeline is working properly, please launch it using these input files as explained below.
 
-To test the pipeline first create the sample file typing
+1. first create the sample file typing:
 ```
 ls $PWD/example/SRR3170296_partial.fastq.gz > $PWD/example/reads.txt
 ```
-Then launch the following command:
+2. launch the pipeline typing the following command:
 ```
 python3 TEspeX_v0.1.py --TE example/RepBase_single_line.fa.gz \
 --cdna example/Caenorhabditis_elegans.WBcel235.cdna.all.fa.gz \
@@ -121,14 +121,14 @@ python3 TEspeX_v0.1.py --TE example/RepBase_single_line.fa.gz \
 --sample example/reads.txt --paired F --length 50 --out test
 ```
 
-The pipeline creates 6 files(TE_transc_reference.fa, TE_transc_reference.fa.fai, TE_transc_reference.fa.bed, Log.file.out, outfile.txt and mapping_stats.txt) and 2 directories (index/ and SRR3170296_partial) within the out directory.\
-To check the pipeline run correctly type:
+The pipeline creates 6 files (TE_transc_reference.fa, TE_transc_reference.fa.fai, TE_transc_reference.fa.bed, Log.file.out, outfile.txt and mapping_stats.txt) and 2 directories (index/ and SRR3170296_partial) within the out directory.\
+To check the pipeline run correctly test there are differences between the 2 .txt files contained in your out folder and the ones conteined in the example one typing:
 ```
 cd $tespex
 diff test/outfile.txt example/outfile
 diff test/mapping_stats.txt example/mapping_stats.txt
 ```
-If nothing is printed it means all went fine.
+If nothing is printed it means all went fine.\
 add description out files.
 
 **Mac OS**
