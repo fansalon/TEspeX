@@ -25,15 +25,15 @@ def help():
   parser = argparse.ArgumentParser()
   
   # create argument list
-  parser.add_argument('--TE', type=str, help='fa/fa.gz file containing TE consensus sequences [required]', required=True)
-  parser.add_argument('--cdna', type=str, help='fa/fa.gz file containing cdna Ensembl sequences [required]', required=True)
-  parser.add_argument('--ncrna', type=str, help='fa/fa.gz file containing ncrna Ensembl sequences [required]', required=True)
+  parser.add_argument('--TE', type=str, help='fa/fa.gz file containing TE consensus sequences in fasta format [required]', required=True)
+  parser.add_argument('--cdna', type=str, help='fa/fa.gz file containing cdna Ensembl sequences in fasta format [required]', required=True)
+  parser.add_argument('--ncrna', type=str, help='fa/fa.gz file containing ncrna Ensembl sequences in fasta format [required]', required=True)
   parser.add_argument('--sample', type=str, help='txt file containing fq/fq.gz FULL PATHS. If reads are single end, one path should be written in each line. If reads are paired end the two mates should be written in the same line separated by \\t [required]', required=True)
-  parser.add_argument('--paired', type=str, help='T (true) or F (false) [required]', required=True)
-  parser.add_argument('--length', type=int, help='length of the read given as input. This is used to calculate STAR index parameters [required]', required=True)
-  parser.add_argument('--out', type=str, help='directory where the output files will be written', required=True)
+  parser.add_argument('--paired', type=str, help='T (true) or F (false). T means the reads are paired and consequently the sample file is expected to contain 2 columns. F means the reads are not paired, sample file is expected to contain  1 single column [required]', required=True)
+  parser.add_argument('--length', type=int, help='length of the read given as input. This is used to calculate STAR index parameters. If your fq/fq.gz file contains reads with different length specify the shorter length [required]', required=True)
+  parser.add_argument('--out', type=str, help='directory where the output files will be written. This directory is created by the pipeline, specificy a non-yet-existing directory', required=True)
   parser.add_argument('--num_threads', type=int, default=2, help='number of threads used by STAR and samtools [2]', required=False)
-  parser.add_argument('--remove', type=str, default='T', help='if this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
+  parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
 
   # create arguments
   arg = parser.parse_args()
