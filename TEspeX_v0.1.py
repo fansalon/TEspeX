@@ -184,7 +184,7 @@ def star_ind(genome, r_length):
 # map the reads to the reference. The argument of this function is a file with the full path to the reads
 # if the reads are paired they are written on the same line separated by \t
 #def star_aln(fq_list, bedReference, pair, rm):
-def star_aln(fq_list, pair, rm):
+def star_aln(fq_list, fastaReference, pair, rm):
   output_names = []				# this is the list that will contain the names of the bedtools coverage output files
   statOut = []					# this is the list that will contain mapping statistics
   statOut.append("SRR\ttot\tmapped\tTE-best\tspecificTE\tnot_specificTE")
@@ -270,7 +270,7 @@ def star_aln(fq_list, pair, rm):
     # 7.5
     # count the reads mapping specifically on TEs using custom script
       writeLog("counting TE expression levels considering TE-specific reads containded in " + filename + "_specificTE.bam")
-      def counts(bam,bed):
+      def counts(bam,fa):
         name = filename
         bam_chr = []
         bamfile = pysam.AlignmentFile(bam, "rb")
@@ -278,16 +278,18 @@ def star_aln(fq_list, pair, rm):
           bam_chr.append(aln.reference_name)
         bamfile.close()
 
-        bed_chr = []
-        with open(bed) as bed_f:
-          for line in bed_f:
-            bed_chr.append(line.split("\t")[0])
+        fa_chr = []
+        with open(fa) as fa_f:
+          for line in fa_f:
+            if line.startswith(">"):
+              if "_transp" in line:
+                fa_chr.append((line.split()[0]).split(">")[1])
 
         with open(name+"_counts",'w') as output:
           output.write("TE\t%s\n" % (name))
-          for chr in bed_chr:
+          for chr in fa_chr:
             output.write("%s\t%s\n" % (chr, bam_chr.count(chr)))
-      counts(filename+"_specificTE.bam", bedReference)
+      counts(filename+"_specificTE.bam", fastaReference)
       # append the name of the bedtools coverage output in the list
       output_names.append(os.path.abspath(".")+"/"+filename+ "_counts")
 
@@ -358,7 +360,7 @@ def main():
   #bedReference = faTObed(reference)
   star_ind(reference, read_length)
   #outfile, statfile = star_aln(sample, bedReference, paired, remove)
-  outfile, statfile = star_aln(sample, bedReference, paired, remove)
+  outfile, statfile = star_aln(sample, reference, paired, remove)
   createOut(outfile, statfile)
 
 
