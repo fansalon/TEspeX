@@ -163,6 +163,8 @@ def star_ind(genome, r_length):
   # to avoid STAR segmentation fault calculate genomeSAindexNbases and genomeChrBinNbits parameters
   readL = int(r_length)
 
+  faidx_com = bin_path + "samtools-1.3.1/bin/samtools faidx " + genome 
+  bash(faidx_com)
   bed = pandas.read_table(genome+".fai", sep='\t', header=None)
   genome_length = sum(bed.iloc[:,1])
   chrom = len(bed.iloc[:,0])
