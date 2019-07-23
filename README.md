@@ -124,13 +124,13 @@ python3 TEspeX_v0.1.py --TE example/RepBase_single_line.fa.gz \
 --ncrna example/Caenorhabditis_elegans.WBcel235.ncrna.fa.gz \
 --sample example/reads.txt --paired F --length 50 --out test
 ```
-Launching this command the pipeline will first merge together the three fasta file creating a reference transcriptome (TE_transc_reference.fa) and then create a STAR index of this file using the ```--length``` parameter for the calculation of genomeSAindexNbase and genomeChrBinNbits. The TE_transc_reference.fa is written in the directory indicated with ```--out```  while the index files are contained in the  ```index``` folder within the  ```--out``` folder.\
+Launching this command the pipeline will first merge together the three fasta file creating a reference transcriptome (TE_transc_reference.fa) and then it will create a STAR index of this file using the ```--length``` parameter for the calculation of genomeSAindexNbase and genomeChrBinNbits. The TE_transc_reference.fa is written in the directory indicated with ```--out```  while the index files are contained in the  ```index``` folder within the  ```--out``` folder.\
 Then reads of the SRR3170296_partial.fastq.gz are mapped, filtered and counted. In this example, the ```--paired``` parameter is set to F, and so the pipeline is expecting one fastq/fastq.gz file per row in the  ```reads.txt``` file. If you have paired-end data please write the fastq_1 and fastq_2 on the same raw separating them with \t and set ```--paired``` to T.\
 All the output files generated during this step are written in the test/SRR3170296_partial folder.\
 When all the samples contained in the ```--sample``` file are analyzed, the raw read counts for each TE, for each sample, are written in a file called outfile.txt in the ```--out``` directory.\
 Moreover a file called mapping_stats.txt containing i) total number of reads, ii) number of mapped reads, iii) number of reads mapping with best alignment score against TEs contained in the ```--TE``` file (please beaware: for each read there could be more than 1 best alignment), iv) number of TE specific reads (reads mapping with best alignment score only on TEs) and v) number of TE aspecific reads (reads mapping with best alignment score on both TEs and coding/noncoding transcripts) is provided.
 
-The pipeline creates 4 files (TE_transc_reference.fa, Log.file.out, outfile.txt and mapping_stats.txt) and 2 directories (index/ and SRR3170296_partial) within the ```--out``` directory.\
+The pipeline launched with 20 threads  (```--num_threads 20```) should take 4' and it creates 5 files (TE_transc_reference.fa, TE_transc_reference.fai, Log.file.out, outfile.txt and mapping_stats.txt) and 2 directories (index/ and SRR3170296_partial) within the ```--out``` directory.\
 To check the pipeline run correctly, please test there are no differences between the 2 .txt files contained in your ```--out``` folder and the ones conteined in the example one typing:
 ```
 cd $tespex
