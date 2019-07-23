@@ -70,19 +70,21 @@ All these libraries except for pysam and pandas are python standard libraries an
 
 To install pysam and pandas please open a terminal and type:
 ```
-pip3 install pandas==0.23.0
+pip3 install --user pandas==0.23.0
 pip3 install pysam==0.14.1
 ```
 
+**Mac OS**
+
 
 # How to run TEspeX
-TEspeX can be run calling directly the script or through a wrapper (wrapper.py file, contained in the 'master' folder). You should use the wrapper ONLY IF you dispose of a queue managment system.
+TEspeX can be run calling directly the script or through a wrapper (wrapper.py file, contained in the 'master' folder). You should use the wrapper ONLY IF you dispose of a PBS queue managment system.
   
 # TEspeX in standard mode
 All the dependencies should have been insalled properly. To test this, type:
 ```
 cd $tespex
-python3 TEspeX.py --help
+python3 TEspeX_v0.1.py --help
 ```
 
 This command shows the help that should be something very simalr to:
@@ -111,8 +113,10 @@ In the folder 'example' you can find a copy of the files used to perform the TE 
 
 1. first create the sample file typing:
 ```
-ls $PWD/example/SRR3170296_partial.fastq.gz > $PWD/example/reads.txt
+ls $tespex/example/SRR3170296_partial.fastq.gz > $tespex/example/reads.txt
 ```
+  Please notice that the sample file can contain as many file as you want. They will be analized one-by-one by the pipeline.
+  
 2. launch the pipeline typing the following command:
 ```
 python3 TEspeX_v0.1.py --TE example/RepBase_single_line.fa.gz \
@@ -120,18 +124,21 @@ python3 TEspeX_v0.1.py --TE example/RepBase_single_line.fa.gz \
 --ncrna example/Caenorhabditis_elegans.WBcel235.ncrna.fa.gz \
 --sample example/reads.txt --paired F --length 50 --out test
 ```
+Launching this command the pipeline will first merge together the three fasta file creating a reference transcriptome (TE_transc_reference.fa) and then create a STAR index of this file using the ```--length``` parameter as input for the calculation of genomeSAindexNbase and genomeChrBinNbits. The TE_transc_reference.fa is written in the directory indicated with ```--out```  while the index files are contained in the  ```index``` folder within the  ```--out``` folder.\
+Then reads of the SRR3170296_partial.fastq.gz are mapped, filtered and counted. In this example, the ```--paired``` parameter is set to F, the pipeline is expecting one fastq/fastq.gz file per row in the  ```reads.txt``` file. All the output files generated during this step are written in the test/SRR3170296_partial folder.\
+When all the samples contained in the ```--sample``` file are analyzed the raw read counts for each TE are written in a file called outfile.txt in the ```--out``` directory. Moreover a file called mapping_stats.txt containing i) total number of reads, ii) number of mapped reads, iii) number of mapped reads with best alignment score against ```--TE``` file, iv) number of specific reads (reads mapping with best alignment score only on TEs) and v) number of aspecific reads (reads mapping with best alignment score on both TEs and coding/noncoding transcripts) is provided.
 
 The pipeline creates 6 files (TE_transc_reference.fa, TE_transc_reference.fa.fai, TE_transc_reference.fa.bed, Log.file.out, outfile.txt and mapping_stats.txt) and 2 directories (index/ and SRR3170296_partial) within the out directory.\
 To check the pipeline run correctly test there are differences between the 2 .txt files contained in your out folder and the ones conteined in the example one typing:
 ```
 cd $tespex
-diff test/outfile.txt example/outfile
+diff test/outfile.txt example/outfile.txt
 diff test/mapping_stats.txt example/mapping_stats.txt
 ```
 If nothing is printed it means all went fine.\
 add description out files.
 
-**Mac OS**
+
 
 # TEspeX in wrapper mode
 
