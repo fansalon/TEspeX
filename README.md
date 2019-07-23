@@ -106,8 +106,8 @@ arguments:
   --remove REMOVE             T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]
 ```
 
-All the arguments, except fot --num_threads and --remove, are required. We suggest to use as argument of --TE argument a fasta file containing TE consensus sequences (from RepBase?) and as arguments of the --cdna and --ncrna arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse).\
---num_threads if not specified is set to 2 while --remove is set to T by  default (meaning all the bam files are removed).
+All the arguments, except fot ```--num_threads``` and ```--remove```, are required. We suggest to use as argument of ```--TE``` argument a fasta file containing TE consensus sequences (from RepBase?) and as arguments of the ```--cdna``` and ```--ncrna``` arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse).\
+```--num_threads``` if not specified is set to 2 while ```--remove``` is set to T by default (meaning all the bam files are removed).
 
 In the folder 'example' you can find a copy of the files used to perform the TE expression analysis in a sample of *C. elegans*. To test the pipeline is working properly, please launch it using these input files as explained below.
 
