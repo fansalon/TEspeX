@@ -143,19 +143,19 @@ def createReference(fasta, tag):
 
 # 5.
 # convert fasta to bed (TE)
-def faTObed(fasta):
-  faidx_com = bin_path + "samtools-1.3.1/bin/samtools faidx " + fasta 
-  bash(faidx_com)
-  # convert the fai file in bed format using pandas
-  fai = pandas.read_table(fasta+".fai", sep='\t', header=None)
-  faiTE = fai[fai[0].str.contains("_transp")]
-  fai_bed = faiTE.iloc[:, [0,1] ]
-  fai_bed.insert(1,'start',0)		# add the column with the start value
-  fai_bed.to_csv(fasta+".bed",sep='\t',index=False, header=False)
-
-  bedRef = (os.path.abspath(fasta+".bed"))
-
-  return bedRef
+#def faTObed(fasta):
+#  faidx_com = bin_path + "samtools-1.3.1/bin/samtools faidx " + fasta 
+#  bash(faidx_com)
+#  # convert the fai file in bed format using pandas
+#  fai = pandas.read_table(fasta+".fai", sep='\t', header=None)
+#  faiTE = fai[fai[0].str.contains("_transp")]
+#  fai_bed = faiTE.iloc[:, [0,1] ]
+#  fai_bed.insert(1,'start',0)		# add the column with the start value
+#  fai_bed.to_csv(fasta+".bed",sep='\t',index=False, header=False)
+#
+#  bedRef = (os.path.abspath(fasta+".bed"))
+#
+#  return bedRef
 
 # 6.
 # this function creates the index of the reference file
@@ -183,7 +183,8 @@ def star_ind(genome, r_length):
 # 7.
 # map the reads to the reference. The argument of this function is a file with the full path to the reads
 # if the reads are paired they are written on the same line separated by \t
-def star_aln(fq_list, bedReference, pair, rm):
+#def star_aln(fq_list, bedReference, pair, rm):
+def star_aln(fq_list, pair, rm):
   output_names = []				# this is the list that will contain the names of the bedtools coverage output files
   statOut = []					# this is the list that will contain mapping statistics
   statOut.append("SRR\ttot\tmapped\tTE-best\tspecificTE\tnot_specificTE")
@@ -354,8 +355,9 @@ def main():
   createReference(TE, "_transp") 
   createReference(cdna, "_transc") 
   reference = createReference(ncrna, "_transc") 
-  bedReference = faTObed(reference)
+  #bedReference = faTObed(reference)
   star_ind(reference, read_length)
+  #outfile, statfile = star_aln(sample, bedReference, paired, remove)
   outfile, statfile = star_aln(sample, bedReference, paired, remove)
   createOut(outfile, statfile)
 
