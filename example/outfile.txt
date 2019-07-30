@@ -1,164 +1,164 @@
-TE	SRR3170296_partial
-CELE1|DNA_transposon|Caenorhabditis_elegans_transp	4
-CELE11|DNA_transposon|Caenorhabditis_elegans_transp	0
-CELE12A|DNA_transposon|Caenorhabditis_elegans_transp	0
-CELE12B|DNA_transposon|Caenorhabditis_elegans_transp	0
-CELE14A|DNA_transposon|Caenorhabditis_elegans_transp	0
-CELE14B|DNA_transposon|Caenorhabditis_elegans_transp	1
-CELE2|DNA_transposon|Caenorhabditis_elegans_transp	0
-CELE4|DNA_transposon|Caenorhabditis_elegans_transp	0
-CELE42|DNA_transposon|Caenorhabditis_elegans_transp	0
-CELE45|SINE2/tRNA|Caenorhabditis_elegans_transp	2
-CELE46A|DNA_transposon|Caenorhabditis_elegans_transp	0
-CELE46B|DNA_transposon|Caenorhabditis_elegans_transp	0
-CELE6|DNA_transposon|Caenorhabditis_elegans_transp	0
-CELE7|DNA_transposon|Caenorhabditis_elegans_transp	0
-CELETC2|DNA_transposon|Caenorhabditis_elegans_transp	0
-CEMUDR1|MuDR|Caenorhabditis_elegans_transp	157
-CEMUDR2|MuDR|Caenorhabditis_elegans_transp	0
-CER1|Gypsy|Caenorhabditis_elegans_transp	927
-CER10-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER10-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER11-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER11-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER12-1-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	1
-CER12-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER12-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER13-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER13-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER15-1-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER15-1-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER15-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER15-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER16-1-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER16-2-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER16-2-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER16-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER16-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER17-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER17-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER2-1-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER2-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER2-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER3-1-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER3-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER3-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER4-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER4-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER5-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER5-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER6-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER6-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER7-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER7-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER8-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER8-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER9-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CER9-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-CEREP1A|DNA_transposon|Caenorhabditis_elegans_transp	77
-CEREP3|CEREP3|Caenorhabditis_elegans_transp	0
-CEREP4|CEREP4|Caenorhabditis_elegans_transp	0
-CEREP5|CEREP5|Caenorhabditis_elegans_transp	0
-CERP1|CERP1|Caenorhabditis_elegans_transp	0
-CERP16|CERP16|Caenorhabditis_elegans_transp	0
-CERP2|CERP2|Caenorhabditis_elegans_transp	0
-CERP3|CERP3|Caenorhabditis_elegans_transp	0
-CERP4|CERP4|Caenorhabditis_elegans_transp	0
-Chapaev-1_CE|EnSpm/CACTA|Caenorhabditis_elegans_transp	467
-Chapaev-2_CE|EnSpm/CACTA|Caenorhabditis_elegans_transp	0
-DNA-3-1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-HAT1_CE|hAT|Caenorhabditis_elegans_transp	0
-HAT2_CE|hAT|Caenorhabditis_elegans_transp	0
-HAT3_CE|hAT|Caenorhabditis_elegans_transp	0
-HAT4_CE|hAT|Caenorhabditis_elegans_transp	0
-HATN1_CE|hAT|Caenorhabditis_elegans_transp	0
-HELITRON1_CE|Helitron|Caenorhabditis_elegans_transp	0
-HELITRON2_CE|Helitron|Caenorhabditis_elegans_transp	0
-HELITRONY1A_CE|Helitron|Caenorhabditis_elegans_transp	0
-HELITRONY1_CE|Helitron|Caenorhabditis_elegans_transp	0
-HELITRONY2_CE|Helitron|Caenorhabditis_elegans_transp	0
-HELITRONY3_CE|Helitron|Caenorhabditis_elegans_transp	5
-HELITRONY4_CE|Helitron|Caenorhabditis_elegans_transp	0
-IR1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-IR3_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-IR4|IR4|Caenorhabditis_elegans_transp	0
-LINE2A_CE|CR1|Caenorhabditis_elegans_transp	0
-LINE2B_CE|CR1|Caenorhabditis_elegans_transp	0
-LINE2C1_CE|CR1|Caenorhabditis_elegans_transp	0
-LINE2C_CE|CR1|Caenorhabditis_elegans_transp	0
-LINE2D_CE|CR1|Caenorhabditis_elegans_transp	0
-LINE2E_CE|CR1|Caenorhabditis_elegans_transp	0
-LINE2F_CE|CR1|Caenorhabditis_elegans_transp	0
-LINE2G_CE|CR1|Caenorhabditis_elegans_transp	0
-LINE2H_CE|CR1|Caenorhabditis_elegans_transp	0
-LONGPAL1|DNA_transposon|Caenorhabditis_elegans_transp	0
-LONGPAL2|MuDR|Caenorhabditis_elegans_transp	0
-LONGPAL3|MuDR|Caenorhabditis_elegans_transp	2
-LR9A|LR9A|Caenorhabditis_elegans_transp	0
-LTR1_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-LTR2_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0
-LTRCER1|Gypsy|Caenorhabditis_elegans_transp	1122
-MARINCE1|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-MARINER2_CE|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-MARINER3_CE|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-MARINER4_CE|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-MARINER5_CE|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-MAR_CE|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-Merlin1m_CE|Merlin|Caenorhabditis_elegans_transp	0
-MIRAGE1|EnSpm/CACTA|Caenorhabditis_elegans_transp	0
-NDNAX1_CE|Helitron|Caenorhabditis_elegans_transp	0
-NDNAX2_CE|Helitron|Caenorhabditis_elegans_transp	0
-NDNAX3_CE|Helitron|Caenorhabditis_elegans_transp	0
-NeSL-1|NeSL|Caenorhabditis_elegans_transp	0
-NPAL0A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-NPAL5A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-NPALTA1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-NTC2A|DNA_transposon|Caenorhabditis_elegans_transp	0
-PAL3A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-PAL5A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-PAL8A_CE|hAT|Caenorhabditis_elegans_transp	0
-PAL8B_CE|hAT|Caenorhabditis_elegans_transp	0
-PAL8C_1|hAT|Caenorhabditis_elegans_transp	0
-PAL8C_2|hAT|Caenorhabditis_elegans_transp	0
-PAL8C_3|hAT|Caenorhabditis_elegans_transp	0
-PAL8C_4|hAT|Caenorhabditis_elegans_transp	0
-PAL8C_5|hAT|Caenorhabditis_elegans_transp	0
-PAL8D_CE|hAT|Caenorhabditis_elegans_transp	0
-PAL9A_CE|MuDR|Caenorhabditis_elegans_transp	0
-PALNN1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-PALTA1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-PALTA2_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-PALTA3_CE|DNA_transposon|Caenorhabditis_elegans_transp	4
-PALTA4_CE|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-PALTA5_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-PALTTAA1_CE|DNA_transposon|Caenorhabditis_elegans_transp	4
-PALTTAA2_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-PALTTAA3_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-PALTTTAAA1|DNA_transposon|Caenorhabditis_elegans_transp	0
-PALTTTAAA2|DNA_transposon|Caenorhabditis_elegans_transp	0
-PALTTTAAA3|DNA_transposon|Caenorhabditis_elegans_transp	3
-RC14|RC14|Caenorhabditis_elegans_transp	0
-RTE1|RTE|Caenorhabditis_elegans_transp	0
-SINE1_CE|SINE|Caenorhabditis_elegans_transp	0
-TC1|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-TC1A|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-TC2|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-Tc3|Mariner/Tc1|Caenorhabditis_elegans_transp	1
-TC4|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-TC5|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-TC5A|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-TC5B|Mariner/Tc1|Caenorhabditis_elegans_transp	0
-TC6|Transposable_Element|Caenorhabditis_elegans_transp	0
-TIR21T5A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-TIR23T5A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-TIR43YW1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-TIR54TA1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-TIR9TA1A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-TIR9TA1B_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-TIR9TA1C_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-TIR9TA1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0
-TR5|CEU86951|Caenorhabditis_elegans_transp	0
-TURMOIL1|Harbinger|Caenorhabditis_elegans_transp	0
-TURMOIL2|Harbinger|Caenorhabditis_elegans_transp	0
-Vingi-1_CE|Vingi|Caenorhabditis_elegans_transp	0
-Vingi-2_CE|Vingi|Caenorhabditis_elegans_transp	0
+TE	SRR3170296_partial	SRR3170297_partial
+CELE1|DNA_transposon|Caenorhabditis_elegans_transp	4	6
+CELE11|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+CELE12A|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+CELE12B|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+CELE14A|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+CELE14B|DNA_transposon|Caenorhabditis_elegans_transp	1	0
+CELE2|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+CELE4|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+CELE42|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+CELE45|SINE2/tRNA|Caenorhabditis_elegans_transp	2	1
+CELE46A|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+CELE46B|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+CELE6|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+CELE7|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+CELETC2|DNA_transposon|Caenorhabditis_elegans_transp	0	2
+CEMUDR1|MuDR|Caenorhabditis_elegans_transp	157	152
+CEMUDR2|MuDR|Caenorhabditis_elegans_transp	0	0
+CER1|Gypsy|Caenorhabditis_elegans_transp	927	815
+CER10-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER10-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER11-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER11-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER12-1-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	1	3
+CER12-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER12-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER13-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER13-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER15-1-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER15-1-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER15-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER15-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER16-1-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER16-2-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	4
+CER16-2-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	1
+CER16-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER16-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER17-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER17-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER2-1-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER2-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER2-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	3
+CER3-1-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	1
+CER3-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER3-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER4-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER4-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER5-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER5-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER6-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER6-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER7-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER7-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER8-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER8-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER9-I_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CER9-LTR_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+CEREP1A|DNA_transposon|Caenorhabditis_elegans_transp	77	111
+CEREP3|CEREP3|Caenorhabditis_elegans_transp	0	0
+CEREP4|CEREP4|Caenorhabditis_elegans_transp	0	0
+CEREP5|CEREP5|Caenorhabditis_elegans_transp	0	0
+CERP1|CERP1|Caenorhabditis_elegans_transp	0	0
+CERP16|CERP16|Caenorhabditis_elegans_transp	0	0
+CERP2|CERP2|Caenorhabditis_elegans_transp	0	0
+CERP3|CERP3|Caenorhabditis_elegans_transp	0	0
+CERP4|CERP4|Caenorhabditis_elegans_transp	0	0
+Chapaev-1_CE|EnSpm/CACTA|Caenorhabditis_elegans_transp	467	400
+Chapaev-2_CE|EnSpm/CACTA|Caenorhabditis_elegans_transp	0	0
+DNA-3-1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+HAT1_CE|hAT|Caenorhabditis_elegans_transp	0	0
+HAT2_CE|hAT|Caenorhabditis_elegans_transp	0	1
+HAT3_CE|hAT|Caenorhabditis_elegans_transp	0	0
+HAT4_CE|hAT|Caenorhabditis_elegans_transp	0	0
+HATN1_CE|hAT|Caenorhabditis_elegans_transp	0	0
+HELITRON1_CE|Helitron|Caenorhabditis_elegans_transp	0	0
+HELITRON2_CE|Helitron|Caenorhabditis_elegans_transp	0	0
+HELITRONY1A_CE|Helitron|Caenorhabditis_elegans_transp	0	0
+HELITRONY1_CE|Helitron|Caenorhabditis_elegans_transp	0	0
+HELITRONY2_CE|Helitron|Caenorhabditis_elegans_transp	0	0
+HELITRONY3_CE|Helitron|Caenorhabditis_elegans_transp	5	0
+HELITRONY4_CE|Helitron|Caenorhabditis_elegans_transp	0	0
+IR1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+IR3_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+IR4|IR4|Caenorhabditis_elegans_transp	0	0
+LINE2A_CE|CR1|Caenorhabditis_elegans_transp	0	0
+LINE2B_CE|CR1|Caenorhabditis_elegans_transp	0	0
+LINE2C1_CE|CR1|Caenorhabditis_elegans_transp	0	0
+LINE2C_CE|CR1|Caenorhabditis_elegans_transp	0	0
+LINE2D_CE|CR1|Caenorhabditis_elegans_transp	0	0
+LINE2E_CE|CR1|Caenorhabditis_elegans_transp	0	0
+LINE2F_CE|CR1|Caenorhabditis_elegans_transp	0	0
+LINE2G_CE|CR1|Caenorhabditis_elegans_transp	0	1
+LINE2H_CE|CR1|Caenorhabditis_elegans_transp	0	0
+LONGPAL1|DNA_transposon|Caenorhabditis_elegans_transp	0	1
+LONGPAL2|MuDR|Caenorhabditis_elegans_transp	0	0
+LONGPAL3|MuDR|Caenorhabditis_elegans_transp	2	0
+LR9A|LR9A|Caenorhabditis_elegans_transp	0	0
+LTR1_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+LTR2_CE|LTR_Retrotransposon|Caenorhabditis_elegans_transp	0	0
+LTRCER1|Gypsy|Caenorhabditis_elegans_transp	1122	1324
+MARINCE1|Mariner/Tc1|Caenorhabditis_elegans_transp	0	0
+MARINER2_CE|Mariner/Tc1|Caenorhabditis_elegans_transp	0	0
+MARINER3_CE|Mariner/Tc1|Caenorhabditis_elegans_transp	0	0
+MARINER4_CE|Mariner/Tc1|Caenorhabditis_elegans_transp	0	0
+MARINER5_CE|Mariner/Tc1|Caenorhabditis_elegans_transp	0	0
+MAR_CE|Mariner/Tc1|Caenorhabditis_elegans_transp	0	0
+Merlin1m_CE|Merlin|Caenorhabditis_elegans_transp	0	0
+MIRAGE1|EnSpm/CACTA|Caenorhabditis_elegans_transp	0	0
+NDNAX1_CE|Helitron|Caenorhabditis_elegans_transp	0	2
+NDNAX2_CE|Helitron|Caenorhabditis_elegans_transp	0	0
+NDNAX3_CE|Helitron|Caenorhabditis_elegans_transp	0	0
+NeSL-1|NeSL|Caenorhabditis_elegans_transp	0	0
+NPAL0A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+NPAL5A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+NPALTA1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+NTC2A|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+PAL3A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+PAL5A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+PAL8A_CE|hAT|Caenorhabditis_elegans_transp	0	0
+PAL8B_CE|hAT|Caenorhabditis_elegans_transp	0	0
+PAL8C_1|hAT|Caenorhabditis_elegans_transp	0	0
+PAL8C_2|hAT|Caenorhabditis_elegans_transp	0	0
+PAL8C_3|hAT|Caenorhabditis_elegans_transp	0	0
+PAL8C_4|hAT|Caenorhabditis_elegans_transp	0	0
+PAL8C_5|hAT|Caenorhabditis_elegans_transp	0	0
+PAL8D_CE|hAT|Caenorhabditis_elegans_transp	0	0
+PAL9A_CE|MuDR|Caenorhabditis_elegans_transp	0	0
+PALNN1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+PALTA1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+PALTA2_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+PALTA3_CE|DNA_transposon|Caenorhabditis_elegans_transp	4	0
+PALTA4_CE|Mariner/Tc1|Caenorhabditis_elegans_transp	0	0
+PALTA5_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+PALTTAA1_CE|DNA_transposon|Caenorhabditis_elegans_transp	4	16
+PALTTAA2_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+PALTTAA3_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+PALTTTAAA1|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+PALTTTAAA2|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+PALTTTAAA3|DNA_transposon|Caenorhabditis_elegans_transp	3	0
+RC14|RC14|Caenorhabditis_elegans_transp	0	0
+RTE1|RTE|Caenorhabditis_elegans_transp	0	0
+SINE1_CE|SINE|Caenorhabditis_elegans_transp	0	0
+TC1|Mariner/Tc1|Caenorhabditis_elegans_transp	0	0
+TC1A|Mariner/Tc1|Caenorhabditis_elegans_transp	0	0
+TC2|Mariner/Tc1|Caenorhabditis_elegans_transp	0	0
+Tc3|Mariner/Tc1|Caenorhabditis_elegans_transp	1	0
+TC4|Mariner/Tc1|Caenorhabditis_elegans_transp	0	2
+TC5|Mariner/Tc1|Caenorhabditis_elegans_transp	0	0
+TC5A|Mariner/Tc1|Caenorhabditis_elegans_transp	0	0
+TC5B|Mariner/Tc1|Caenorhabditis_elegans_transp	0	0
+TC6|Transposable_Element|Caenorhabditis_elegans_transp	0	2
+TIR21T5A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+TIR23T5A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+TIR43YW1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+TIR54TA1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+TIR9TA1A_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+TIR9TA1B_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+TIR9TA1C_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+TIR9TA1_CE|DNA_transposon|Caenorhabditis_elegans_transp	0	0
+TR5|CEU86951|Caenorhabditis_elegans_transp	0	0
+TURMOIL1|Harbinger|Caenorhabditis_elegans_transp	0	0
+TURMOIL2|Harbinger|Caenorhabditis_elegans_transp	0	0
+Vingi-1_CE|Vingi|Caenorhabditis_elegans_transp	0	0
+Vingi-2_CE|Vingi|Caenorhabditis_elegans_transp	0	0

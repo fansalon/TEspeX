@@ -297,21 +297,38 @@ def star_aln(fq_list, fastaReference, pair, rm):
 
     # 7.6
     # create a file with statistics
-      # total reads
       writeLog("calculating the mapping statistics...")
-      if gzipped == True:
-        count = int(subprocess.check_output("zcat " + lin[0] + " | wc -l", shell=True)) # bash zcat is faster than python .gzip
-        tot = str(int(count/4))
-      else:
-        count = int(subprocess.check_output("cat " + lin[0] + " | wc -l", shell=True)) 
-        tot = str(int(count/4))
-      # mapped
-      read_list = []
-      samfile = pysam.AlignmentFile(filename+".bam", "rb")
-      for aln in samfile.fetch(until_eof=True):
-        read_list.append(aln.query_name)
-      samfile.close()
-      map = len(list(set(read_list)))
+      # total reads
+      def starFinalHandling(star_final):
+        tot_map = 0
+        mapped = 0
+        with open(star_final) as s_stat:
+          for line in s_stat:
+            if "Number of input reads" in line:
+              numb = line.split("\t")[1]
+              tot_map = str(numb[:-1])
+            elif "Uniquely mapped reads number" in line:
+              numb = line.split("\t")[1]
+              mapped = str(int(mapped) + int(numb))
+            elif "Number of reads mapped to multiple loci" in line:
+              numb = line.split("\t")[1]
+              mapped = str(int(mapped) + int(numb))
+        return tot_map, mapped
+      tot, map = starFinalHandling("Log.final.out") 
+
+#      if gzipped == True:
+#        count = int(subprocess.check_output("zcat " + lin[0] + " | wc -l", shell=True)) # bash zcat is faster than python .gzip
+#        tot = str(int(count/4))
+#      else:
+#        count = int(subprocess.check_output("cat " + lin[0] + " | wc -l", shell=True)) 
+#        tot = str(int(count/4))
+#      # mapped
+#      read_list = []
+#      samfile = pysam.AlignmentFile(filename+".bam", "rb")
+#      for aln in samfile.fetch(until_eof=True):
+#        read_list.append(aln.query_name)
+#      samfile.close()
+#      map = len(list(set(read_list)))
       # reads mapped on TEs
       mapTE = len(final) + len(not_specific)
       # reads specifically mapped against TE
