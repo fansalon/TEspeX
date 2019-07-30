@@ -71,10 +71,73 @@ All these libraries except for pysam and pandas are python standard libraries an
 To install pysam and pandas please open a terminal and type:
 ```
 pip3 install --user pandas==0.23.0
-pip3 install pysam==0.14.1
+pip3 install --user pysam==0.14.1
 ```
 
 **Mac OS**
+
+open a Terminal and type:
+```
+git clone https://github.com/fansalon/TEspeX
+```
+
+This should download locally TEspeX.
+
+Copy the downoloaded folder in the directory in which you wish to install TEspeX, move to that directory and type:
+```
+cd TEspex/
+tespex=$PWD
+cd bin
+ls
+ls picard
+```
+A file called 'picard.jar' should be contained in the 'picard' directory.\
+To check whether java is properly installed on your machine and picard is working, type:
+```
+cd picard
+java -jar picard.jar
+```
+If the picard help is printed everything is fine, if an error rises it may be that java is not installed on your machine. Install Java and retry.
+
+Now all the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.14.1) should be installed in the bin/ directory within the TEspeX/ directory.\
+Please install STAR, samtools, pandas and pysam even if they are  already installed on your machine. TEspeX has been tested on these specific versions  and the use of different versions of these softwares may generate different and unpredictable results.
+
+install STAR2.6.0c:
+```
+cd $tespex/bin
+curl -L -o STAR-2.6.0c.tar.gz https://github.com/alexdobin/STAR/archive/2.6.0c.tar.gz
+tar -zxvf STAR-2.6.0c.tar.gz
+cd STAR-2.6.0c/bin/MacOSX_x86_64/
+./STAR --version
+```
+this should return:
+```STAR_2.6.0c``` 
+
+install samtools-1.3.1
+```
+cd $tespex/bin
+curl -L -o samtools-1.3.1.tar.bz2 https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2
+tar xjf samtools-1.3.1.tar.bz2
+cd samtools-1.3.1
+./configure --prefix=$PWD/
+make
+make install
+bin/samtools --version
+```
+this should return something like:
+```
+samtools 1.3.1
+Using htslib 1.3.1
+Copyright (C) 2016 Genome Research Ltd.
+```
+
+TEspeX takes also advantage of the python3 libraries: sys, time, os, argparse, gzip, subprocess, math, pysam and pandas.
+All these libraries except for pysam and pandas are python standard libraries and should not require installation while pysam and pandas do require an installation.
+
+To install pysam and pandas please open a terminal and type:
+```
+pip3 install --user pandas==0.23.0
+pip3 install --user pysam==0.14.1
 
 
 # How to run TEspeX
@@ -113,7 +176,7 @@ In the folder 'example' you can find a copy of the files used to perform the TE 
 
 1. first create the sample file typing:
 ```
-ls $tespex/example/SRR3170296_partial.fastq.gz > $tespex/example/reads.txt
+ls $tespex/example/*.fastq.gz > $tespex/example/reads.txt
 ```
   Please notice that the sample file can contain as many file as you want (one per raw - 1 column if SE, 2 column if PE). They will be analized one-by-one by the pipeline.
   
@@ -125,12 +188,14 @@ python3 TEspeX_v0.1.py --TE example/RepBase_single_line.fa.gz \
 --sample example/reads.txt --paired F --length 50 --out test
 ```
 Launching this command the pipeline will first merge together the three fasta file creating a reference transcriptome (TE_transc_reference.fa) and then it will create a STAR index of this file using the ```--length``` parameter for the calculation of genomeSAindexNbase and genomeChrBinNbits. The TE_transc_reference.fa is written in the directory indicated with ```--out```  while the index files are contained in the  ```index``` folder within the  ```--out``` folder.\
-Then reads of the SRR3170296_partial.fastq.gz are mapped, filtered and counted. In this example, the ```--paired``` parameter is set to F, and so the pipeline is expecting one fastq/fastq.gz file per row in the  ```reads.txt``` file. If you have paired-end data please write the fastq_1 and fastq_2 on the same raw separating them with \t and set ```--paired``` to T.\
+Then reads of the first fastq sample (SRR3170296_partial.fastq.gz) are mapped, filtered and counted. In this example, the ```--paired``` parameter is set to F, and so the pipeline is expecting one fastq/fastq.gz file per row in the  ```reads.txt``` file. If you have paired-end data please write the fastq_1 and fastq_2 on the same raw separating them with \t and set ```--paired``` to T.\
 All the output files generated during this step are written in the test/SRR3170296_partial folder.\
-When all the samples contained in the ```--sample``` file are analyzed, the raw read counts for each TE, for each sample, are written in a file called outfile.txt in the ```--out``` directory.\
-Moreover a file called mapping_stats.txt containing i) total number of reads, ii) number of mapped reads, iii) number of reads mapping with best alignment score against TEs contained in the ```--TE``` file (please beaware: for each read there could be more than 1 best alignment), iv) number of TE specific reads (reads mapping with best alignment score only on TEs) and v) number of TE aspecific reads (reads mapping with best alignment score on both TEs and coding/noncoding transcripts) is provided.
+Then the second sample (SRR3170297_partial.fastq.gz) will be analyzed and the output files are written in the test/SRR3170297_partial folder.\
+When all the samples contained in the ```--sample``` file are analyzed, the raw read counts for each TE, for each sample, are written in a file called outfile.txt in the ```--out``` directory. The file contains in the first column the names of the TEs (as they are in the fasta file) and a column with the raw read counts for each fastq analyzed.\
+Moreover a file called mapping_stats.txt containing i) total number of reads, ii) number of mapped reads, iii) number of reads mapping with best alignment score against TEs contained in the ```--TE``` file (please beaware: for each read there could be more than 1 best alignment), iv) number of TE specific reads (reads mapping with best alignment score only on TEs) and v) number of TE aspecific reads (reads mapping with best alignment score on both TEs and coding/noncoding transcripts) is provided.\
+The pipeline prints in the Log.final.out all the commands that are launched in real-time, the user can read it to follow all the opearation the pipeline is doing.
 
-The pipeline launched with 20 threads  (```--num_threads 20```) should take 4' and it creates 5 files (TE_transc_reference.fa, TE_transc_reference.fai, Log.file.out, outfile.txt and mapping_stats.txt) and 2 directories (index/ and SRR3170296_partial) within the ```--out``` directory.\
+The pipeline launched with 20 threads (```--num_threads 20```) should take 4 minutes and it creates 5 files (TE_transc_reference.fa, TE_transc_reference.fai, Log.file.out, outfile.txt and mapping_stats.txt) and 3 directories (index/, SRR3170296_partial and SRR3170297_partial) within the ```--out``` directory.\
 To check the pipeline run correctly, please test there are no differences between the 2 .txt files contained in your ```--out``` folder and the ones conteined in the example one typing:
 ```
 cd $tespex
@@ -138,7 +203,7 @@ diff test/outfile.txt example/outfile.txt
 diff test/mapping_stats.txt example/mapping_stats.txt
 ```
 If nothing is printed it means all went fine.\
-add description out files.
+
 
 
 
