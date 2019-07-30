@@ -74,9 +74,9 @@ To install pysam and pandas please open a terminal and type:
 pip3 install --user pandas==0.23.0
 pip3 install --user pysam==0.14.1
 ```
-
-
-
+\
+\
+\
 **Mac OS**
 
 open a Terminal and type:
@@ -142,9 +142,9 @@ To install pysam and pandas please open a terminal and type:
 pip3 install --user pandas==0.23.0
 pip3 install --user pysam==0.14.1
 ```
-
-
-
+\
+\
+\
 **Windows**
 
 Use an Unix system.
