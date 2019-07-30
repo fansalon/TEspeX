@@ -145,12 +145,11 @@ pip3 install --user pysam==0.14.1
 \
 **Windows**
 
-Use an Unix system.\
+Use an Unix system.
 \
 \
-
-
-
+\
+\
 # How to run TEspeX
 TEspeX can be run calling directly the script or through a wrapper (wrapper.py file, contained in the 'master' folder). You should use the wrapper ONLY IF you dispose of a PBS queue managment system.
   
