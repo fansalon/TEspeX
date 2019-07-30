@@ -177,7 +177,7 @@ def star_ind(genome, r_length):
   os.mkdir("index")
   os.chdir("index")
   # then we can call the STAR index function using the number of threads that is passed from command line
-  starCmd = bin_path + "STAR-2.6.0c/bin/Linux_x86_64_static/STAR --runThreadN " +str(num_threads)+ " --runMode genomeGenerate --genomeDir " +os.path.abspath(".")+ " --genomeFastaFiles " +genome+ " --genomeSAindexNbases " +str(genomeSAindexNbase)+ " --genomeChrBinNbits " +str(genomeChrBinNbits)
+  starCmd = bin_path + "STAR-2.6.0c/bin/tespex/STAR --runThreadN " +str(num_threads)+ " --runMode genomeGenerate --genomeDir " +os.path.abspath(".")+ " --genomeFastaFiles " +genome+ " --genomeSAindexNbases " +str(genomeSAindexNbase)+ " --genomeChrBinNbits " +str(genomeChrBinNbits)
   bash(starCmd)
   
   os.chdir(dir)
@@ -192,7 +192,7 @@ def star_aln(fq_list, fastaReference, pair, rm):
   statOut.append("SRR\ttot\tmapped\tTE-best\tspecificTE\tnot_specificTE")
 
   # define the general command (no reads and no zcat)
-  command = bin_path + "STAR-2.6.0c/bin/Linux_x86_64_static/STAR --outSAMunmapped None --outSAMprimaryFlag AllBestScore --outFilterMismatchNoverLmax 0.04 --outMultimapperOrder Random --outSAMtype BAM Unsorted --outStd BAM_Unsorted --runThreadN " +str(num_threads)+ " --genomeDir " +os.path.abspath("index")
+  command = bin_path + "STAR-2.6.0c/bin/tespex/STAR --outSAMunmapped None --outSAMprimaryFlag AllBestScore --outFilterMismatchNoverLmax 0.04 --outMultimapperOrder Random --outSAMtype BAM Unsorted --outStd BAM_Unsorted --runThreadN " +str(num_threads)+ " --genomeDir " +os.path.abspath("index")
   # for every line of the file launch the analysis
   with open(fq_list) as reads:
     for line in reads:
