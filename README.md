@@ -42,7 +42,10 @@ install STAR2.6.0c:
 cd $tespex/bin
 wget -O STAR-2.6.0c.tar.gz https://github.com/alexdobin/STAR/archive/2.6.0c.tar.gz
 tar -zxvf STAR-2.6.0c.tar.gz
-cd STAR-2.6.0c/bin/Linux_x86_64_static/
+cd STAR-2.6.0c/bin/
+mkdir tespex/
+cp Linux_x86_64_static/STAR tespex/
+cd tespex/
 ./STAR --version
 ```
 this should return:
@@ -110,7 +113,10 @@ install STAR2.6.0c:
 cd $tespex/bin
 curl -L -o STAR-2.6.0c.tar.gz https://github.com/alexdobin/STAR/archive/2.6.0c.tar.gz
 tar -zxvf STAR-2.6.0c.tar.gz
-cd STAR-2.6.0c/bin/MacOSX_x86_64/
+cd STAR-2.6.0c/bin/
+mkdir tespex/
+cp MacOSX_x86_64/STAR tespex/
+cd tespex/
 ./STAR --version
 ```
 this should return:
