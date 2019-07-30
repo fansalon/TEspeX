@@ -215,7 +215,7 @@ def star_aln(fq_list, fastaReference, pair, rm):
           sys.exit(1)
         if file_extension == ".gz":
           gzipped = True
-          command_final = command + " --readFilesIn " +lin[0]+ " --readFilesCommand zcat > " +filename+ ".bam"
+          command_final = command + " --readFilesIn " +lin[0]+ " --readFilesCommand gunzip -c > " +filename+ ".bam"
         else:
           gzipped =False
           command_final = command + " --readFilesIn " +lin[0]+ " > " +filename+ ".bam"
@@ -228,7 +228,7 @@ def star_aln(fq_list, fastaReference, pair, rm):
           sys.exit(1)
         if file_extension == ".gz":
           gzipped = True
-          command_final = command + " --readFilesIn " +lin[0]+ " " +lin[1]+ " --readFilesCommand zcat > "+filename+ ".bam"
+          command_final = command + " --readFilesIn " +lin[0]+ " " +lin[1]+ " --readFilesCommand gunzip -c > "+filename+ ".bam"
         else:
           gzipped = False
           command_final = command + " --readFilesIn " +lin[0]+ " " +lin[1]+ " > " +filename+ ".bam"
