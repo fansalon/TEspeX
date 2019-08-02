@@ -104,7 +104,7 @@ java -jar picard.jar
 If the picard help is printed everything is fine, if an error rises it may be that java is not installed on your machine. Install Java and retry.
 
 Now all the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.15.1) should be installed in the bin/ directory within the TEspeX/ directory.\
-Please install STAR, samtools, pandas and pysam even if they are  already installed on your machine. TEspeX has been tested on these specific versions  and the use of different versions of these softwares may generate different and unpredictable results.\
+Please install STAR, samtools, pandas and pysam even if they are  already installed on your machine. TEspeX has been tested on these specific versions  and the use of different versions of these softwares may generate different and unpredictable results.
 
 In Mac OS X it seems that pysam 0.14.1 cannot be installed through pip3 (Python3.7), to overcome this issue we  reccomend to download pysam 0.15.1. The pipeline has been tested on Mac OS X with pysam 0.15.1 and generates the same results obtained with pysam 0.14.1 on Unix systems.
 
@@ -209,14 +209,14 @@ When all the samples contained in the ```--sample``` file are analyzed, the raw 
 Moreover a file called mapping_stats.txt containing i) total number of reads, ii) number of mapped reads, iii) number of reads mapping with best alignment score against TEs contained in the ```--TE``` file (please beaware: for each read there could be more than 1 best alignment), iv) number of TE specific reads (reads mapping with best alignment score only on TEs) and v) number of TE aspecific reads (reads mapping with best alignment score on both TEs and coding/noncoding transcripts) is provided.\
 The pipeline prints in the Log.final.out all the commands that are launched in real-time, the user can read it to follow all the opearation the pipeline is doing.
 
-The pipeline launched with 20 threads (```--num_threads 20```) should take 4 minutes and it creates 5 files (TE_transc_reference.fa, TE_transc_reference.fai, Log.file.out, outfile.txt and mapping_stats.txt) and 3 directories (index/, SRR3170296_partial and SRR3170297_partial) within the ```--out``` directory.\
+The pipeline launched with 20 threads (```--num_threads 20```) should take less than 5 minutes and it creates 5 files (TE_transc_reference.fa, TE_transc_reference.fai, Log.file.out, outfile.txt and mapping_stats.txt) and 3 directories (index/, SRR3170296_partial and SRR3170297_partial) within the ```--out``` directory.\
 To check the pipeline run correctly, please test there are no differences between the 2 .txt files contained in your ```--out``` folder and the ones conteined in the example one typing:
 ```
 cd $tespex
 diff test/outfile.txt example/outfile.txt
 diff test/mapping_stats.txt example/mapping_stats.txt
 ```
-If nothing is printed it means all went fine.\
+If nothing is printed it means all went fine.
 
 
 
