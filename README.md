@@ -155,6 +155,11 @@ Use an Unix system.
 * TE consensus sequences in fasta format
 * coding transcripts in fasta format (we suggest the 'cdna.fa.gz' fasta file downloaded from ensembl)
 * non coding trasncripts in fasta format (we suggest the 'ncrna.fa.gz' fasta file downloaded from ensembl)
+* RN-seq data in fastq/fastq.gz format
+
+# Output files
+* outfile.txt: txt file containing the raw counts of reads specifically mapping on TEs. The first column contains the TE names as they are in the TE consensus fasta file, the other columns contain the read counts for each fq input file
+* mapping_stats.txt: txt file containing mapping statistics 
 
 # How to run TEspeX
 TEspeX can be run calling directly the script or through a wrapper (wrapper.py file, contained in the 'master' folder). You should use the wrapper ONLY IF you dispose of a PBS queue managment system.
