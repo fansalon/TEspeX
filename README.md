@@ -2,7 +2,6 @@
 
 TEspeX (Transposable Elements SPEific eXpression) is a tool for the TE expression quantification from RNA-seq data. The rationale of this pipeline is to map reads against TE consensus sequences, coding transcripts and non-coding transcripts and to select and count reads mapping with best alignment score only against TE consensus sequences. This should avoid the quantification of reads that may be generated from TE-fragments embedded in coding and non-coding annotated transcripts (39% of human protein coding genes contain TE-fragments). 
 
-If you are curious about the use of this pipeline, you can take a look here where it has been tested on a *C. elegans* embryonic dataset (Ansaloni F., et al - BMC Bioinformatics, 2019). *cooming soon, I hope*
 
 The pipeline has been written in python3 so **YOU MUST** use python3 and it has been tested on Ubuntu, CentOS and Mac OS X systems.
 
@@ -59,6 +58,7 @@ wget -O samtools-1.3.1.tar.bz2 https://github.com/samtools/samtools/releases/dow
 tar xjf samtools-1.3.1.tar.bz2
 cd samtools-1.3.1
 ./configure --prefix=$PWD/
+(if during the --configure step you encounter an error like: "configure: error: curses development files not found" please relaunch  the command adding the --without-curses flag)
 make
 make install
 bin/samtools --version
@@ -69,6 +69,7 @@ samtools 1.3.1
 Using htslib 1.3.1
 Copyright (C) 2016 Genome Research Ltd.
 ```
+
 
 TEspeX takes also advantage of the python3 libraries: sys, time, os, argparse, gzip, subprocess, math, pysam and pandas.
 All these libraries except for pysam and pandas are python standard libraries and should not require installation while pysam and pandas do require an installation.
@@ -126,6 +127,7 @@ curl -L -o samtools-1.3.1.tar.bz2 https://github.com/samtools/samtools/releases/
 tar xjf samtools-1.3.1.tar.bz2
 cd samtools-1.3.1
 ./configure --prefix=$PWD/
+(if during the --configure step you encounter an error like: "configure: error: curses development files not found" please relaunch  the command adding the --without-curses flag)
 make
 make install
 bin/samtools --version
@@ -232,7 +234,7 @@ If nothing is printed it means all went fine.
 # TEspeX in wrapper mode
 
 
-
+The pipeline has been developed by Federico Ansaloni (federico.ansaloni@gmail.com), PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of pof. Remo Sanges.
 
 
 
