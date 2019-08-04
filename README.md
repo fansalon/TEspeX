@@ -1,7 +1,3 @@
-'''
-The
-'''
-
 # TEspeX
 
 TEspeX (Transposable Elements SPEific eXpression) is a tool for the TE expression quantification from RNA-seq data. The rationale of this pipeline is to map reads against TE consensus sequences, coding transcripts and non-coding transcripts and to select and count reads mapping with best alignment score only against TE consensus sequences. This should avoid the quantification of reads that may be generated from TE-fragments embedded in coding and non-coding annotated transcripts (39% of human protein coding genes contain TE-fragments). 
@@ -238,7 +234,7 @@ If nothing is printed it means all went fine.
 # TEspeX in wrapper mode
 
 
-The TEspeX pipeline has been developed by Federico Ansaloni (federico.ansaloni@gmail.com), PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of pof. Remo Sanges. To report bugs or suggestion please feel free to write an email to federico.ansaloni@gmail.com
+The TEspeX pipeline has been developed by Federico Ansaloni, PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of pof. Remo Sanges. To report bugs or suggestion please feel free to write an email to federico.ansaloni@gmail.com
 
 
 
