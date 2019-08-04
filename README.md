@@ -151,6 +151,11 @@ pip3 install --user pysam==0.15.1
 Use an Unix system.
 
 
+# Input files
+* TE consensus sequences in fasta format
+* coding transcripts in fasta format (suggested the fasta file downloaded from ensembl 
+* non coding trasncripts in fasta format (suggested the fasta file downloaded from ensembl 
+
 # How to run TEspeX
 TEspeX can be run calling directly the script or through a wrapper (wrapper.py file, contained in the 'master' folder). You should use the wrapper ONLY IF you dispose of a PBS queue managment system.
   
