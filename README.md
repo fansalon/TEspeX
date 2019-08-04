@@ -13,7 +13,7 @@ The pipeline has been written in python3 so **YOU MUST** use python3 and it has 
 * java
 
 \
-**Unix**
+## **Unix**
 
 open a Terminal and type:
 ```
