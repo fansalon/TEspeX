@@ -11,8 +11,7 @@ The pipeline has been written in python3 so **YOU MUST** use python3 and it has 
 **Prerequisites**
 * Python3 (>=3.4.6)
 * pip3
-* java
-\
+* java\
 
 
 **Unix**
