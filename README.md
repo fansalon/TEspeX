@@ -8,6 +8,10 @@ The pipeline has been written in python3 so **YOU MUST** use python3 and it has 
 
 # How to install TEspeX
 
+**Prerequisites**
+* Python3 (>=3.4.6)
+* pip3
+* java
 
 **Unix**
 
@@ -22,15 +26,11 @@ Copy the downoloaded folder in the directory in which you wish to install TEspeX
 ```
 cd TEspex/
 tespex=$PWD
-cd bin
-ls
-ls picard
 ```
-A file called 'picard.jar' should be contained in the 'picard' directory.\
+A file called 'picard.jar' should be contained in the 'bin/picard' directory.\
 To check whether java is properly installed on your machine and picard is working, type:
 ```
-cd picard
-java -jar picard.jar
+java -jar $tespex/bin/picard/picard.jar
 ```
 If the picard help is printed everything is fine, if an error rises it may be that java is not installed on your machine. Install Java and retry.
 
@@ -91,15 +91,11 @@ Copy the downoloaded folder in the directory in which you wish to install TEspeX
 ```
 cd TEspex/
 tespex=$PWD
-cd bin
-ls
-ls picard
 ```
-A file called 'picard.jar' should be contained in the 'picard' directory.\
+A file called 'picard.jar' should be contained in the 'bin/picard' directory.\
 To check whether java is properly installed on your machine and picard is working, type:
 ```
-cd picard
-java -jar picard.jar
+java -jar $tespex/bin/picard/picard.jar
 ```
 If the picard help is printed everything is fine, if an error rises it may be that java is not installed on your machine. Install Java and retry.
 
