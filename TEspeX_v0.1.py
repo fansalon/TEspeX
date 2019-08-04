@@ -365,6 +365,7 @@ def createOut(out, stat):
       mapS.write("%s\n" % (stat[i]))
 
   writeLog("DONE")
+  writeLog("output files "+dir+"/outfile.txt and "+dir+"/mapping_stats.txt have been correctly created")
 
 # 9.
 # main
