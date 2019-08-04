@@ -162,7 +162,8 @@ Use an Unix system.
 * mapping_stats.txt: txt file containing mapping statistics 
 
 # How to run TEspeX
-TEspeX can be run calling directly the script or through a wrapper (wrapper.py file, contained in the 'master' folder). You should use the wrapper ONLY IF you dispose of a PBS queue managment system.
+TEspeX can be run calling directly the script from the command line. However, for those users disposing a queue managment system we suggest to use a wrapper script that can launch several jobs in parallel saving consistent amount of time. We provide  the wrapper file we use on our PBS queue managment system (see the section TEspeX in  wrapper mode for more info).
+
   
 # TEspeX in standard mode
 All the dependencies should have been installed properly. To test this, type:
@@ -190,10 +191,10 @@ arguments:
   --remove REMOVE             T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]
 ```
 
-All the arguments, except fot ```--num_threads``` and ```--remove```, are required. We suggest to use as argument of ```--TE``` argument a fasta file containing TE consensus sequences (from RepBase?) and as arguments of the ```--cdna``` and ```--ncrna``` arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse).\
+All the arguments, except fot ```--num_threads``` and ```--remove```, are required. We suggest to use as argument of ```--TE``` argument a fasta file containing TE consensus sequences (from RepBase?) and as arguments of the ```--cdna``` and ```--ncrna``` arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse data).\
 ```--num_threads``` if not specified is set to 2 while ```--remove``` is set to T by default (meaning all the bam files are removed).
 
-In the folder 'example' you can find a copy of the files used to perform the TE expression analysis in a sample of *C. elegans*. To test whether the pipeline is working properly, please launch it using the input files in the 'example' folder as explained below.
+In the folder 'example' you can find a copy of the files used to perform the TE expression analysis on 2 *C. elegans* embryonic fastq files. To test whether the pipeline is working properly, please launch it using the input files in the 'example' folder as explained below.
 
 1. first create the sample file typing:
 ```
@@ -209,14 +210,14 @@ python3 TEspeX_v0.1.py --TE example/RepBase_single_line.fa.gz \
 --sample example/reads.txt --paired F --length 50 --out test
 ```
 Launching this command the pipeline will first merge together the three fasta file creating a reference transcriptome (TE_transc_reference.fa) and then it will create a STAR index of this file using the ```--length``` parameter for the calculation of genomeSAindexNbase and genomeChrBinNbits. The TE_transc_reference.fa is written in the directory indicated with ```--out```  while the index files are contained in the  ```index``` folder within the  ```--out``` folder.\
-Then reads of the first fastq sample (SRR3170296_partial.fastq.gz) are mapped, filtered and counted. In this example, the ```--paired``` parameter is set to F, and so the pipeline is expecting one fastq/fastq.gz file per row in the  ```reads.txt``` file. If you have paired-end data please write the fastq_1 and fastq_2 on the same raw separating them with \t and set ```--paired``` to T.\
+Then reads of the first fastq sample (SRR3170296_partial.fastq.gz, in this case) are mapped, filtered and counted. In this example, the ```--paired``` parameter is set to F, and so the pipeline is expecting one fastq/fastq.gz file per row in the  ```reads.txt``` file. If you have paired-end data please write the fastq_1 and fastq_2 on the same raw separating them with \t and set ```--paired``` to T.\
 All the output files generated during this step are written in the test/SRR3170296_partial folder.\
-Then the second sample (SRR3170297_partial.fastq.gz) will be analyzed and the output files are written in the test/SRR3170297_partial folder.\
-When all the samples contained in the ```--sample``` file are analyzed, the raw read counts for each TE, for each sample, are written in a file called outfile.txt in the ```--out``` directory. The file contains in the first column the names of the TEs (as they are in the fasta file) and a column with the raw read counts for each fastq analyzed.\
+Then the second sample (SRR3170297_partial.fastq.gz, in this case) will be analyzed and the output files are written in the test/SRR3170297_partial folder.\
+When all the samples contained in the ```--sample``` file are analyzed, the  output files are merged together. The raw read counts for each TE, for each sample, are written in a file called outfile.txt in the ```--out``` directory. The file contains in the first column the names of the TEs (as they are in the fasta file) and a column with the raw read counts for each fastq analyzed.\
 Moreover a file called mapping_stats.txt containing i) total number of reads, ii) number of mapped reads, iii) number of reads mapping with best alignment score against TEs contained in the ```--TE``` file (please beaware: for each read there could be more than 1 best alignment), iv) number of TE specific reads (reads mapping with best alignment score only on TEs) and v) number of TE aspecific reads (reads mapping with best alignment score on both TEs and coding/noncoding transcripts) is provided.\
 The pipeline prints in the Log.final.out all the commands that are launched in real-time, the user can read it to follow all the opearation the pipeline is doing.
 
-The pipeline launched with 20 threads (```--num_threads 20```) should take less than 5 minutes and it creates 5 files (TE_transc_reference.fa, TE_transc_reference.fai, Log.file.out, outfile.txt and mapping_stats.txt) and 3 directories (index/, SRR3170296_partial and SRR3170297_partial) within the ```--out``` directory.\
+The pipeline launched on the example files should take less than 5 minutes and it should create 5 files (TE_transc_reference.fa, TE_transc_reference.fai, Log.file.out, outfile.txt and mapping_stats.txt) and 3 directories (index/, SRR3170296_partial and SRR3170297_partial) within the ```--out``` directory.\
 To check the pipeline run correctly, please test there are no differences between the 2 .txt files contained in your ```--out``` folder and the ones conteined in the example one typing:
 ```
 cd $tespex
