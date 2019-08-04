@@ -7,12 +7,12 @@ The pipeline has been written in python3 so **YOU MUST** use python3 and it has 
 
 # How to install TEspeX
 
-**Prerequisites**
+## **Prerequisites**
 * Python3 (>=3.4.6)
 * pip3
 * java
 
-\
+
 ## **Unix**
 
 open a Terminal and type:
@@ -80,7 +80,7 @@ pip3 install --user pandas==0.23.0
 pip3 install --user pysam==0.14.1
 ```
 \
-**Mac OS**
+## **Mac OS**
 
 open a Terminal and type:
 ```
@@ -148,9 +148,6 @@ pip3 install --user pandas==0.23.0
 pip3 install --user pysam==0.15.1
 ```
 \
-**Windows**
-
-Use an Unix system.
 
 
 # Input files
