@@ -230,6 +230,16 @@ If nothing is printed it means all went fine.
 
 # TEspeX in wrapper mode
 
+The wrapper.py is the wrapper file **we use on our PBS queue managment system** thus it is written to fit the requirements of our system. If you dispose a PBS queue managment machine you should modify according to your machine settings:
+* queue name (#PBS -q)
+* walltime (#PBS -l)
+
+
+
+
+
+
+
 
 The TEspeX pipeline has been developed by Federico Ansaloni, PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of pof. Remo Sanges.\
 To report bugs or suggestions please feel free to write an email to federico.ansaloni@gmail.com
