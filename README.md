@@ -171,7 +171,7 @@ cd $tespex
 python3 TEspeX_v0.1.py --help
 ```
 
-This command shows the help that should be something very simalr to:
+This command shows the help that should be something very similar to:
 ```
 usage: TExspec_v0.1.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE 
                         --paired PAIRED --length LENGTH --out OUT
@@ -234,13 +234,68 @@ The wrapper.py is the wrapper file **we use on our PBS queue managment system** 
 * queue name (#PBS -q)
 * walltime (#PBS -l)
 
+These two parameters are defined at line 159 of the wrapper.py file.
+
+Once you have modified these parameters you can proceed and use the wrapper.py script. To see the help, type:
+```
+cd $tespex
+python3 wrapper.py -h
+```
+
+This should print to screen:
+```
+usage: wrapper.py [-h] --script SCRIPT --TE TE --cdna CDNA --ncrna NCRNA
+                  --sample SAMPLE --paired PAIRED --length LENGTH --out OUT
+                  --job JOB [--num_threads NUM_THREADS] [--remove REMOVE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --script SCRIPT       path to the python pipeline for calculation of TE
+                        expression [required]
+  --TE TE               fa/fa.gz file containing TE consensus sequences in
+                        fasta format [required]
+  --cdna CDNA           fa/fa.gz file containing cdna Ensembl sequences in
+                        fasta format [required]
+  --ncrna NCRNA         fa/fa.gz file containing ncrna Ensembl sequences in
+                        fasta format [required]
+  --sample SAMPLE       txt file containing fq/fq.gz FULL PATHS. If reads are
+                        single end, one path should be written in each line.
+                        If reads are paired end the two mates should be
+                        written in the same line separated by \t [required]
+  --paired PAIRED       T (true) or F (false). T means the reads are paired
+                        and consequently the sample file is expected to
+                        contain 2 columns. F means the reads are not paired,
+                        sample file is expected to contain 1 single column
+                        [required]
+  --length LENGTH       length of the read given as input. This is used to
+                        calculate STAR index parameters. If your fq/fq.gz file
+                        contains reads with different length specify the
+                        shorter length [required]
+  --out OUT             directory where the output files will be written. This
+                        directory is created by the pipeline, specificy a non-
+                        yet-existing directory
+  --job JOB             number of jobs that can be run at the same time
+  --num_threads NUM_THREADS
+                        number of threads used by STAR and samtools [2]
+  --remove REMOVE       T (true) or F (false). If this parameter is set to T
+                        all the bam files are removed. If it is F they are not
+                        removed [T]
+
+```
+
+The parameters are exactly the same of TEspeX.py script except for 2 new parameters:
+* --script: it requires the path to TEspeX.py script
+* --job: it requires the number of job you want to run at the same time. This depends on the settings of your system. If you can run 40 jobs at the same time and you have 80 fq/fq.gz written in the txt file given as input to ```--sample``` the wrapper.py script will: 
+* subset the ```--sample``` file in 40 sub-files containing 2 (80/40) fq/fq.gz each 
+* create 40 folders (named: 0, 1, 2, 3, .., 40)
+* launch 40 different jobs (named job_0, job_1, .., job_40)
+* when all the jobs have finished the cleanup.py job is automatically launched and all the output files are merged together
+
+When all is done you should have in your ```--out``` folder: 5 files (cleanup_job.oXXX, TE_transc_reference.fa, TE_transc_reference.fai and the 2 output files mapping_stats_total.txt and outfile_total.txt) and 3 directories (index/, mappings/ and tmp/). In the mappings/ directory there is one directory for each fq/fq.gz analyzed containing all the temporary output files.
 
 
 
-
-
-
-
+# Development and help
 The TEspeX pipeline has been developed by Federico Ansaloni, PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of pof. Remo Sanges.\
 To report bugs or suggestions please feel free to write an email to federico.ansaloni@gmail.com
 
