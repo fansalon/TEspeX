@@ -287,8 +287,8 @@ The parameters are exactly the same of TEspeX.py script except for 2 new paramet
 * --script: it requires the path to TEspeX.py script
 * --job: it requires the number of jobs you want to run at the same time. This depends on the settings of your system. If you can run 40 jobs at the same time and you have 80 fq/fq.gz written in the txt file given as input to ```--sample``` the wrapper.py script will: 
     * subset the ```--sample``` file in 40 sub-files containing 2 (80/40) fq/fq.gz each 
-    * create 40 folders (named: 0, 1, 2, 3, .., 40)
-    * launch 40 different jobs (named job_0, job_1, .., job_40)
+    * create 40 folders (named: 0, 1, .., 40)
+    * launch 40 different jobs (named: job_0, job_1, .., job_40)
     * when all the jobs have finished the cleanup.py job is automatically launched and all the output files are merged together
 
 When all is done you should have in your ```--out``` folder: 5 files (cleanup_job.oXXX, TE_transc_reference.fa, TE_transc_reference.fai and the 2 output files mapping_stats_total.txt and outfile_total.txt) and 3 directories (index/, mappings/ and tmp/). In the mappings/ directory there is one directory for each fq/fq.gz analyzed containing all the temporary output files.
@@ -296,7 +296,7 @@ When all is done you should have in your ```--out``` folder: 5 files (cleanup_jo
 
 
 # Development and help
-The TEspeX pipeline has been developed by Federico Ansaloni, PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of pof. Remo Sanges.\
+The TEspeX pipeline has been developed by Federico Ansaloni, PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of prof. Remo Sanges.\
 To report bugs or suggestions please feel free to write an email to federico.ansaloni@gmail.com
 
 
