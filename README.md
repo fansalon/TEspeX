@@ -154,7 +154,7 @@ pip3 install --user pysam==0.15.1
 * TE consensus sequences in fasta format
 * coding transcripts in fasta format (we suggest the 'cdna.fa.gz' fasta file downloaded from ensembl)
 * non coding trasncripts in fasta format (we suggest the 'ncrna.fa.gz' fasta file downloaded from ensembl)
-* RN-seq data in fastq/fastq.gz format
+* RNA-seq data in fastq/fastq.gz format
 
 # Output files
 * outfile.txt: txt file containing the raw counts of reads specifically mapping on TEs. The first column contains the TE names as they are in the TE consensus fasta file, the other columns contain the read counts for each fq input file
