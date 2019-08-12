@@ -77,7 +77,7 @@ All these libraries except for pysam and pandas are python standard libraries an
 To install pysam and pandas please open a terminal and type:
 ```
 pip3 install --user pandas==0.23.0
-pip3 install --user pysam==0.14.1
+pip3 install --user pysam==0.15.1
 ```
 
 ## **Mac OS**
@@ -151,13 +151,13 @@ pip3 install --user pysam==0.15.1
 
 
 # Input files
-* TE consensus sequences in fasta format
+* TE consensus sequences in fasta (fa/fa.gz) format
 * coding transcripts in fasta format (we suggest the 'cdna.fa.gz' fasta file downloaded from ensembl)
 * non coding trasncripts in fasta format (we suggest the 'ncrna.fa.gz' fasta file downloaded from ensembl)
-* RNA-seq data in fastq/fastq.gz format
+* RNA-seq data in fastq (fq/fq.gz) format
 
 # Output files
-* outfile.txt: txt file containing the raw counts of reads specifically mapping on TEs. The first column contains the TE names as they are in the TE consensus fasta file, the other columns contain the read counts for each fq input file
+* outfile.txt: txt file containing the raw counts of reads mapping specifically on TEs. The first column contains the TE names as they are in the TE consensus fasta file, the other columns contain the read counts for each fq input file
 * mapping_stats.txt: txt file containing mapping statistics 
 
 # How to run TEspeX
@@ -193,13 +193,13 @@ arguments:
 All the arguments, except fot ```--num_threads``` and ```--remove```, are required. We suggest to use as argument of ```--TE``` argument a fasta file containing TE consensus sequences (from RepBase?) and as arguments of the ```--cdna``` and ```--ncrna``` arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse data).\
 ```--num_threads``` if not specified is set to 2 while ```--remove``` is set to T by default (meaning all the bam files are removed).
 
-In the folder 'example' you can find a copy of the files used to perform the TE expression analysis on 2 *C. elegans* embryonic fastq files. To test whether the pipeline is working properly, please launch it using the input files in the 'example' folder as explained below.
+In the folder 'example' you can find a copy of the files used to perform the TE expression analysis on 2 *C. elegans* embryonic fastq files (Tintori SC, et al. - Dev. Cell - 2016 - https://www.ncbi.nlm.nih.gov/pubmed/27554860). To test whether the pipeline is working properly, please launch it using the input files in the 'example' folder as explained below.
 
 1. first create the sample file typing:
 ```
 ls $tespex/example/*.fastq.gz > $tespex/example/reads.txt
 ```
-  Please notice that the sample file can contain as many file as you want (one per raw - 1 column if SE, 2 column if PE). They will be analized one-by-one by the pipeline.
+  Please notice that the sample file can contain as many file as you want (one per raw - 1 column if SE, 2 columns if PE). They will be analized one-by-one by the pipeline.
   
 2. launch the pipeline typing the following command:
 ```
@@ -286,7 +286,7 @@ optional arguments:
 The parameters are exactly the same of TEspeX.py script except for 2 new parameters:
 * --script: it requires the path to TEspeX.py script
 * --job: it requires the number of jobs you want to run at the same time. This depends on the settings of your system. If you can run 40 jobs at the same time and you have 80 fq/fq.gz written in the txt file given as input to ```--sample``` the wrapper.py script will: 
-    * subset the ```--sample``` file in 40 sub-files containing 2 (80/40) fq/fq.gz each 
+    * subset the ```--sample``` file in 40 sub-files containing 2 (80/40) fq/fq.gz each (named: sample0, sample1, .., sample40)
     * create 40 folders (named: 0, 1, .., 40)
     * launch 40 different jobs (named: job_0, job_1, .., job_40)
     * when all the jobs have finished the cleanup.py job is automatically launched and all the output files are merged together
@@ -297,7 +297,7 @@ When all is done you should have in your ```--out``` folder: 5 files (cleanup_jo
 
 # Development and help
 The TEspeX pipeline has been developed by Federico Ansaloni, PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of prof. Remo Sanges.\
-To report bugs or suggestions please feel free to write an email to federico.ansaloni@gmail.com
+To report bugs or suggestions please feel free to write to federico.ansaloni@gmail.com
 
 
 
