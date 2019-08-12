@@ -34,7 +34,7 @@ java -jar $tespex/bin/picard/picard.jar
 ```
 If the picard help is printed everything is fine, if an error rises it may be that java is not installed on your machine. Install Java and retry.
 
-Now all the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.14.1) should be installed in the bin/ directory within the TEspeX/ directory.\
+Now all the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.15.1) should be installed in the bin/ directory within the TEspeX/ directory.\
 Please install STAR, samtools, pandas and pysam even if they are  already installed on your machine. TEspeX has been tested on these specific versions  and the use of different versions of these softwares may generate different and unpredictable results.
 
 install STAR2.6.0c:
@@ -104,7 +104,6 @@ If the picard help is printed everything is fine, if an error rises it may be th
 Now all the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.15.1) should be installed in the bin/ directory within the TEspeX/ directory.\
 Please install STAR, samtools, pandas and pysam even if they are  already installed on your machine. TEspeX has been tested on these specific versions  and the use of different versions of these softwares may generate different and unpredictable results.
 
-In Mac OS X it seems that pysam 0.14.1 cannot be installed through pip3 (Python3.7), to overcome this issue we  reccomend to download pysam 0.15.1. The pipeline has been tested on Mac OS X with pysam 0.15.1 and generates the same results obtained with pysam 0.14.1 on Unix systems.
 
 install STAR2.6.0c:
 ```
