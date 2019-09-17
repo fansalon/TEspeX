@@ -24,7 +24,7 @@ This should download locally TEspeX.
 
 Copy the downoloaded folder in the directory in which you wish to install TEspeX, move to that directory and type:
 ```
-cd TEspex/
+cd TEspeX/
 tespex=$PWD
 ```
 A file called 'picard.jar' should be contained in the 'bin/picard' directory.\
@@ -91,7 +91,7 @@ This should download locally TEspeX.
 
 Copy the downoloaded folder in the directory in which you wish to install TEspeX, move to that directory and type:
 ```
-cd TEspex/
+cd TEspeX/
 tespex=$PWD
 ```
 A file called 'picard.jar' should be contained in the 'bin/picard' directory.\
