@@ -135,7 +135,7 @@ def createReference(fasta, tag):
     if '>' in riga:
       riga_new = riga.split()[0] + tag
     else:
-      riga_new = riga.split("\t")[0]  
+      riga_new = riga.split()[0]  
     return riga_new
 
   with open(dir+"/TE_transc_reference.fa",'a') as output:
