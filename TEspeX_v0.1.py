@@ -135,7 +135,7 @@ def createReference(fasta, tag):
     if '>' in riga:
       riga_new = riga.split()[0] + tag
     else:
-      riga_new = riga.split("\t")[0]  
+      riga_new = riga.split()[0]  
     return riga_new
 
   with open(dir+"/TE_transc_reference.fa",'a') as output:
@@ -283,8 +283,12 @@ def star_aln(fq_list, fastaReference, pair, rm):
 
     # 7.4
     # usem picard to extract alignmets corresponing to reads mapping specifically on TEs
-      picard = "java -jar " + bin_path + "picard/picard.jar FilterSamReads I="+filename+"_mappedPrim.bam O="+filename+"_specificTE.bam FILTER=includeReadList RLF=specificTE.txt"
-      bash(picard)
+      if os.stat("specificTE.txt").st_size != 0:		# if file not empty
+        picard = "java -jar " + bin_path + "picard/picard.jar FilterSamReads I="+filename+"_mappedPrim.bam O="+filename+"_specificTE.bam FILTER=includeReadList RLF=specificTE.txt"
+        bash(picard)
+      else:							# if file empty, create a bam containig only the header
+        header_bam = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -H " +filename+ "_mappedPrim.bam -b -o " +filename+"_specificTE.bam"
+        bash(header_bam)
 
     # 7.5
     # count the reads mapping specifically on TEs using custom script
