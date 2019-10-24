@@ -277,7 +277,7 @@ usage: wrapper.py [-h] --script SCRIPT --TE TE --cdna CDNA --ncrna NCRNA
 
 optional arguments:
   -h, --help            show this help message and exit
-  --script SCRIPT       path to the python pipeline for calculation of TE
+  --script SCRIPT       path to the TEspeX*.py pipeline for calculation of TE
                         expression [required]
   --TE TE               fa/fa.gz file containing TE consensus sequences in
                         fasta format [required]
