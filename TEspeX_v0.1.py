@@ -27,6 +27,7 @@ import math
 import pysam
 import pandas
 from functools import reduce
+import csv
 
 # 1.
 # define the help function
@@ -40,7 +41,7 @@ def help():
   bin_path = os.path.dirname(os.path.realpath(__file__)) + "/bin/"
 
   parser = argparse.ArgumentParser()
-  
+
   # create argument list
   parser.add_argument('--TE', type=str, help='fa/fa.gz file containing TE consensus sequences in fasta format [required]', required=True)
   parser.add_argument('--cdna', type=str, help='fa/fa.gz file containing cdna Ensembl sequences in fasta format [required]', required=True)
@@ -49,6 +50,7 @@ def help():
   parser.add_argument('--paired', type=str, help='T (true) or F (false). T means the reads are paired and consequently the sample file is expected to contain 2 columns. F means the reads are not paired, sample file is expected to contain  1 single column [required]', required=True)
   parser.add_argument('--length', type=int, help='length of the read given as input. This is used to calculate STAR index parameters. If your fq/fq.gz file contains reads with different length specify the shorter length [required]', required=True)
   parser.add_argument('--out', type=str, help='directory where the output files will be written. This directory is created by the pipeline, specificy a non-yet-existing directory', required=True)
+  parser.add_argument('--strand', type=str, help='strandeness of the RNAseq library. no = unstranded/htseqcount \'no\', yes = htseqcount \'yes\', reverse = htseqcount \'reverse\'', required=True)
   parser.add_argument('--num_threads', type=int, default=2, help='number of threads used by STAR and samtools [2]', required=False)
   parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
 
@@ -61,6 +63,7 @@ def help():
   prd = arg.paired
   rl = arg.length
   dir = os.path.abspath(arg.out)
+  strandeness = arg.strand
   num_threads = arg.num_threads
   rm = arg.remove
 
@@ -74,7 +77,7 @@ def help():
     except FileExistsError:
       print("ERROR: "+dir+" directory already exists")
       sys.exit(1)
-  
+
 
   # create a list with the arguments that are files
   argList = []
@@ -90,7 +93,13 @@ def help():
       print("ERROR!\n%s: no such file or directory" % (argList[i]))
       sys.exit(1)
 
-  return te, cDNA, ncRNA, sample_file, prd, rl, dir, num_threads, rm, bin_path
+  # check strand argument is 0, 1 or 2
+  strand_list = [ "no", "yes", "reverse"]
+  if strandeness not in strand_list:
+    print("ERROR!\nunrecognized --strand parameter. Please specify no, yes or reverse")
+    sys.exit(1)
+
+  return te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, num_threads, rm, bin_path
 
 
 # 2.
@@ -127,7 +136,7 @@ def bash(*command):
        riseError(cmd)
 
 # 4.
-# this function takes as input 3 fasta files: TE, ensembl-cdna, ensembl-ncrna, adds _transc and _transp to fasta names 
+# this function takes as input 3 fasta files: TE, ensembl-cdna, ensembl-ncrna, adds _transc and _transp to fasta names
 # and merge the 3 files together creating the reference
 def createReference(fasta, tag):
   # this function takes a line of a fasta file and return the name+tag or the nt sequence
@@ -135,7 +144,7 @@ def createReference(fasta, tag):
     if '>' in riga:
       riga_new = riga.split()[0] + tag
     else:
-      riga_new = riga.split()[0]  
+      riga_new = riga.split()[0]
     return riga_new
 
   with open(dir+"/TE_transc_reference.fa",'a') as output:
@@ -160,27 +169,53 @@ def createReference(fasta, tag):
 
 # 5.
 # convert fasta to bed (TE)
-#def faTObed(fasta):
-#  faidx_com = bin_path + "samtools-1.3.1/bin/samtools faidx " + fasta 
-#  bash(faidx_com)
-#  # convert the fai file in bed format using pandas
-#  fai = pandas.read_table(fasta+".fai", sep='\t', header=None)
-#  faiTE = fai[fai[0].str.contains("_transp")]
-#  fai_bed = faiTE.iloc[:, [0,1] ]
-#  fai_bed.insert(1,'start',0)		# add the column with the start value
-#  fai_bed.to_csv(fasta+".bed",sep='\t',index=False, header=False)
-#
-#  bedRef = (os.path.abspath(fasta+".bed"))
-#
-#  return bedRef
+def faTObed(fasta):
+  faidx_com = bin_path + "samtools-1.3.1/bin/samtools faidx " + fasta
+  bash(faidx_com)
+  # convert the fai file in bed format using pandas
+  fai = pandas.read_table(fasta+".fai", sep='\t', header=None)
+  faiTE = fai[fai[0].str.contains("_transp")]
+  fai_bed = faiTE.iloc[:, [0,1] ]
+  fai_bed.insert(1,'start',0)		# add the column with the start value
+  fai_bed.to_csv(fasta+".bed",sep='\t',index=False, header=False)
+
+  bedRef = (os.path.abspath(fasta+".bed"))
+
+  return bedRef
 
 # 6.
+# convert bed to gtf
+def bedTOgtf(bed):
+  # read input bed
+  bed_pd = pandas.read_table(bed,sep='\t',header=None)
+  seqname = bed_pd.iloc[:,0]
+  start = bed_pd.iloc[:,1]
+  end = bed_pd.iloc[:,2]
+  # create the gtf. seqname is the chr, source is empty, feature is always 'exon', start +1, end, score is empty, strand is always +, frame is empty
+  gtf = pandas.DataFrame()
+  gtf["seqname"] = seqname
+  gtf["source"] = "."
+  gtf["feature"] = "exon"
+  gtf["start"] = start + 1
+  gtf["end"] = end
+  gtf["score"] = "."
+  gtf["strand"] = "+"
+  gtf["frame"] = "."
+  gtf["group"] = "gene_id \"" + gtf["seqname"] + "\"; transcript_id \"" + gtf["seqname"] + "\"; exon_number \"1\"; gene_name \"" + gtf["seqname"] + "\"; gene_source \".\"; gene_biotype \"protein_coding\"; transcript_name \"" + gtf["seqname"] + "\"; transcript_source \".\"; transcript_biotype \"protein_coding\"; exon_id \"" + gtf["seqname"] + "-E1\";"
+
+  gtf.to_csv(bed+".gtf",sep='\t',index=False, header=False,quoting=csv.QUOTE_NONE)
+
+  gtfRef = (os.path.abspath(bed+".gtf"))
+
+  return gtfRef
+
+# 7.
 # this function creates the index of the reference file
 def star_ind(genome, r_length):
   # to avoid STAR segmentation fault calculate genomeSAindexNbases and genomeChrBinNbits parameters
   readL = int(r_length)
 
-  faidx_com = bin_path + "samtools-1.3.1/bin/samtools faidx " + genome 
+  faidx_com = bin_path + "samtools-1.3.1/bin/samtools faidx " + genome
   bash(faidx_com)
   bed = pandas.read_table(genome+".fai", sep='\t', header=None)
   genome_length = sum(bed.iloc[:,1])
@@ -196,14 +231,14 @@ def star_ind(genome, r_length):
   # then we can call the STAR index function using the number of threads that is passed from command line
   starCmd = bin_path + "STAR-2.6.0c/bin/tespex/STAR --runThreadN " +str(num_threads)+ " --runMode genomeGenerate --genomeDir " +os.path.abspath(".")+ " --genomeFastaFiles " +genome+ " --genomeSAindexNbases " +str(genomeSAindexNbase)+ " --genomeChrBinNbits " +str(genomeChrBinNbits)
   bash(starCmd)
-  
+
   os.chdir(dir)
 
-# 7.
+# 8.
 # map the reads to the reference. The argument of this function is a file with the full path to the reads
 # if the reads are paired they are written on the same line separated by \t
 #def star_aln(fq_list, bedReference, pair, rm):
-def star_aln(fq_list, fastaReference, pair, rm):
+def star_aln(fq_list, gtf_ref, strandn, pair, rm):
   output_names = []				# this is the list that will contain the names of the bedtools coverage output files
   statOut = []					# this is the list that will contain mapping statistics
   statOut.append("SRR\ttot\tmapped\tTE-best\tspecificTE\tnot_specificTE")
@@ -218,7 +253,7 @@ def star_aln(fq_list, fastaReference, pair, rm):
       lin = line.split()
 
       path_filename, file_extension = os.path.splitext(lin[0])	# separate full_path+file and extension
-      filenam = os.path.basename(path_filename)			# extrapolate filename without full_path and extension 
+      filenam = os.path.basename(path_filename)			# extrapolate filename without full_path and extension
       filename = os.path.splitext(filenam)[0]			# (if the file is fq.gz .fq will remain in filenam)
       os.mkdir(filename)					# (if the file is fq.gz .fq will remain in filenam)
       os.chdir(filename)
@@ -234,7 +269,7 @@ def star_aln(fq_list, fastaReference, pair, rm):
           gzipped = True
           command_final = command + " --readFilesIn " +lin[0]+ " --readFilesCommand gunzip -c > " +filename+ ".bam"
         else:
-          gzipped =False
+          gzipped = False
           command_final = command + " --readFilesIn " +lin[0]+ " > " +filename+ ".bam"
       # paired end
       elif len(lin) == 2:
@@ -249,16 +284,16 @@ def star_aln(fq_list, fastaReference, pair, rm):
         else:
           gzipped = False
           command_final = command + " --readFilesIn " +lin[0]+ " " +lin[1]+ " > " +filename+ ".bam"
-    # 7.1 
-    # map reads to reference  
+    # 8.1
+    # map reads to reference
       bash(command_final)
-    
-    # 7.2  
+
+    # 8.2
     # extract primary alignments (best score alignments)
       prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
       bash(prim_cmd)
 
-    # 7.3  
+    # 8.3
     # create list containing name of the reads mapping with best score alignmets only on TEs. These reads are mapping specifically on TEs
       writeLog("selecting reads mapping specifically on TEs")
       TE = []
@@ -281,42 +316,55 @@ def star_aln(fq_list, fastaReference, pair, rm):
         for j in range(0, len(not_specific)):
           out2.write("%s\n" % (not_specific[j]))
 
-    # 7.4
+    # 8.4
     # usem picard to extract alignmets corresponing to reads mapping specifically on TEs
-      if os.stat("specificTE.txt").st_size != 0:		# if file not empty
+      if os.stat("specificTE.txt").st_size != 0:		# if specific read file not empty
         picard = "java -jar " + bin_path + "picard/picard.jar FilterSamReads I="+filename+"_mappedPrim.bam O="+filename+"_specificTE.bam FILTER=includeReadList RLF=specificTE.txt"
         bash(picard)
       else:							# if file empty, create a bam containig only the header
         header_bam = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -H " +filename+ "_mappedPrim.bam -b -o " +filename+"_specificTE.bam"
         bash(header_bam)
 
-    # 7.5
-    # count the reads mapping specifically on TEs using custom script
+    # 8.5
+    # count the reads mapping specifically on TEs using htseqcount
       writeLog("counting TE expression levels considering TE-specific reads containded in " + filename + "_specificTE.bam")
-      def counts(bam,fa):
-        name = filename
-        bam_chr = []
-        bamfile = pysam.AlignmentFile(bam, "rb")
-        for aln in bamfile.fetch(until_eof=True):
-          bam_chr.append(aln.reference_name)
-        bamfile.close()
-
-        fa_chr = []
-        with open(fa) as fa_f:
-          for line in fa_f:
-            if line.startswith(">"):
-              if "_transp" in line:
-                fa_chr.append((line.split()[0]).split(">")[1])
-
-        with open(name+"_counts",'w') as output:
-          output.write("TE\t%s\n" % (name))
-          for chr in fa_chr:
-            output.write("%s\t%s\n" % (chr, bam_chr.count(chr)))
-      counts(filename+"_specificTE.bam", fastaReference)
+      count = "htseq-count -q -f bam -r name -a 0 -s " + strandn + " -m union --nonunique all --secondary-alignments score --supplementary-alignments score " + filename+"_specificTE.bam " + gtf_ref + " > " + filename + "_counts.tmp"
+      bash(count)
+      # delete annotation lines starting with "__"
+      with open(filename + "_counts.tmp") as htseqoutmp:
+        with open(filename + "_counts",'w') as htseqout:
+          htseqout.write("TE\t%s\n" % (filename))
+          for hts_line in htseqoutmp:
+            if hts_line.startswith("__"):
+              continue
+            else:
+              htseqout.write(hts_line)
       # append the name of the bedtools coverage output in the list
       output_names.append(os.path.abspath(".")+"/"+filename+ "_counts")
+#      def counts(bam,fa):
+#        name = filename
+#        bam_chr = []
+#        bamfile = pysam.AlignmentFile(bam, "rb")
+#        for aln in bamfile.fetch(until_eof=True):
+#          bam_chr.append(aln.reference_name)
+#        bamfile.close()
+#
+#        fa_chr = []
+#        with open(fa) as fa_f:
+#          for line in fa_f:
+#            if line.startswith(">"):
+#              if "_transp" in line:
+#                fa_chr.append((line.split()[0]).split(">")[1])
+#
+#        with open(name+"_counts",'w') as output:
+#          output.write("TE\t%s\n" % (name))
+#          for chr in fa_chr:
+#            output.write("%s\t%s\n" % (chr, bam_chr.count(chr)))
+#      counts(filename+"_specificTE.bam", fastaReference)
+#      # append the name of the bedtools coverage output in the list
+#      output_names.append(os.path.abspath(".")+"/"+filename+ "_counts")
 
-    # 7.6
+    # 8.6
     # create a file with statistics
       writeLog("calculating the mapping statistics...")
       # total reads
@@ -335,13 +383,13 @@ def star_aln(fq_list, fastaReference, pair, rm):
               numb = line.split("\t")[1]
               mapped = str(int(mapped) + int(numb))
         return tot_map, mapped
-      tot, map = starFinalHandling("Log.final.out") 
+      tot, map = starFinalHandling("Log.final.out")
 
 #      if gzipped == True:
 #        count = int(subprocess.check_output("zcat " + lin[0] + " | wc -l", shell=True)) # bash zcat is faster than python .gzip
 #        tot = str(int(count/4))
 #      else:
-#        count = int(subprocess.check_output("cat " + lin[0] + " | wc -l", shell=True)) 
+#        count = int(subprocess.check_output("cat " + lin[0] + " | wc -l", shell=True))
 #        tot = str(int(count/4))
 #      # mapped
 #      read_list = []
@@ -366,9 +414,9 @@ def star_aln(fq_list, fastaReference, pair, rm):
         os.remove(filename+ "_mappedPrim.bam")
         os.remove(filename+"_specificTE.bam")
 
-  return output_names, statOut  
+  return output_names, statOut
 
-# 8.
+# 9.
 # this function takes as input the list 'out' containing the full path to bedtools coverage output files
 # and the list 'stat' containing the mapping statitistics for each fq analyzed and write the 2 lists
 # in 2 output files
@@ -379,7 +427,7 @@ def createOut(out, stat):
     pd.append(pdFile)
   count_final = reduce(lambda left,right: pandas.merge(left,right,on='TE'), pd)
   count_final.to_csv(dir+"/outfile.txt",sep='\t',index=False,float_format='%.2f')
-  
+
   # create the output file with mapping statistics
   with open(dir+"/mapping_stats.txt", 'w') as mapS:
     for i in range(0, len(stat)):
@@ -388,20 +436,21 @@ def createOut(out, stat):
   writeLog("DONE")
   writeLog("output files "+dir+"/outfile.txt and "+dir+"/mapping_stats.txt have been correctly created")
 
-# 9.
+# 10.
 # main
 def main():
-  TE, cdna, ncrna, sample, paired, read_length, dir, num_threads, remove, bin_path = help()
+  TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, bin_path = help()
   os.chdir(dir)
-  writeLog("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nnum_threads = %s \nremove = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, num_threads, remove))
+  writeLog("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_threads = %s \nremove = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove))
   writeLog("creating reference file %s/TE_transc_reference.fa" % (dir))
-  createReference(TE, "_transp") 
-  createReference(cdna, "_transc") 
-  reference = createReference(ncrna, "_transc") 
-  #bedReference = faTObed(reference)
+  createReference(TE, "_transp")
+  createReference(cdna, "_transc")
+  reference = createReference(ncrna, "_transc")
+  bedReference = faTObed(reference)
+  gtfReference = bedTOgtf(bedReference)
   star_ind(reference, read_length)
   #outfile, statfile = star_aln(sample, bedReference, paired, remove)
-  outfile, statfile = star_aln(sample, reference, paired, remove)
+  outfile, statfile = star_aln(sample, gtfReference, strand, paired, remove)
   createOut(outfile, statfile)
 
 
