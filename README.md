@@ -272,7 +272,8 @@ This should print to screen:
 ```
 usage: wrapper.py [-h] --script SCRIPT --TE TE --cdna CDNA --ncrna NCRNA
                   --sample SAMPLE --paired PAIRED --length LENGTH --out OUT
-                  --job JOB [--num_threads NUM_THREADS] [--remove REMOVE]
+                  --strand STRAND --job JOB [--num_threads NUM_THREADS] 
+                  [--remove REMOVE]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -300,6 +301,9 @@ optional arguments:
   --out OUT             directory where the output files will be written. This
                         directory is created by the pipeline, specificy a non-
                         yet-existing directory
+  --strand STRAND       strandeness of the RNAseq library. no =
+                        unstranded/htseqcount 'no', yes = htseqcount 'yes',
+                        reverse = htseqcount 'reverse'
   --job JOB             number of jobs that can be run at the same time
   --num_threads NUM_THREADS
                         number of threads used by STAR and samtools [2]
