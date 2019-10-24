@@ -1,0 +1,2 @@
+/Users/federico/Documents/GitHub/TEspeX/example/SRR3170296_partial.fastq.gz
+/Users/federico/Documents/GitHub/TEspeX/example/SRR3170297_partial.fastq.gz

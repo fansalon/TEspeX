@@ -20,7 +20,7 @@ def help():
 
   # this script requires the launcher.py script
   clean = os.path.dirname(os.path.realpath(__file__)) + "/cleanup.py"
-  if os.path.isfile(clean): 
+  if os.path.isfile(clean):
     True
   else:
     print("\nERROR:")
@@ -29,9 +29,9 @@ def help():
     sys.exit()
 
   parser = argparse.ArgumentParser()
-  
+
   # create argument list
-  parser.add_argument('--script', type=str, help='path to the python pipeline for calculation of TE expression [required]', required=True)
+  parser.add_argument('--script', type=str, help='path to the TEspeX*.py pipeline for calculation of TE expression [required]', required=True)
   parser.add_argument('--TE', type=str, help='fa/fa.gz file containing TE consensus sequences in fasta format [required]', required=True)
   parser.add_argument('--cdna', type=str, help='fa/fa.gz file containing cdna Ensembl sequences in fasta format [required]', required=True)
   parser.add_argument('--ncrna', type=str, help='fa/fa.gz file containing ncrna Ensembl sequences in fasta format [required]', required=True)
@@ -39,6 +39,7 @@ def help():
   parser.add_argument('--paired', type=str, help='T (true) or F (false). T means the reads are paired and consequently the sample file is expected to contain 2 columns. F means the reads are not paired, sample file is expected to contain  1 single column [required]', required=True)
   parser.add_argument('--length', type=int, help='length of the read given as input. This is used to calculate STAR index parameters. If your fq/fq.gz file contains reads with different length specify the shorter length [required]', required=True)
   parser.add_argument('--out', type=str, help='directory where the output files will be written. This directory is created by the pipeline, specificy a non-yet-existing directory', required=True)
+  parser.add_argument('--strand', type=str, help='strandeness of the RNAseq library. no = unstranded/htseqcount \'no\', yes = htseqcount \'yes\', reverse = htseqcount \'reverse\'', required=True)
   parser.add_argument('--job', type=str, help='number of jobs that can be run at the same time', required=True)
   parser.add_argument('--num_threads', type=int, default=2, help='number of threads used by STAR and samtools [2]', required=False)
   parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
@@ -55,6 +56,7 @@ def help():
   prd = arg.paired
   rl = arg.length
   dir = os.path.abspath(arg.out)
+  strandeness = arg.strand
   njob = arg.job
   num_threads = arg.num_threads
   rm = arg.remove
@@ -69,7 +71,7 @@ def help():
     except FileExistsError:
       print("ERROR: "+dir+" directory already exists")
       sys.exit()
-  
+
 
   # create a list with the arguments that are files
   argList = []
@@ -86,7 +88,13 @@ def help():
       print("ERROR!\n%s: no such file or directory" % (argList[i]))
       sys.exit()
 
-  return clean, pipeline, te, cDNA, ncRNA, sample_file, prd, rl, dir, njob, num_threads, rm
+  # check strand argument is 0, 1 or 2
+  strand_list = [ "no", "yes", "reverse"]
+  if strandeness not in strand_list:
+    print("ERROR!\nunrecognized --strand parameter. Please specify no, yes or reverse")
+    sys.exit(1)
+
+  return clean, pipeline, te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, njob, num_threads, rm
 
 # 2.
 # this function writes the message to the log file in the output directory
@@ -153,15 +161,15 @@ def createSample(fq_file, jobs):
   splitter(fq_list, jobs)
 
 # create the jobs
-def createJob(jobs, py, te, cDna, ncRna, prd, read_leng, threads, remove):
+def createJob(jobs, py, te, cDna, ncRna, prd, read_leng, strandn, threads, remove):
   job_list = []
   for i in range(0, int(jobs)):
     with open("job"+str(i), 'w') as outj:
       job_list.append("job"+str(i))
       outj.write("#!/bin/bash\n#\n#PBS -q regular\n#PBS -j oe\n#PBS -l nodes=1:ppn="+str(threads)+"\n#PBS -l walltime=12:00:00\ncd $PBS_O_WORKDIR\n\n")
-      outj.write("time python3 "+py+" --TE "+te+" --cdna "+cDna+" --ncrna "+ncRna+" --sample sample"+str(i)+".txt --paired "+prd+" --length "+str(read_leng)+" --out "+str(i)+ " --num_threads "+str(threads)+" --remove "+remove+"\n\n")
+      outj.write("time python3 "+py+" --TE "+te+" --cdna "+cDna+" --ncrna "+ncRna+" --sample sample"+str(i)+".txt --paired "+prd+" --length "+str(read_leng)+" --out "+str(i)+ " --strand "+strandn+ " --num_threads "+str(threads)+" --remove "+remove+"\n\n")
 
-  return job_list 
+  return job_list
 
 # launch the job
 def launchJob(jl):
@@ -194,12 +202,12 @@ def cleanUP(job_id, cleanupy):
 
 # main
 def main():
-  clean_script, pyscript, TE, cdna, ncrna, sample, paired, read_length, dir, num_job, num_threads, remove = help()
+  clean_script, pyscript, TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove = help()
   os.chdir(dir)
-  print("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nnum_job = %s\nnum_threads = %s \nremove = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, num_job, num_threads, remove))
+  print("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_job = %s\nnum_threads = %s \nremove = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove))
   createSample(sample, num_job)
   print("You have asked to split the analysis in %s different jobs:" % (num_job))
-  jlist = createJob(num_job, pyscript, TE, cdna, ncrna, paired, read_length, num_threads, remove)
+  jlist = createJob(num_job, pyscript, TE, cdna, ncrna, paired, read_length, strand, num_threads, remove)
   jid = launchJob(jlist)
   cleanUP(jid, clean_script)
 
