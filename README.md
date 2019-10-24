@@ -10,6 +10,7 @@ The pipeline has been written in python3 so **YOU MUST** use python3 and it has 
 ## **Prerequisites**
 * Python3 (>=3.4.6)
 * pip3
+* pip
 * java
 
 
@@ -78,6 +79,11 @@ To install pysam and pandas please open a terminal and type:
 ```
 pip3 install --user pandas==0.23.0
 pip3 install --user pysam==0.15.1
+```
+
+TEspeX takes advantage of HTSeq to perform reads counting. HTSeq should be installed as follow: (under construnction...)
+```
+pip install --user HTSeq==0.11.2
 ```
 
 ## **Mac OS**
