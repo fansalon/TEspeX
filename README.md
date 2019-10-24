@@ -178,21 +178,42 @@ python3 TEspeX_v0.1.py --help
 
 This command shows the help that should be something very similar to:
 ```
-usage: TExspec_v0.1.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE 
-                        --paired PAIRED --length LENGTH --out OUT
-                       [--num_threads NUM_THREADS] [--remove REMOVE]
+usage: TEspeX_v0.1.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE
+                      --paired PAIRED --length LENGTH --out OUT --strand
+                      STRAND [--num_threads NUM_THREADS] [--remove REMOVE]
 
-arguments:
-  -h, --help                  show this help message and exit
-  --TE TE                     fa/fa.gz file containing TE consensus sequences in fasta format [required]
-  --cdna CDNA                 fa/fa.gz file containing cdna Ensembl sequences in fasta format [required]
-  --ncrna NCRNA               fa/fa.gz file containing ncrna Ensembl sequences in fasta format [required]
-  --sample SAMPLE             txt file containing fq/fq.gz FULL PATHS. If reads are single end, one path should be written in each line. If reads are paired end the two mates should be written in the same line separated by \t [required]
-  --paired PAIRED             T (true) or F (false). T means the reads are paired and consequently the sample file is expected to contain 2 columns. F means the reads are not paired, sample file is expected to contain  1 single column [required]
-  --length LENGTH             length of the read given as input. This is used to calculate STAR index parameters. If your fq/fq.gz file contains reads with different length specify the shorter length [required]
-  --out OUT                   directory where the output files will be written. This directory is created by the pipeline, specificy a non-yet-existing directory [required]
-  --num_threads NUM_THREADS   number of threads used by STAR and samtools [2]
-  --remove REMOVE             T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]
+optional arguments:
+  -h, --help            show this help message and exit
+  --TE TE               fa/fa.gz file containing TE consensus sequences in
+                        fasta format [required]
+  --cdna CDNA           fa/fa.gz file containing cdna Ensembl sequences in
+                        fasta format [required]
+  --ncrna NCRNA         fa/fa.gz file containing ncrna Ensembl sequences in
+                        fasta format [required]
+  --sample SAMPLE       txt file containing fq/fq.gz FULL PATHS. If reads are
+                        single end, one path should be written in each line.
+                        If reads are paired end the two mates should be
+                        written in the same line separated by \t [required]
+  --paired PAIRED       T (true) or F (false). T means the reads are paired
+                        and consequently the sample file is expected to
+                        contain 2 columns. F means the reads are not paired,
+                        sample file is expected to contain 1 single column
+                        [required]
+  --length LENGTH       length of the read given as input. This is used to
+                        calculate STAR index parameters. If your fq/fq.gz file
+                        contains reads with different length specify the
+                        shorter length [required]
+  --out OUT             directory where the output files will be written. This
+                        directory is created by the pipeline, specificy a non-
+                        yet-existing directory
+  --strand STRAND       strandeness of the RNAseq library. no =
+                        unstranded/htseqcount 'no', yes = htseqcount 'yes',
+                        reverse = htseqcount 'reverse'
+  --num_threads NUM_THREADS
+                        number of threads used by STAR and samtools [2]
+  --remove REMOVE       T (true) or F (false). If this parameter is set to T
+                        all the bam files are removed. If it is F they are not
+                        removed [T]
 ```
 
 All the arguments, except fot ```--num_threads``` and ```--remove```, are required. We suggest to use as argument of ```--TE``` argument a fasta file containing TE consensus sequences (from RepBase?) and as arguments of the ```--cdna``` and ```--ncrna``` arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse data).\
@@ -211,7 +232,7 @@ ls $tespex/example/*.fastq.gz > $tespex/example/reads.txt
 python3 TEspeX_v0.1.py --TE example/RepBase_single_line.fa.gz \
 --cdna example/Caenorhabditis_elegans.WBcel235.cdna.all.fa.gz \
 --ncrna example/Caenorhabditis_elegans.WBcel235.ncrna.fa.gz \
---sample example/reads.txt --paired F --length 50 --out test
+--sample example/reads.txt --paired F --length 50 --out test --strand no
 ```
 Launching this command the pipeline will first merge together the three fasta file creating a reference transcriptome (TE_transc_reference.fa) and then it will create a STAR index of this file using the ```--length``` parameter for the calculation of genomeSAindexNbase and genomeChrBinNbits. The TE_transc_reference.fa is written in the directory indicated with ```--out```  while the index files are contained in the  ```index``` folder within the  ```--out``` folder.\
 Then reads of the first fastq sample (SRR3170296_partial.fastq.gz, in this case) are mapped, filtered and counted. In this example, the ```--paired``` parameter is set to F, and so the pipeline is expecting one fastq/fastq.gz file per row in the  ```reads.txt``` file. If you have paired-end data please write the fastq_1 and fastq_2 on the same raw separating them with \t and set ```--paired``` to T.\
