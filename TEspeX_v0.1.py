@@ -238,7 +238,7 @@ def star_ind(genome, r_length):
 # map the reads to the reference. The argument of this function is a file with the full path to the reads
 # if the reads are paired they are written on the same line separated by \t
 #def star_aln(fq_list, bedReference, pair, rm):
-def star_aln(fq_list, gtf_ref, strandn, pair, rm):
+def star_aln(fq_list, gtf_ref, strandn, fastaReference, pair, rm):
   output_names = []				# this is the list that will contain the names of the bedtools coverage output files
   statOut = []					# this is the list that will contain mapping statistics
   statOut.append("SRR\ttot\tmapped\tTE-best\tspecificTE\tnot_specificTE")
@@ -290,7 +290,21 @@ def star_aln(fq_list, gtf_ref, strandn, pair, rm):
 
     # 8.2
     # extract primary alignments (best score alignments)
-      prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
+      if pair == "F":
+        if strandn == "no":
+          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
+        elif strandn == "yes":
+          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -F 0x10 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
+        elif strandn == "reverse":
+          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x10 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
+      elif pair == "T":
+        if strandn == "no":
+          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x40 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
+        elif strandn == "yes":
+          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x40 -F 0x10 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
+        elif strandn == "reverse":
+          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x40 -f 0x10 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
+
       bash(prim_cmd)
 
     # 8.3
@@ -328,41 +342,41 @@ def star_aln(fq_list, gtf_ref, strandn, pair, rm):
     # 8.5
     # count the reads mapping specifically on TEs using htseqcount
       writeLog("counting TE expression levels considering TE-specific reads containded in " + filename + "_specificTE.bam")
-      count = "htseq-count -q -f bam -r name -a 0 -s " + strandn + " -m union --nonunique all --secondary-alignments score --supplementary-alignments score " + filename+"_specificTE.bam " + gtf_ref + " > " + filename + "_counts.tmp"
-      bash(count)
-      # delete annotation lines starting with "__"
-      with open(filename + "_counts.tmp") as htseqoutmp:
-        with open(filename + "_counts",'w') as htseqout:
-          htseqout.write("TE\t%s\n" % (filename))
-          for hts_line in htseqoutmp:
-            if hts_line.startswith("__"):
-              continue
-            else:
-              htseqout.write(hts_line)
-      # append the name of the bedtools coverage output in the list
-      output_names.append(os.path.abspath(".")+"/"+filename+ "_counts")
-#      def counts(bam,fa):
-#        name = filename
-#        bam_chr = []
-#        bamfile = pysam.AlignmentFile(bam, "rb")
-#        for aln in bamfile.fetch(until_eof=True):
-#          bam_chr.append(aln.reference_name)
-#        bamfile.close()
-#
-#        fa_chr = []
-#        with open(fa) as fa_f:
-#          for line in fa_f:
-#            if line.startswith(">"):
-#              if "_transp" in line:
-#                fa_chr.append((line.split()[0]).split(">")[1])
-#
-#        with open(name+"_counts",'w') as output:
-#          output.write("TE\t%s\n" % (name))
-#          for chr in fa_chr:
-#            output.write("%s\t%s\n" % (chr, bam_chr.count(chr)))
-#      counts(filename+"_specificTE.bam", fastaReference)
+#      count = "htseq-count -q -f bam -r name -a 0 -s " + strandn + " -m union --nonunique all --secondary-alignments score --supplementary-alignments score " + filename+"_specificTE.bam " + gtf_ref + " > " + filename + "_counts.tmp"
+#      bash(count)
+#      # delete annotation lines starting with "__"
+#      with open(filename + "_counts.tmp") as htseqoutmp:
+#        with open(filename + "_counts",'w') as htseqout:
+#          htseqout.write("TE\t%s\n" % (filename))
+#          for hts_line in htseqoutmp:
+#            if hts_line.startswith("__"):
+#              continue
+#            else:
+#              htseqout.write(hts_line)
 #      # append the name of the bedtools coverage output in the list
 #      output_names.append(os.path.abspath(".")+"/"+filename+ "_counts")
+      def counts(bam,fa):
+        name = filename
+        bam_chr = []
+        bamfile = pysam.AlignmentFile(bam, "rb")
+        for aln in bamfile.fetch(until_eof=True):
+          bam_chr.append(aln.reference_name)
+        bamfile.close()
+
+        fa_chr = []
+        with open(fa) as fa_f:
+          for line in fa_f:
+            if line.startswith(">"):
+              if "_transp" in line:
+                fa_chr.append((line.split()[0]).split(">")[1])
+
+        with open(name+"_counts",'w') as output:
+          output.write("TE\t%s\n" % (name))
+          for chr in fa_chr:
+            output.write("%s\t%s\n" % (chr, bam_chr.count(chr)))
+      counts(filename+"_specificTE.bam", fastaReference)
+#      # append the name of the bedtools coverage output in the list
+      output_names.append(os.path.abspath(".")+"/"+filename+ "_counts")
 
     # 8.6
     # create a file with statistics
@@ -450,7 +464,7 @@ def main():
   gtfReference = bedTOgtf(bedReference)
   star_ind(reference, read_length)
   #outfile, statfile = star_aln(sample, bedReference, paired, remove)
-  outfile, statfile = star_aln(sample, gtfReference, strand, paired, remove)
+  outfile, statfile = star_aln(sample, gtfReference, strand, reference, paired, remove)
   createOut(outfile, statfile)
 
 
