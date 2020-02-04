@@ -301,7 +301,7 @@ def star_aln(fq_list, gtf_ref, strandn, fastaReference, pair, rm):
         if strandn == "no":
           prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x40 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
         elif strandn == "yes":
-          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x40 -F 0x10 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
+          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x40 -f 0x20 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
         elif strandn == "reverse":
           prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x40 -f 0x10 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
 
