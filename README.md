@@ -2,7 +2,7 @@
 
 TEspeX (Transposable Elements SPEific eXpression) is a tool for the TE expression quantification from RNA-seq data. The rationale of this pipeline is to map reads against TE consensus sequences, coding transcripts and non-coding transcripts and to select and count reads mapping with best alignment score only against TE consensus sequences. This should avoid the quantification of reads that may be generated from TE-fragments embedded in coding and non-coding annotated transcripts (39% of human protein coding genes contain TE-fragments). 
 
-If you wish to know something more about TEspeX, take a look at our manuscript in which we have applied TEspeX to a C. elegans RNA-seq early embryo dataset:
+If you wish to know something more about TEspeX, take a look at our manuscript in which we have applied TEspeX to a C. elegans RNA-seq early embryo dataset:\
 https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-019-3088-7
 
 
