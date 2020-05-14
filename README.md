@@ -179,6 +179,7 @@ This command shows the help that should be something very similar to:
 usage: TEspeX_v0.1.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE
                       --paired PAIRED --length LENGTH --out OUT --strand
                       STRAND [--num_threads NUM_THREADS] [--remove REMOVE]
+                      [--index INDEX]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -212,10 +213,13 @@ optional arguments:
   --remove REMOVE       T (true) or F (false). If this parameter is set to T
                         all the bam files are removed. If it is F they are not
                         removed [T]
+  --index INDEX         Specific path to STAR index. If you want TEspeX to
+                        build the index for you, leave the default value
+                        [reccomended]. [F]
 ```
 
-All the arguments, except fot ```--num_threads``` and ```--remove```, are required. We suggest to use as argument of ```--TE``` argument a fasta file containing TE consensus sequences (from RepBase?) and as arguments of the ```--cdna``` and ```--ncrna``` arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse data).\
-```--num_threads``` if not specified is set to 2 while ```--remove``` is set to T by default (meaning all the bam files are removed).
+All the arguments, except fot ```--num_threads```, ```--remove``` and ```--index``` are required. We suggest to use as argument of ```--TE``` argument a fasta file containing TE consensus sequences (from RepBase?) and as arguments of the ```--cdna``` and ```--ncrna``` arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse data).\
+By default ```--num_threads``` is set to 2,  ```--remove``` is set to T by default (meaning all the bam files are removed)  and ```--index``` is set to F (meaning TEspeX will take care about index building).
 
 In the folder 'example' you can find a copy of the files used to perform the TE expression analysis on 2 *C. elegans* embryonic fastq files (Tintori SC, et al. - Dev. Cell - 2016 - https://www.ncbi.nlm.nih.gov/pubmed/27554860). To test whether the pipeline is working properly, please launch it using the input files in the 'example' folder as explained below.
 
@@ -254,13 +258,9 @@ If nothing is printed it means all went fine.
 
 # TEspeX in wrapper mode
 
-The wrapper.py is the wrapper file **we use on our PBS queue managment system** thus it is written to fit the requirements of our system. If you dispose a PBS queue managment machine you should modify according to your machine settings:
-* queue name (#PBS -q)
-* walltime (#PBS -l)
+The wrapper.py is the **PBS** wrapper file while wrapper_slurm.py is the **SLURM** wrapper file. The  wrapper files have been written to fit the requirements of our system. Modify parameters as queu name, walltime, .., according to your machine settings.
 
-These two parameters are defined at line 159 of the wrapper.py file.
-
-Once you have modified these parameters you can proceed and use the wrapper.py script. To see the help, type:
+Once these parameters have been modified, you can proceed and use the wrapper.py or wrapper_slurm.py script. To see the help, type:
 ```
 cd $tespex
 python3 wrapper.py -h
@@ -325,6 +325,7 @@ When all is done you should have in your ```--out``` folder: 5 files (cleanup_jo
 
 # Development and help
 The TEspeX pipeline has been developed by Federico Ansaloni, PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of prof. Remo Sanges.\
+Nicolo' Gualandi developed the wrapper_slurm.py script.\
 To report bugs or suggestions please feel free to write to federico.ansaloni@gmail.com
 
 
