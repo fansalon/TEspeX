@@ -54,14 +54,14 @@ def clean(dir, jobs):
   for i in range(0, int(jobs)):
     os.chdir(str(i))
     # remove all the directories with index except one that is moved to wd. Do the same for annotation files
-    if i == 0:
-      c1 = "mv index/ " + dir
-      bash(c1)
-      c2 = "mv TE_transc_reference* " + dir
-      bash(c2)
-    else:
-      bash("rm -r index/")
-      bash("rm TE_transc_reference*")
+  #  if i == 0:
+  #    c1 = "mv index/ " + dir
+  #    bash(c1)
+  #    c2 = "mv TE_transc_reference* " + dir
+  #    bash(c2)
+  #  else:
+  #    bash("rm -r index/")
+  #    bash("rm TE_transc_reference*")
     # mv all the other files to tmp/ adding the number of the job to the  end of the file
     c3 = "mv outfile.txt " + dir + "/tmp/outfile_" + str(i) + ".txt"
     bash(c3)

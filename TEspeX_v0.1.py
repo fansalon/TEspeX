@@ -53,6 +53,7 @@ def help():
   parser.add_argument('--strand', type=str, help='strandeness of the RNAseq library. no = unstranded/htseqcount \'no\', yes = htseqcount \'yes\', reverse = htseqcount \'reverse\'', required=True)
   parser.add_argument('--num_threads', type=int, default=2, help='number of threads used by STAR and samtools [2]', required=False)
   parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
+  parser.add_argument('--index', type=str, default='F', help='Specific path to STAR index. If you want TEspeX to build the index for you, leave the default value [reccomended]. [F]', required=False)
 
   # create arguments
   arg = parser.parse_args()
@@ -66,6 +67,7 @@ def help():
   strandeness = arg.strand
   num_threads = arg.num_threads
   rm = arg.remove
+  index = arg.index
 
 #  global dir
 
@@ -98,8 +100,23 @@ def help():
   if strandeness not in strand_list:
     print("ERROR!\nunrecognized --strand parameter. Please specify no, yes or reverse")
     sys.exit(1)
+  # check T F args
+  truefalse = [ 'T', 'F' ]
+  if prd not in truefalse or rm not in truefalse:
+    print("ERROR!\nunrecognized --paired or --remove parameters. Please specify T or F")
+    sys.exit(1)
+  # check index arg
+  if index == 'F':
+    tmp = True
+  else:
+    if os.path.isdir(index):
+      tmp = True
+    else:
+      print("ERROR: %s no such file or directory" % (index))
+      print("Please specify --index F [default] of an existing directory containing STAR indexes")
+      sys.exit(1)
 
-  return te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, num_threads, rm, bin_path
+  return te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, num_threads, rm, bin_path, index
 
 
 # 2.
@@ -238,13 +255,19 @@ def star_ind(genome, r_length):
 # map the reads to the reference. The argument of this function is a file with the full path to the reads
 # if the reads are paired they are written on the same line separated by \t
 #def star_aln(fq_list, bedReference, pair, rm):
-def star_aln(fq_list, gtf_ref, strandn, fastaReference, pair, rm):
+def star_aln(fq_list, gtf_ref, strandn, fastaReference, pair, rm, *index_dir):
   output_names = []				# this is the list that will contain the names of the bedtools coverage output files
   statOut = []					# this is the list that will contain mapping statistics
   statOut.append("SRR\ttot\tmapped\tTE-best\tspecificTE\tnot_specificTE")
-
+  
   # define the general command (no reads and no zcat)
-  command = bin_path + "STAR-2.6.0c/bin/tespex/STAR --outSAMunmapped None --outSAMprimaryFlag AllBestScore --outFilterMismatchNoverLmax 0.04 --outMultimapperOrder Random --outSAMtype BAM Unsorted --outStd BAM_Unsorted --runThreadN " +str(num_threads)+ " --genomeDir " +os.path.abspath("index")
+  # if  optional arg index_dir is passed it means that indexes have aady been generated and are in index_dir directory
+  # otherwise each directory has its own index
+  if index_dir:
+    index = index_dir[0]
+    command = bin_path + "STAR-2.6.0c/bin/tespex/STAR --outSAMunmapped None --outSAMprimaryFlag AllBestScore --outFilterMismatchNoverLmax 0.04 --outMultimapperOrder Random --outSAMtype BAM Unsorted --outStd BAM_Unsorted --runThreadN " +str(num_threads)+ " --genomeDir " +index
+  else:
+    command = bin_path + "STAR-2.6.0c/bin/tespex/STAR --outSAMunmapped None --outSAMprimaryFlag AllBestScore --outFilterMismatchNoverLmax 0.04 --outMultimapperOrder Random --outSAMtype BAM Unsorted --outStd BAM_Unsorted --runThreadN " +str(num_threads)+ " --genomeDir " +os.path.abspath("index")
   # for every line of the file launch the analysis
   with open(fq_list) as reads:
     for line in reads:
@@ -453,18 +476,39 @@ def createOut(out, stat):
 # 10.
 # main
 def main():
-  TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, bin_path = help()
+  TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, bin_path, indici = help()
   os.chdir(dir)
-  writeLog("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_threads = %s \nremove = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove))
-  writeLog("creating reference file %s/TE_transc_reference.fa" % (dir))
-  createReference(TE, "_transp")
-  createReference(cdna, "_transc")
-  reference = createReference(ncrna, "_transc")
-  bedReference = faTObed(reference)
-  gtfReference = bedTOgtf(bedReference)
-  star_ind(reference, read_length)
+  writeLog("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_threads = %s \nremove = %s\nindex = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, indici))
+
+  # create reference transcriptome and STAR index
+  if indici == 'F':
+    writeLog("creating reference file %s/TE_transc_reference.fa" % (dir))
+    createReference(TE, "_transp")
+    createReference(cdna, "_transc")
+    reference = createReference(ncrna, "_transc")
+    bedReference = faTObed(reference)
+    gtfReference = bedTOgtf(bedReference)
+    star_ind(reference, read_length)
+    outfile, statfile = star_aln(sample, gtfReference, strand, reference, paired, remove)
+  else:
+    prev_dir = '/'.join(dir.split("/")[:-1])
+    print('')
+    print('')
+    print('')
+    print('')
+    print('')
+    print(prev_dir)
+    print('')
+    print('')
+    print('')
+    print('')
+    print('')
+    print('')
+    reference = prev_dir+"/TE_transc_reference.fa"
+    bedReference = prev_dir+"/TE_transc_reference.fa.bed"
+    gtfReference = prev_dir+"/TE_transc_reference.fa.bed.gtf"
+    outfile, statfile = star_aln(sample, gtfReference, strand, reference, paired, remove, indici)
   #outfile, statfile = star_aln(sample, bedReference, paired, remove)
-  outfile, statfile = star_aln(sample, gtfReference, strand, reference, paired, remove)
   createOut(outfile, statfile)
 
 
