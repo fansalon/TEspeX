@@ -258,20 +258,20 @@ If nothing is printed it means all went fine.
 
 # TEspeX in wrapper mode
 
-The wrapper.py is the **PBS** wrapper file while wrapper_slurm.py is the **SLURM** wrapper file. The  wrapper files have been written to fit the requirements of our system. Modify parameters as queu name, walltime, .., according to your machine settings.
+The file while wrapper_slurm.py is the **SLURM** wrapper file. The  wrapper files have been written to fit the requirements of our system. Modify parameters as queue name, walltime, .., according to your machine settings.
 
-Once these parameters have been modified, you can proceed and use the wrapper.py or wrapper_slurm.py script. To see the help, type:
+Once these parameters have been modified, you can proceed and use the wrapper_slurm.py script. To see the help, type:
 ```
 cd $tespex
-python3 wrapper.py -h
+python3 wrapper_slurm.py -h
 ```
 
 This should print to screen:
 ```
-usage: wrapper.py [-h] --script SCRIPT --TE TE --cdna CDNA --ncrna NCRNA
-                  --sample SAMPLE --paired PAIRED --length LENGTH --out OUT
-                  --strand STRAND --job JOB [--num_threads NUM_THREADS] 
-                  [--remove REMOVE]
+usage: wrapper_slurm.py [-h] --script SCRIPT --TE TE --cdna CDNA --ncrna NCRNA
+                        --sample SAMPLE --paired PAIRED --length LENGTH --out
+                        OUT --strand STRAND --job JOB
+                        [--num_threads NUM_THREADS] [--remove REMOVE]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -319,7 +319,7 @@ The parameters are exactly the same of TEspeX.py script except for 2 new paramet
     * launch 40 different jobs (named: job_0, job_1, .., job_40)
     * when all the jobs have finished the cleanup.py job is automatically launched and all the output files are merged together
 
-When all is done you should have in your ```--out``` folder: 5 files (cleanup_job.oXXX, TE_transc_reference.fa, TE_transc_reference.fai and the 2 output files mapping_stats_total.txt and outfile_total.txt) and 3 directories (index/, mappings/ and tmp/). In the mappings/ directory there is one directory for each fq/fq.gz analyzed containing all the temporary output files.
+When all is done you should have in your ```--out``` folder: slurm output files and 4 output files (TE_transc_reference.fa, TE_transc_reference.fai and the 2 output files mapping_stats_total.txt and outfile_total.txt) and 3 directories (index/, mappings/ and tmp/). In the mappings/ directory there is one directory for each fq/fq.gz analyzed containing all the temporary output files.
 
 
 
