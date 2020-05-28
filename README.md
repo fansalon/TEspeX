@@ -313,7 +313,7 @@ optional arguments:
 
 The parameters are exactly the same of TEspeX.py script except for 2 new parameters:
 * --script: it requires the path to TEspeX.py script
-* --job: it requires the number of jobs you want to run at the same time. This depends on the settings of your system. If you can run 40 jobs at the same time and you have 80 fq/fq.gz written in the txt file given as input to ```--sample``` the wrapper.py script will: 
+* --job: it requires the number of jobs you want to run at the same time. This depends on the settings of your system. If you can run 40 jobs at the same time and you have 80 fq/fq.gz written in the txt file given as input to ```--sample``` the wrapper_slurm.py script will: 
     * subset the ```--sample``` file in 40 sub-files containing 2 (80/40) fq/fq.gz each (named: sample0, sample1, .., sample40)
     * create 40 folders (named: 0, 1, .., 40)
     * launch 40 different jobs (named: job_0, job_1, .., job_40)
