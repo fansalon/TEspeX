@@ -259,15 +259,16 @@ def star_aln(fq_list, gtf_ref, strandn, fastaReference, pair, rm, *index_dir):
   output_names = []				# this is the list that will contain the names of the bedtools coverage output files
   statOut = []					# this is the list that will contain mapping statistics
   statOut.append("SRR\ttot\tmapped\tTE-best\tspecificTE\tnot_specificTE")
-  
+
   # define the general command (no reads and no zcat)
   # if  optional arg index_dir is passed it means that indexes have aady been generated and are in index_dir directory
   # otherwise each directory has its own index
+  command = bin_path + "STAR-2.6.0c/bin/tespex/STAR --outFilterMultimapNmax 1000000 --outSAMunmapped None --outSAMprimaryFlag AllBestScore --outFilterMismatchNoverLmax 0.04 --outMultimapperOrder Random --outSAMtype BAM Unsorted --outStd BAM_Unsorted --runThreadN " +str(num_threads)
   if index_dir:
     index = index_dir[0]
-    command = bin_path + "STAR-2.6.0c/bin/tespex/STAR --outSAMunmapped None --outSAMprimaryFlag AllBestScore --outFilterMismatchNoverLmax 0.04 --outMultimapperOrder Random --outSAMtype BAM Unsorted --outStd BAM_Unsorted --runThreadN " +str(num_threads)+ " --genomeDir " +index
+    command = command + " --genomeDir " +index
   else:
-    command = bin_path + "STAR-2.6.0c/bin/tespex/STAR --outSAMunmapped None --outSAMprimaryFlag AllBestScore --outFilterMismatchNoverLmax 0.04 --outMultimapperOrder Random --outSAMtype BAM Unsorted --outStd BAM_Unsorted --runThreadN " +str(num_threads)+ " --genomeDir " +os.path.abspath("index")
+    command = command + " --genomeDir " +os.path.abspath("index")
   # for every line of the file launch the analysis
   with open(fq_list) as reads:
     for line in reads:
