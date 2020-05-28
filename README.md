@@ -164,7 +164,7 @@ pip3 install --user pysam==0.15.1
 * mapping_stats.txt: txt file containing mapping statistics 
 
 # How to run TEspeX
-TEspeX can be run calling directly the script from the command line. However, for those users disposing a queue managment system we suggest to use a wrapper script that can launch several jobs in parallel saving consistent amount of time. We provide  the wrapper file we use on our PBS queue managment system (see the section TEspeX in  wrapper mode for more info).
+TEspeX can be run calling directly the script from the command line. However, for those users disposing a queue managment system we suggest to use a wrapper script that can launch several jobs in parallel saving consistent amount of time. We provide the wrapper file we use on our slurm queue managment system (see the section TEspeX in  wrapper mode for more info).
 
   
 # TEspeX in standard mode
