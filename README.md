@@ -213,9 +213,10 @@ optional arguments:
   --remove REMOVE       T (true) or F (false). If this parameter is set to T
                         all the bam files are removed. If it is F they are not
                         removed [T]
-  --index INDEX         Specific path to STAR index. If you want TEspeX to
-                        build the index for you, leave the default value
-                        [reccomended]. [F]
+  --index INDEX         If you want TEspeX to build the index for you, leave
+                        the default value [reccomended]. Otherwise provide
+                        FULL path to a directoray containing STAR indexes
+                        [not_reccomended] [F]
 ```
 
 All the arguments, except fot ```--num_threads```, ```--remove``` and ```--index``` are required. We suggest to use as argument of ```--TE``` argument a fasta file containing TE consensus sequences (from RepBase?) and as arguments of the ```--cdna``` and ```--ncrna``` arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse data).\
