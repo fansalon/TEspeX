@@ -53,7 +53,7 @@ def help():
   parser.add_argument('--strand', type=str, help='strandeness of the RNAseq library. no = unstranded/htseqcount \'no\', yes = htseqcount \'yes\', reverse = htseqcount \'reverse\'', required=True)
   parser.add_argument('--num_threads', type=int, default=2, help='number of threads used by STAR and samtools [2]', required=False)
   parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
-  parser.add_argument('--index', type=str, default='F', help='Specific path to STAR index. If you want TEspeX to build the index for you, leave the default value [reccomended]. [F]', required=False)
+  parser.add_argument('--index', type=str, default='F', help='If you want TEspeX to build the index for you, leave the default value [reccomended]. Otherwise provide FULL path to a directoray containing STAR indexes [not_reccomended] [F]', required=False)
 
   # create arguments
   arg = parser.parse_args()
@@ -68,6 +68,8 @@ def help():
   num_threads = arg.num_threads
   rm = arg.remove
   index = arg.index
+  if index != "F":
+    index = os.path.abspath(arg.index)
 
 #  global dir
 
@@ -111,6 +113,13 @@ def help():
   else:
     if os.path.isdir(index):
       tmp = True
+      prev_dir = '/'.join(index.split("/")[:-1])
+      if os.path.isfile(prev_dir+"/TE_transc_reference.fa"):
+        tmp2 = True
+      else:
+        print("ERROR: %s no such file or directory" % (prev_dir+"/TE_transc_reference.fa"))
+        print("It seems you are using --index parameter. This is not reccomended. However, if you really want to use it, provide %s/TE_transc_reference.fa file" % (prev_dir))
+        sys.exit(1)
     else:
       print("ERROR: %s no such file or directory" % (index))
       print("Please specify --index F [default] of an existing directory containing STAR indexes")
@@ -184,48 +193,6 @@ def createReference(fasta, tag):
 
   return fastaRef
 
-# 5.
-# convert fasta to bed (TE)
-def faTObed(fasta):
-  faidx_com = bin_path + "samtools-1.3.1/bin/samtools faidx " + fasta
-  bash(faidx_com)
-  # convert the fai file in bed format using pandas
-  fai = pandas.read_table(fasta+".fai", sep='\t', header=None)
-  faiTE = fai[fai[0].str.contains("_transp")]
-  fai_bed = faiTE.iloc[:, [0,1] ]
-  fai_bed.insert(1,'start',0)		# add the column with the start value
-  fai_bed.to_csv(fasta+".bed",sep='\t',index=False, header=False)
-
-  bedRef = (os.path.abspath(fasta+".bed"))
-
-  return bedRef
-
-# 6.
-# convert bed to gtf
-def bedTOgtf(bed):
-  # read input bed
-  bed_pd = pandas.read_table(bed,sep='\t',header=None)
-  seqname = bed_pd.iloc[:,0]
-  start = bed_pd.iloc[:,1]
-  end = bed_pd.iloc[:,2]
-  # create the gtf. seqname is the chr, source is empty, feature is always 'exon', start +1, end, score is empty, strand is always +, frame is empty
-  gtf = pandas.DataFrame()
-  gtf["seqname"] = seqname
-  gtf["source"] = "."
-  gtf["feature"] = "exon"
-  gtf["start"] = start + 1
-  gtf["end"] = end
-  gtf["score"] = "."
-  gtf["strand"] = "+"
-  gtf["frame"] = "."
-  gtf["group"] = "gene_id \"" + gtf["seqname"] + "\"; transcript_id \"" + gtf["seqname"] + "\"; exon_number \"1\"; gene_name \"" + gtf["seqname"] + "\"; gene_source \".\"; gene_biotype \"protein_coding\"; transcript_name \"" + gtf["seqname"] + "\"; transcript_source \".\"; transcript_biotype \"protein_coding\"; exon_id \"" + gtf["seqname"] + "-E1\";"
-
-  gtf.to_csv(bed+".gtf",sep='\t',index=False, header=False,quoting=csv.QUOTE_NONE)
-
-  gtfRef = (os.path.abspath(bed+".gtf"))
-
-  return gtfRef
-
 # 7.
 # this function creates the index of the reference file
 def star_ind(genome, r_length):
@@ -255,7 +222,7 @@ def star_ind(genome, r_length):
 # map the reads to the reference. The argument of this function is a file with the full path to the reads
 # if the reads are paired they are written on the same line separated by \t
 #def star_aln(fq_list, bedReference, pair, rm):
-def star_aln(fq_list, gtf_ref, strandn, fastaReference, pair, rm, *index_dir):
+def star_aln(fq_list, strandn, fastaReference, pair, rm, *index_dir):
   output_names = []				# this is the list that will contain the names of the bedtools coverage output files
   statOut = []					# this is the list that will contain mapping statistics
   statOut.append("SRR\ttot\tmapped\tTE-best\tspecificTE\tnot_specificTE")
@@ -365,19 +332,6 @@ def star_aln(fq_list, gtf_ref, strandn, fastaReference, pair, rm, *index_dir):
     # 8.5
     # count the reads mapping specifically on TEs using htseqcount
       writeLog("counting TE expression levels considering TE-specific reads containded in " + filename + "_specificTE.bam")
-#      count = "htseq-count -q -f bam -r name -a 0 -s " + strandn + " -m union --nonunique all --secondary-alignments score --supplementary-alignments score " + filename+"_specificTE.bam " + gtf_ref + " > " + filename + "_counts.tmp"
-#      bash(count)
-#      # delete annotation lines starting with "__"
-#      with open(filename + "_counts.tmp") as htseqoutmp:
-#        with open(filename + "_counts",'w') as htseqout:
-#          htseqout.write("TE\t%s\n" % (filename))
-#          for hts_line in htseqoutmp:
-#            if hts_line.startswith("__"):
-#              continue
-#            else:
-#              htseqout.write(hts_line)
-#      # append the name of the bedtools coverage output in the list
-#      output_names.append(os.path.abspath(".")+"/"+filename+ "_counts")
       def counts(bam,fa):
         name = filename
         bam_chr = []
@@ -422,19 +376,6 @@ def star_aln(fq_list, gtf_ref, strandn, fastaReference, pair, rm, *index_dir):
         return tot_map, mapped
       tot, map = starFinalHandling("Log.final.out")
 
-#      if gzipped == True:
-#        count = int(subprocess.check_output("zcat " + lin[0] + " | wc -l", shell=True)) # bash zcat is faster than python .gzip
-#        tot = str(int(count/4))
-#      else:
-#        count = int(subprocess.check_output("cat " + lin[0] + " | wc -l", shell=True))
-#        tot = str(int(count/4))
-#      # mapped
-#      read_list = []
-#      samfile = pysam.AlignmentFile(filename+".bam", "rb")
-#      for aln in samfile.fetch(until_eof=True):
-#        read_list.append(aln.query_name)
-#      samfile.close()
-#      map = len(list(set(read_list)))
       # reads mapped on TEs
       mapTE = len(final) + len(not_specific)
       # reads specifically mapped against TE
@@ -486,29 +427,14 @@ def main():
     createReference(TE, "_transp")
     createReference(cdna, "_transc")
     reference = createReference(ncrna, "_transc")
-    bedReference = faTObed(reference)
-    gtfReference = bedTOgtf(bedReference)
     star_ind(reference, read_length)
-    outfile, statfile = star_aln(sample, gtfReference, strand, reference, paired, remove)
+    outfile, statfile = star_aln(sample, strand, reference, paired, remove)
   else:
-    prev_dir = '/'.join(dir.split("/")[:-1])
-    print('')
-    print('')
-    print('')
-    print('')
-    print('')
-    print(prev_dir)
-    print('')
-    print('')
-    print('')
-    print('')
-    print('')
-    print('')
+    writeLog("reading index in %s" % (indici))
+    prev_dir = '/'.join(indici.split("/")[:-1])
     reference = prev_dir+"/TE_transc_reference.fa"
-    bedReference = prev_dir+"/TE_transc_reference.fa.bed"
-    gtfReference = prev_dir+"/TE_transc_reference.fa.bed.gtf"
-    outfile, statfile = star_aln(sample, gtfReference, strand, reference, paired, remove, indici)
-  #outfile, statfile = star_aln(sample, bedReference, paired, remove)
+    writeLog("reading reference in %s" % (reference))
+    outfile, statfile = star_aln(sample, strand, reference, paired, remove, indici)
   createOut(outfile, statfile)
 
 
