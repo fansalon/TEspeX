@@ -29,7 +29,6 @@ import pandas
 from functools import reduce
 import csv
 
-# 1.
 # define the help function
 def help():
   # define 2 global variables because they will be used by more than 2 functions
@@ -70,8 +69,6 @@ def help():
   index = arg.index
   if index != "F":
     index = os.path.abspath(arg.index)
-
-#  global dir
 
   # create the outDir
   while True:
@@ -120,6 +117,12 @@ def help():
         print("ERROR: %s no such file or directory" % (prev_dir+"/TE_transc_reference.fa"))
         print("It seems you are using --index parameter. This is not reccomended. However, if you really want to use it, provide %s/TE_transc_reference.fa file" % (prev_dir))
         sys.exit(1)
+      if os.path.isfile(prev_dir+"/TE_transc_reference.fa.fai"):
+        tmp2 = True
+      else:
+        print("ERROR: %s no such file or directory" % (prev_dir+"/TE_transc_reference.fa.fai"))
+        print("It seems you are using --index parameter. This is not reccomended. However, if you really want to use it, provide %s/TE_transc_reference.fa.fai file" % (prev_dir))
+        sys.exit(1)
     else:
       print("ERROR: %s no such file or directory" % (index))
       print("Please specify --index F [default] of an existing directory containing STAR indexes")
@@ -128,7 +131,6 @@ def help():
   return te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, num_threads, rm, bin_path, index
 
 
-# 2.
 # this function writes the message to the log file in the output directory
 def writeLog(message):
   print(message)
@@ -136,7 +138,6 @@ def writeLog(message):
     logfile.write("[%s] " % (time.asctime()))
     logfile.write("%s\n" % (message))
 
-# 3.
 # this function takes as input a string containing a shell command and executes it
 def bash(*command):
   def riseError(popen_var):
@@ -161,7 +162,6 @@ def bash(*command):
        cmd = subprocess.Popen(arg, shell=True, stdin=cmd.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
        riseError(cmd)
 
-# 4.
 # this function takes as input 3 fasta files: TE, ensembl-cdna, ensembl-ncrna, adds _transc and _transp to fasta names
 # and merge the 3 files together creating the reference
 def createReference(fasta, tag):
@@ -193,7 +193,6 @@ def createReference(fasta, tag):
 
   return fastaRef
 
-# 7.
 # this function creates the index of the reference file
 def star_ind(genome, r_length):
   # to avoid STAR segmentation fault calculate genomeSAindexNbases and genomeChrBinNbits parameters
@@ -218,7 +217,6 @@ def star_ind(genome, r_length):
 
   os.chdir(dir)
 
-# 8.
 # map the reads to the reference. The argument of this function is a file with the full path to the reads
 # if the reads are paired they are written on the same line separated by \t
 #def star_aln(fq_list, bedReference, pair, rm):
@@ -274,11 +272,9 @@ def star_aln(fq_list, strandn, fastaReference, pair, rm, *index_dir):
         else:
           gzipped = False
           command_final = command + " --readFilesIn " +lin[0]+ " " +lin[1]+ " > " +filename+ ".bam"
-    # 8.1
     # map reads to reference
       bash(command_final)
 
-    # 8.2
     # extract primary alignments (best score alignments)
       if pair == "F":
         if strandn == "no":
@@ -297,7 +293,6 @@ def star_aln(fq_list, strandn, fastaReference, pair, rm, *index_dir):
 
       bash(prim_cmd)
 
-    # 8.3
     # create list containing name of the reads mapping with best score alignmets only on TEs. These reads are mapping specifically on TEs
       writeLog("selecting reads mapping specifically on TEs")
       TE = []
@@ -320,7 +315,6 @@ def star_aln(fq_list, strandn, fastaReference, pair, rm, *index_dir):
         for j in range(0, len(not_specific)):
           out2.write("%s\n" % (not_specific[j]))
 
-    # 8.4
     # usem picard to extract alignmets corresponing to reads mapping specifically on TEs
       if os.stat("specificTE.txt").st_size != 0:		# if specific read file not empty
         picard = "java -jar " + bin_path + "picard/picard.jar FilterSamReads I="+filename+"_mappedPrim.bam O="+filename+"_specificTE.bam FILTER=includeReadList RLF=specificTE.txt"
@@ -329,7 +323,6 @@ def star_aln(fq_list, strandn, fastaReference, pair, rm, *index_dir):
         header_bam = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -H " +filename+ "_mappedPrim.bam -b -o " +filename+"_specificTE.bam"
         bash(header_bam)
 
-    # 8.5
     # count the reads mapping specifically on TEs using htseqcount
       writeLog("counting TE expression levels considering TE-specific reads containded in " + filename + "_specificTE.bam")
       def counts(bam,fa):
@@ -355,7 +348,6 @@ def star_aln(fq_list, strandn, fastaReference, pair, rm, *index_dir):
 #      # append the name of the bedtools coverage output in the list
       output_names.append(os.path.abspath(".")+"/"+filename+ "_counts")
 
-    # 8.6
     # create a file with statistics
       writeLog("calculating the mapping statistics...")
       # total reads
@@ -394,7 +386,6 @@ def star_aln(fq_list, strandn, fastaReference, pair, rm, *index_dir):
 
   return output_names, statOut
 
-# 9.
 # this function takes as input the list 'out' containing the full path to bedtools coverage output files
 # and the list 'stat' containing the mapping statitistics for each fq analyzed and write the 2 lists
 # in 2 output files
@@ -414,7 +405,6 @@ def createOut(out, stat):
   writeLog("DONE")
   writeLog("output files "+dir+"/outfile.txt and "+dir+"/mapping_stats.txt have been correctly created")
 
-# 10.
 # main
 def main():
   TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, bin_path, indici = help()
