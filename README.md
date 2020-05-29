@@ -171,12 +171,12 @@ TEspeX can be run calling directly the script from the command line. However, fo
 All the dependencies should have been installed properly. To test this, type:
 ```
 cd $tespex
-python3 TEspeX_v0.1.py --help
+python3 TEspeX_v0.2.py --help
 ```
 
 This command shows the help that should be something very similar to:
 ```
-usage: TEspeX_v0.1.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE
+usage: TEspeX_v0.2.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE
                       --paired PAIRED --length LENGTH --out OUT --strand
                       STRAND [--num_threads NUM_THREADS] [--remove REMOVE]
                       [--index INDEX]
@@ -232,7 +232,7 @@ ls $tespex/example/*.fastq.gz > $tespex/example/reads.txt
   
 2. launch the pipeline typing the following command:
 ```
-python3 TEspeX_v0.1.py --TE example/RepBase_single_line.fa.gz \
+python3 TEspeX_v0.2.py --TE example/RepBase_single_line.fa.gz \
 --cdna example/Caenorhabditis_elegans.WBcel235.cdna.all.fa.gz \
 --ncrna example/Caenorhabditis_elegans.WBcel235.ncrna.fa.gz \
 --sample example/reads.txt --paired F --length 50 --out test --strand no
