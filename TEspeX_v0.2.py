@@ -52,7 +52,7 @@ def help():
   parser.add_argument('--strand', type=str, help='strandeness of the RNAseq library. no = unstranded/htseqcount \'no\', yes = htseqcount \'yes\', reverse = htseqcount \'reverse\'', required=True)
   parser.add_argument('--num_threads', type=int, default=2, help='number of threads used by STAR and samtools [2]', required=False)
   parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
-  parser.add_argument('--index', type=str, default='F', help='If you want TEspeX to build the index for you, leave the default value [reccomended]. Otherwise provide FULL path to a directoray containing STAR indexes [not_reccomended] [F]', required=False)
+  parser.add_argument('--index', type=str, default='F', help='If you want TEspeX to build the index for you, leave the default value [recommended]. Otherwise provide FULL path to a directoray containing STAR indexes [not_recommended] [F]', required=False)
 
   # create arguments
   arg = parser.parse_args()
@@ -115,13 +115,13 @@ def help():
         tmp2 = True
       else:
         print("ERROR: %s no such file or directory" % (prev_dir+"/TE_transc_reference.fa"))
-        print("It seems you are using --index parameter. This is not reccomended. However, if you really want to use it, provide %s/TE_transc_reference.fa file" % (prev_dir))
+        print("It seems you are using --index parameter. This is not recommended. However, if you really want to use it, provide %s/TE_transc_reference.fa file" % (prev_dir))
         sys.exit(1)
       if os.path.isfile(prev_dir+"/TE_transc_reference.fa.fai"):
         tmp2 = True
       else:
         print("ERROR: %s no such file or directory" % (prev_dir+"/TE_transc_reference.fa.fai"))
-        print("It seems you are using --index parameter. This is not reccomended. However, if you really want to use it, provide %s/TE_transc_reference.fa.fai file" % (prev_dir))
+        print("It seems you are using --index parameter. This is not recommended. However, if you really want to use it, provide %s/TE_transc_reference.fa.fai file" % (prev_dir))
         sys.exit(1)
     else:
       print("ERROR: %s no such file or directory" % (index))
