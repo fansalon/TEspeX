@@ -158,7 +158,7 @@ pip3 install --user pysam==0.15.1
 
 
 # Input files
-* TE consensus sequences in fasta (fa/fa.gz) format (--TE argument). Follow these instrucionts to generate a proper TE consensus sequences input file (https://github.com/fansalon/TEconsensus)
+* TE consensus sequences in fasta (fa/fa.gz) format (--TE argument). Follow these instructions to generate a proper TE consensus sequences input file (https://github.com/fansalon/TEconsensus)
 * coding transcripts in fasta format (we suggest the 'cdna.fa.gz' fasta file downloaded from ensembl) (--cdna argument)
 * non coding trasncripts in fasta format (we suggest the 'ncrna.fa.gz' fasta file downloaded from ensembl) (--ncrna argument)
 * RNA-seq data in fastq (fq/fq.gz) format. TEspeX expects the full path of the fq/fq.gz files to be written in a plain txt file (1 file per row. If paired-end files, TEspeX expects the fq/fq.gz to be listed in two tab-separated columns - PE1 in column 1, PE2 of the same fq/fq.gz in column 2)
@@ -342,7 +342,9 @@ norm <- read.table("mapping_stats_total.txt",header=T,sep='\t')
 y <- DGEList(counts=counts,group=group,lib.size = norm$mapped)  # assuming conuts is the matrix containing the raw counts and group the factor containing metadata information
 ```
 
-Moreover, our tests suggest that edgeR works slightly better than DESeq2 (as it better handles the TEs showing no expression in multiple samples) and we thus suggest to use edgeR instead of DESeq2. TEspeX has been, nevertheless, tested on both tools providing consistent results in both scenarios.
+It is likely that the perfect tool for testing for DE TEs does not exist yet as most of the assumptions made on gene expression data are not necessarily true in the TE scenario. We have internally tested the DE analysis downstream to TEspeX with edgeR, DESeq2 and applying a Welch t.test to normalised counts (RPM: raw counts / tot mapped reads \*1M). If you are interested in the development of such a tool feel free to contact Federico at (federico.ansaloni@gmail.com).
+
+Our tests suggest that edgeR works slightly better than both DESeq2 (as it better handles the TEs showing no expression in multiple samples) and t.test (as it is lesse sensnible to the sampple size) and we thus suggest to use edgeR. DE testing downstream to TEspeX has been, nevertheless, tested with all the 3 methods providing consistent results in both scenarios.
 
 
 
