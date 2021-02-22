@@ -344,11 +344,11 @@ norm <- read.table("mapping_stats_total.txt",header=T,sep='\t')
 y <- DGEList(counts=counts,group=group,lib.size = norm$mapped)  # assuming conuts is the matrix containing the raw counts and group the factor containing metadata information
 ```
 
-It is likely that the perfect tool for testing for DE TEs does not exist yet as most of the assumptions made on gene expression data are not necessarily true in the TE scenario. We have internally tested the DE analysis downstream to TEspeX with i) edgeR, ii) DESeq2 and iii) applying a Welch t.test to normalised counts (RPM: raw counts / tot mapped reads \*1M).
+It is likely that **the perfect tool** for testing for DE TEs does not exist yet as most of the assumptions made on gene expression data are not necessarily true in the TE scenario. We have internally tested the DE analysis downstream to TEspeX with i) edgeR, ii) DESeq2 and iii) applying a Welch t.test to normalised counts (RPM: raw counts / tot mapped reads \*1M).
 
-Our tests suggest that edgeR works slightly better than both DESeq2 (as it better handles the TEs showing no expression in multiple samples) and t.test (as it is lesse sensnible to the sampple size) and we thus suggest to use edgeR. DE testing downstream to TEspeX has been, nevertheless, tested with all the 3 methods providing consistent results in both scenarios.
+Our tests suggest that edgeR works slightly better than both DESeq2 (as it better handles the TEs showing no expression in multiple samples) and t.test (as it is lesse sensible to the sample size) and we thus suggest to use edgeR. DE testing downstream to TEspeX has been, nevertheless, tested with all the 3 methods providing consistent results in all the tested scenarios.
 
-If you are interested in the development of such a tool feel free to contact Federico at (federico.ansaloni@gmail.com).
+If you are interested in the development of **the perfect tool** for testing for DE TEs feel free to contact Federico at (federico.ansaloni@gmail.com).
 
 
 
