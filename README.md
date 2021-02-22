@@ -1,6 +1,6 @@
 # TEspeX
 
-TEspeX (Transposable Elements SPEific eXpression) is a tool for the TE expression quantification from RNA-seq data. The rationale of this pipeline is to map reads against a reference transcriptome composed by i) TE consensus sequences, ii) coding transcripts and iii) non-coding transcripts and to select for the counting those reads mapping with best alignment score exclusively against TE consensus sequences. This should avoid the quantification of reads that may be generated from TE-fragments embedded in coding and non-coding annotated transcripts.
+TEspeX (Transposable Elements SPEcific eXpression) is a tool for the TE expression quantification from RNA-seq data. The rationale of this pipeline is to map reads against a reference transcriptome composed by i) TE consensus sequences, ii) coding transcripts and iii) non-coding transcripts and to select for the counting those reads mapping with best alignment score exclusively against TE consensus sequences. This should avoid the quantification of reads that may be generated from TE-fragments embedded in coding and non-coding annotated transcripts.
 
 Possible scenarios:
 * A reads is mapping with best alignment score on TE consensus sequences but not on coding/non-coding transcripts --> counted as TE-specific
@@ -331,6 +331,18 @@ The parameters are exactly the same of TEspeX.py script except for 2 new paramet
     * when all the jobs have finished the cleanup.py job is automatically launched and all the output files are merged together
 
 When all is done you should have in your ```--out``` folder: slurm output files and 4 output files (TE_transc_reference.fa, TE_transc_reference.fai and the 2 output files mapping_stats_total.txt and outfile_total.txt) and 3 directories (index/, mappings/ and tmp/). In the mappings/ directory there is one directory for each fq/fq.gz analyzed containing all the temporary output files.
+
+
+# How to test for differentially expressed TEs
+TEspeX provides a raw-count output file that can be potentially used as input for any of the several tools developed to detect differential expression of genes among two biological conditions (e.g. DESeq2 and edgeR). However, the large majority (all?) of such tools estimate the library size (i.e., sequencing depth) of each analysed sample by summing together the reads mapped on all the genes. While this assumption is perfectly working when analysing gene expression data, this might be unprecise when analysing TE expression data (i.e. the sum of the reads mapping on TE consensus is not a good aproximation of the total library size). Thus, we **strongly** recommend not to allow the tool to automatically calculate the library size, providing instead as library size the total number of reads TEspeX has succesfully mapped on the reference transcriptome (i.e., TE consensus+cdna+ncrna). This information is contained in the 3rd column of the mapping_stats.txt/mapping_stats_total.txt TEspeX outputs in the working directory.
+
+In edgeR this can be easily done with the following commands:
+```
+norm <- read.table("mapping_stats_total.txt",header=T,sep='\t')
+y <- DGEList(counts=counts,group=group,lib.size = norm$mapped)  # assuming conuts is the matrix containing the raw counts and group the factor containing metadata information
+```
+
+Moreover, our tests suggest that edgeR works slightly better than DESeq2 (as it better handles the TEs showing no expression in multiple samples) and we thus suggest to use edgeR instead of DESeq2. TEspeX has been, nevertheless, tested on both tools providing consistent results in both scenarios.
 
 
 
