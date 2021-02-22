@@ -348,7 +348,7 @@ It is likely that **the perfect tool** for testing for DE TEs does not exist yet
 
 Our tests suggest that edgeR works slightly better than both DESeq2 (as it better handles the TEs showing no expression in multiple samples) and t.test (as it is lesse sensible to the sample size) and we thus suggest to use edgeR. DE testing downstream to TEspeX has been, nevertheless, tested with all the 3 methods providing consistent results in all the tested scenarios.
 
-If you are interested in the development of **the perfect tool** for testing for DE TEs feel free to contact Federico at (federico.ansaloni@gmail.com).
+If you are interested in the development of **the perfect tool** for testing for DE TEs - or at least to try - feel free to contact Federico at (federico.ansaloni@gmail.com).
 
 
 
