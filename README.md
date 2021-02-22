@@ -8,8 +8,6 @@ Possible scenarios:
 * A reads is mapping with best alignment score on *BOTH* TE consensus sequences and coding/non-coding transcripts --> discarded as it may be generated from TE fragments embedded in coding/non-coding transcripts
 * A reads is mapping with best alignment score on coding/non-coding transcripts --> discarded as it is (probably) transcribed from coding/non-coding transcripts.
 
-If you wish to know something more about TEspeX, take a look at our manuscript in which we have applied TEspeX to a C. elegans RNA-seq early embryo dataset:\
-https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-019-3088-7
 
 
 The pipeline has been written in python3 so **YOU MUST** use python3 and it has been tested on Ubuntu, CentOS and Mac OS X systems.
@@ -31,20 +29,20 @@ git clone https://github.com/fansalon/TEspeX
 
 This should download locally TEspeX.
 
-Copy the downoloaded folder in the directory in which you wish to install TEspeX, move to that directory and type:
+Copy the downoloaded folder in the directory you wish TEspeX to be installed, move to that directory and type:
 ```
 cd TEspeX/
 tespex=$PWD
 ```
-A file called 'picard.jar' should be contained in the 'bin/picard' directory.\
+A file called 'picard.jar' is contained in the 'bin/picard' directory.\
 To check whether java is properly installed on your machine and picard is working, type:
 ```
 java -jar $tespex/bin/picard/picard.jar
 ```
-If the picard help is printed everything is fine, if an error rises it may be that java is not installed on your machine. Install Java and retry.
+If the picard help is printed everything is fine. If an error rises java is not (properly) installed on your machine. Install Java and retry.
 
-Now all the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.15.1) should be installed in the bin/ directory within the TEspeX/ directory.\
-Please install STAR, samtools, pandas and pysam even if they are  already installed on your machine. TEspeX has been tested on these specific versions  and the use of different versions of these softwares may generate different and unpredictable results.
+All the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.15.1) have now to be installed in the bin/ directory within the TEspeX/ directory.\
+Please install STAR, samtools, pandas and pysam even if they are already installed on your machine. TEspeX has been tested on these specific versions and the use of different versions of these softwares may generate different and unpredictable results.
 
 install STAR2.6.0c:
 ```
@@ -81,7 +79,7 @@ Copyright (C) 2016 Genome Research Ltd.
 
 
 TEspeX takes also advantage of the python3 libraries: sys, time, os, argparse, gzip, subprocess, math, pysam and pandas.
-All these libraries except for pysam and pandas are python standard libraries and should not require installation while pysam and pandas do require an installation.
+Except for pysam and pandas, all the libraries are python standard libraries that do not require installation.
 
 To install pysam and pandas please open a terminal and type:
 ```
@@ -99,7 +97,7 @@ git clone https://github.com/fansalon/TEspeX
 
 This should download locally TEspeX.
 
-Copy the downoloaded folder in the directory in which you wish to install TEspeX, move to that directory and type:
+Copy the downoloaded folder in the directory you wish TEspeX to be installed, move to that directory and type:
 ```
 cd TEspeX/
 tespex=$PWD
@@ -109,10 +107,10 @@ To check whether java is properly installed on your machine and picard is workin
 ```
 java -jar $tespex/bin/picard/picard.jar
 ```
-If the picard help is printed everything is fine, if an error rises it may be that java is not installed on your machine. Install Java and retry.
+If the picard help is printed everything is fine. If an error rises java is not (properly) installed on your machine. Install Java and retry.
 
-Now all the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.15.1) should be installed in the bin/ directory within the TEspeX/ directory.\
-Please install STAR, samtools, pandas and pysam even if they are  already installed on your machine. TEspeX has been tested on these specific versions  and the use of different versions of these softwares may generate different and unpredictable results.
+All the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.15.1) have now to be installed in the bin/ directory within the TEspeX/ directory.\
+Please install STAR, samtools, pandas and pysam even if they are already installed on your machine. TEspeX has been tested on these specific versions and the use of different versions of these softwares may generate different and unpredictable results.
 
 
 install STAR2.6.0c:
@@ -149,7 +147,7 @@ Copyright (C) 2016 Genome Research Ltd.
 ```
 
 TEspeX takes also advantage of the python3 libraries: sys, time, os, argparse, gzip, subprocess, math, pysam and pandas.
-All these libraries except for pysam and pandas are python standard libraries and should not require installation while pysam and pandas do require an installation.
+Except for pysam and pandas, all the libraries are python standard libraries that do not require installation.
 
 To install pysam and pandas please open a terminal and type:
 ```
@@ -160,17 +158,18 @@ pip3 install --user pysam==0.15.1
 
 
 # Input files
-* TE consensus sequences in fasta (fa/fa.gz) format
-* coding transcripts in fasta format (we suggest the 'cdna.fa.gz' fasta file downloaded from ensembl)
-* non coding trasncripts in fasta format (we suggest the 'ncrna.fa.gz' fasta file downloaded from ensembl)
-* RNA-seq data in fastq (fq/fq.gz) format
+* TE consensus sequences in fasta (fa/fa.gz) format (--TE argument)
+* coding transcripts in fasta format (we suggest the 'cdna.fa.gz' fasta file downloaded from ensembl) (--cdna argument)
+* non coding trasncripts in fasta format (we suggest the 'ncrna.fa.gz' fasta file downloaded from ensembl) (--ncrna argument)
+* RNA-seq data in fastq (fq/fq.gz) format. TEspeX expects the full path of the fq/fq.gz files to be written in a plain txt file (1 file per row. If paired-end files, TEspeX expects the fq/fq.gz to be listed in two tab-separated columns - PE1 in column 1, PE2 of the same fq/fq.gz in column 2)
+
 
 # Output files
 * outfile.txt: txt file containing the raw counts of reads mapping specifically on TEs. The first column contains the TE names as they are in the TE consensus fasta file, the other columns contain the read counts for each fq input file
-* mapping_stats.txt: txt file containing mapping statistics 
+* mapping_stats.txt: txt file containing mapping statistics
 
 # How to run TEspeX
-TEspeX can be run calling directly the script from the command line. However, for those users disposing a queue managment system we suggest to use a wrapper script that can launch several jobs in parallel saving consistent amount of time. We provide the wrapper file we use on our slurm queue managment system (see the section TEspeX in  wrapper mode for more info).
+TEspeX can be run calling directly the script from the command line. However, for those users disposing a queue managment system we suggest to use a wrapper script that can launch several jobs in parallel saving consistent amount of time. Wrapper file we use on our slurm queue managment system is provided (see the section TEspeX in  wrapper mode for more info).
 
   
 # TEspeX in standard mode
@@ -225,16 +224,18 @@ optional arguments:
                         [not_recommended] [F]
 ```
 
-All the arguments, except fot ```--num_threads```, ```--remove``` and ```--index``` are required. We suggest to use as argument of ```--TE``` argument a fasta file containing TE consensus sequences (from RepBase?) and as arguments of the ```--cdna``` and ```--ncrna``` arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse data).\
+All the arguments, except fot ```--num_threads```, ```--remove``` and ```--index``` are required. We suggest to use as argument of ```--TE``` argument a fasta file containing TE consensus sequences and as arguments of the ```--cdna``` and ```--ncrna``` arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse data).\
+The ```--length``` of the read is only needed to build the index of the reference transcriptome - in case of trimmed reads just provide the most frequent read lenght.\
+The ```--strand``` TEspeX expects the same nomenclature as the one used by htseq-count (if you are unsure please take a look at: https://chipster.csc.fi/manual/library-type-summary.html).\
 By default ```--num_threads``` is set to 2,  ```--remove``` is set to T by default (meaning all the bam files are removed)  and ```--index``` is set to F (meaning TEspeX will take care about index building).
 
-In the folder 'example' you can find a copy of the files used to perform the TE expression analysis on 2 *C. elegans* embryonic fastq files (Tintori SC, et al. - Dev. Cell - 2016 - https://www.ncbi.nlm.nih.gov/pubmed/27554860). To test whether the pipeline is working properly, please launch it using the input files in the 'example' folder as explained below.
+In the folder 'example' you can find a copy of the files used to perform the TE expression analysis on 2 *C. elegans* embryonic fastq files (Tintori SC, et al. - Dev. Cell - 2016 - https://www.ncbi.nlm.nih.gov/pubmed/27554860). To test whether the pipeline is working properly, please launch it using the input files in the 'example' folder following the steps below:
 
 1. first create the sample file typing:
 ```
 ls $tespex/example/*.fastq.gz > $tespex/example/reads.txt
 ```
-  Please notice that the sample file can contain as many file as you want (one per raw - 1 column if SE, 2 columns if PE). They will be analized one-by-one by the pipeline.
+  Please note that the sample file can contain as many file as you want (one per raw - 1 column if SE, 2 columns if PE). They will be analized one-by-one by the pipeline.
   
 2. launch the pipeline typing the following command:
 ```
