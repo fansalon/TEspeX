@@ -224,9 +224,10 @@ optional arguments:
                         [not_recommended] [F]
 ```
 
-All the arguments, except fot ```--num_threads```, ```--remove``` and ```--index``` are required. We suggest to use as argument of ```--TE``` argument a fasta file containing TE consensus sequences and as arguments of the ```--cdna``` and ```--ncrna``` arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse data).\
+All the arguments, except fot ```--num_threads```, ```--remove``` and ```--index``` are required.\
+We suggest to use as argument of ```--TE``` argument a fasta file containing TE consensus sequences and as arguments of the ```--cdna``` and ```--ncrna``` arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse data).\
 The ```--length``` of the read is only needed to build the index of the reference transcriptome - in case of trimmed reads just provide the most frequent read lenght.\
-The ```--strand``` TEspeX expects the same nomenclature as the one used by htseq-count (if you are unsure please take a look at: https://chipster.csc.fi/manual/library-type-summary.html).\
+As ```--strand``` TEspeX expects the same nomenclature as the one used by htseq-count (if you are unsure please take a look at: https://chipster.csc.fi/manual/library-type-summary.html) .\
 By default ```--num_threads``` is set to 2,  ```--remove``` is set to T by default (meaning all the bam files are removed)  and ```--index``` is set to F (meaning TEspeX will take care about index building).
 
 In the folder 'example' you can find a copy of the files used to perform the TE expression analysis on 2 *C. elegans* embryonic fastq files (Tintori SC, et al. - Dev. Cell - 2016 - https://www.ncbi.nlm.nih.gov/pubmed/27554860). To test whether the pipeline is working properly, please launch it using the input files in the 'example' folder following the steps below:
