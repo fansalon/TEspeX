@@ -158,7 +158,7 @@ pip3 install --user pysam==0.15.1
 
 
 # Input files
-* TE consensus sequences in fasta (fa/fa.gz) format (--TE argument)
+* TE consensus sequences in fasta (fa/fa.gz) format (--TE argument). Follow these instrucionts to generate a proper TE consensus sequences input file.
 * coding transcripts in fasta format (we suggest the 'cdna.fa.gz' fasta file downloaded from ensembl) (--cdna argument)
 * non coding trasncripts in fasta format (we suggest the 'ncrna.fa.gz' fasta file downloaded from ensembl) (--ncrna argument)
 * RNA-seq data in fastq (fq/fq.gz) format. TEspeX expects the full path of the fq/fq.gz files to be written in a plain txt file (1 file per row. If paired-end files, TEspeX expects the fq/fq.gz to be listed in two tab-separated columns - PE1 in column 1, PE2 of the same fq/fq.gz in column 2)
