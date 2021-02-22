@@ -334,7 +334,7 @@ When all is done you should have in your ```--out``` folder: slurm output files 
 
 
 # How to test for differentially expressed TEs
-TEspeX provides a raw-count output file that can be potentially used as input for any of the several tools developed to detect differential expression of genes among two biological conditions (e.g. DESeq2 and edgeR). However, the large majority (all?) of such tools estimate the library size (i.e., sequencing depth) of each analysed sample by summing together the reads mapped on all the genes. While this assumption is perfectly working when analysing gene expression data, this might be unprecise when analysing TE expression data (i.e. the sum of the reads mapping on TE consensus is not a good aproximation of the total library size).\
+TEspeX provides a raw-count output file that can be potentially used as input for any of the several tools developed to detect differential expression of genes among two biological conditions (e.g. DESeq2 and edgeR). However, the large majority (all?) of such tools estimate the library size (i.e., sequencing depth) of each analysed sample by summing together the reads mapped on all the genes. While this assumption is perfectly working when analysing gene expression data, this might be unprecise when analysing TE expression data (i.e. the sum of the reads mapping on TE consensus is not a good aproximation of the total library size).
 
 Thus, we **strongly** recommend not to allow the tool to automatically calculate the library size, providing instead as library size the total number of reads TEspeX has succesfully mapped on the reference transcriptome (i.e., TE consensus+cdna+ncrna). This information is contained in the 3rd column of the mapping_stats.txt/mapping_stats_total.txt TEspeX outputs in the working directory.
 
@@ -344,9 +344,11 @@ norm <- read.table("mapping_stats_total.txt",header=T,sep='\t')
 y <- DGEList(counts=counts,group=group,lib.size = norm$mapped)  # assuming conuts is the matrix containing the raw counts and group the factor containing metadata information
 ```
 
-It is likely that the perfect tool for testing for DE TEs does not exist yet as most of the assumptions made on gene expression data are not necessarily true in the TE scenario. We have internally tested the DE analysis downstream to TEspeX with edgeR, DESeq2 and applying a Welch t.test to normalised counts (RPM: raw counts / tot mapped reads \*1M). If you are interested in the development of such a tool feel free to contact Federico at (federico.ansaloni@gmail.com).
+It is likely that the perfect tool for testing for DE TEs does not exist yet as most of the assumptions made on gene expression data are not necessarily true in the TE scenario. We have internally tested the DE analysis downstream to TEspeX with i) edgeR, ii) DESeq2 and iii) applying a Welch t.test to normalised counts (RPM: raw counts / tot mapped reads \*1M).
 
 Our tests suggest that edgeR works slightly better than both DESeq2 (as it better handles the TEs showing no expression in multiple samples) and t.test (as it is lesse sensnible to the sampple size) and we thus suggest to use edgeR. DE testing downstream to TEspeX has been, nevertheless, tested with all the 3 methods providing consistent results in both scenarios.
+
+If you are interested in the development of such a tool feel free to contact Federico at (federico.ansaloni@gmail.com).
 
 
 
