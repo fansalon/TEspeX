@@ -1,3 +1,0 @@
-SRR	tot	mapped	TE-best	specificTE	not_specificTE
-SRR3170296_partial	2031585	1727462	2993	2767	226
-SRR3170297_partial	2031585	1720087	3117	2831	286
