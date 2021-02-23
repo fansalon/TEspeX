@@ -232,7 +232,7 @@ By default ```--num_threads``` is set to 2,  ```--remove``` is set to T by defau
 
 # Test TEspeX
 
-In the folder 'example' a copy of the files used to perform the TE expression analysis on 2 *C. elegans* embryonic fastq files (Tintori SC, et al. - Dev. Cell - 2016 - https://www.ncbi.nlm.nih.gov/pubmed/27554860) is deposited. Please, *please*, test whether the pipeline is working properly following the steps below:
+In the folder 'example' a copy of the files used to perform the TE expression analysis on 2 *C. elegans* embryonic fastq files (Tintori SC, et al. - Dev. Cell - 2016 - https://www.ncbi.nlm.nih.gov/pubmed/27554860) is deposited. Please, **please**, **DO** test whether the pipeline is working properly following the steps below:
 
 1. create the list of fq/fq.gz to be analysed:
 ```
