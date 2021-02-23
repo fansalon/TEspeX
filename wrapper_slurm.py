@@ -28,6 +28,8 @@ import pandas
 from functools import reduce
 import math
 
+__version__ = 'part of TEspeX v0.2.1'
+
 # 1.
 # define the help function
 def help():
@@ -64,6 +66,7 @@ def help():
   parser.add_argument('--job', type=str, help='number of jobs that can be run at the same time', required=True)
   parser.add_argument('--num_threads', type=int, default=2, help='number of threads used by STAR and samtools [2]', required=False)
   parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
+  parser.add_argument('--version', action='version', version='%(prog)s ' + __version__, help='show the version number and exit')
 
 
   # create arguments

@@ -29,6 +29,8 @@ import pandas
 from functools import reduce
 import csv
 
+__version__ = 'part of TEspeX v0.2.1'
+
 # 1.
 # define the help function
 def help():
@@ -49,6 +51,7 @@ def help():
   parser.add_argument('--length', type=int, help='length of the read given as input. This is used to calculate STAR index parameters. If your fq/fq.gz file contains reads with different length specify the shorter length [required]', required=True)
   parser.add_argument('--out', type=str, help='directory where the output files will be written. This directory is created by the pipeline, specificy a non-yet-existing directory', required=True)
   parser.add_argument('--num_threads', type=int, default=2, help='number of threads used by STAR and samtools [2]', required=False)
+  parser.add_argument('--version', action='version', version='%(prog)s ' + __version__, help='show the version number and exit')
 
   # create arguments
   arg = parser.parse_args()

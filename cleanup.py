@@ -23,6 +23,8 @@ import argparse
 import subprocess
 import pandas as pd
 
+__version__ = 'part of TEspeX v0.2.1'
+
 # 1.
 # define the help function
 def help():
@@ -34,6 +36,7 @@ def help():
   # create argument list
   parser.add_argument('--wd', type=str, help='wrapper.py working directory (--out parameter of wrapper.py)', required=True)
   parser.add_argument('--job', type=int, help='number of jobs (--job parameter of wrapper.py', required=True)
+  parser.add_argument('--version', action='version', version='%(prog)s ' + __version__, help='show the version number and exit')
 
   # create arguments
   arg = parser.parse_args()
@@ -123,6 +126,7 @@ def clean(dir, jobs):
   te = tot["TE"]					# TE column should always be the first so
   tot.drop(["TE"], axis=1,inplace=True)			# I delete it and insert in 1st position
   tot.insert(0,"TE",te)
+  #tot["TE"] = tot["TE"].str.replace("_transp","")
   tot.to_csv(dir+"/outfile_total.txt", sep = '\t', header = True, index = False)
 
 # main
