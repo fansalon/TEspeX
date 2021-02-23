@@ -1,6 +1,6 @@
 # TEspeX
 
-TEspeX (Transposable Elements SPEcific eXpression) is a tool for the TE expression quantification from RNA-seq data. The rationale of this pipeline is to map reads against a reference transcriptome composed by i) TE consensus sequences, ii) coding transcripts and iii) non-coding transcripts and to select for the counting those reads mapping with best alignment score exclusively against TE consensus sequences. This should avoid the quantification of reads that may be generated from TE-fragments embedded in coding and non-coding annotated transcripts.
+TEspeX (Transposable Elements SPEcific eXpression) is a tool for the TE expression quantification from RNA-seq data. The rationale of this pipeline is to map reads against a reference transcriptome composed by i) TE consensus sequences, ii) coding transcripts and iii) non-coding transcripts and to select for the counting those reads mapping with best alignment score exclusively agace.Dfam.fa.gzinst TE consensus sequences. This should avoid the quantification of reads that may be generated from TE-fragments embedded in coding and non-coding annotated transcripts.
 
 Possible scenarios:
 * A reads is mapping with best alignment score on TE consensus sequences but not on coding/non-coding transcripts --> counted as TE-specific
@@ -242,7 +242,7 @@ ls $tespex/example/*.fastq.gz > $tespex/example/reads.txt
   
 2. launch the pipeline typing the following command:
 ```
-python3 TEspeX_v0.2.py --TE example/RepBase_single_line.fa.gz \
+python3 TEspeX_v0.2.py --TE example/ce.Dfam.fa.gz \
 --cdna example/Caenorhabditis_elegans.WBcel235.cdna.all.fa.gz \
 --ncrna example/Caenorhabditis_elegans.WBcel235.ncrna.fa.gz \
 --sample example/reads.txt --paired F --length 50 --out test --strand no
