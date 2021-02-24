@@ -205,8 +205,8 @@ optional arguments:
                         [required]
   --length LENGTH       length of the read given as input. This is used to
                         calculate STAR index parameters. If your fq/fq.gz file
-                        contains reads with different length specify the
-                        shorter length [required]
+                        contains reads with different length specify the most 
+                        frequent read length [required]
   --out OUT             directory where the output files will be written. This
                         directory is created by the pipeline, specificy a non-
                         yet-existing directory
@@ -305,8 +305,8 @@ optional arguments:
                         [required]
   --length LENGTH       length of the read given as input. This is used to
                         calculate STAR index parameters. If your fq/fq.gz file
-                        contains reads with different length specify the
-                        shorter length [required]
+                        contains reads with different length specify the most 
+                        frequent read length [required]
   --out OUT             directory where the output files will be written. This
                         directory is created by the pipeline, specificy a non-
                         yet-existing directory
