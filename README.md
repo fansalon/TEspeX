@@ -3,10 +3,10 @@
 TEspeX (Transposable Elements SPEcific eXpression) is a tool for the TE expression quantification from RNA-seq data. The rationale of this pipeline is to map reads against a reference transcriptome composed by i) TE consensus sequences, ii) coding transcripts and iii) non-coding transcripts and to select for the counting those reads mapping with best alignment score exclusively agace.Dfam.fa.gzinst TE consensus sequences. This should avoid the quantification of reads that may be generated from TE-fragments embedded in coding and non-coding annotated transcripts.
 
 Possible scenarios:
-* A reads is mapping with best alignment score on TE consensus sequences but not on coding/non-coding transcripts --> counted as TE-specific
-* A reads is mapping with best alignment score on TE consensus sequences but not on coding/non-coding transcripts. However, the reads multi-map on >10 loci --> discarded as not assignable to a specific TE subfamily
-* A reads is mapping with best alignment score on *BOTH* TE consensus sequences and coding/non-coding transcripts --> discarded as it may be generated from TE fragments embedded in coding/non-coding transcripts
-* A reads is mapping with best alignment score on coding/non-coding transcripts --> discarded as it is (probably) transcribed from coding/non-coding transcripts.
+* A read is mapping with best alignment score on TE consensus sequences but not on coding/non-coding transcripts --> counted as TE-specific
+* A read is mapping with best alignment score on TE consensus sequences but not on coding/non-coding transcripts. However, the reads multi-map on >10 loci --> discarded as not assignable to a specific TE subfamily
+* A read is mapping with best alignment score on *BOTH* TE consensus sequences and coding/non-coding transcripts --> discarded as it may be generated from TE fragments embedded in coding/non-coding transcripts
+* A read is mapping with best alignment score on coding/non-coding transcripts --> discarded as it is (probably) transcribed from coding/non-coding transcripts.
 
 
 
