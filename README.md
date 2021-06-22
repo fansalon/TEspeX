@@ -1,12 +1,22 @@
 # TEspeX
 
-TEspeX (Transposable Elements SPEcific eXpression) is a tool for the TE expression quantification from RNA-seq data. The rationale of this pipeline is to map reads against a reference transcriptome composed by i) TE consensus sequences, ii) coding transcripts and iii) non-coding transcripts and to select for the counting those reads mapping with best alignment score exclusively agace.Dfam.fa.gzinst TE consensus sequences. This should avoid the quantification of reads that may be generated from TE-fragments embedded in coding and non-coding annotated transcripts.
+TEspeX (Transposable Elements SPEcific eXpression) is a tool for the TE expression quantification from Illummina short RNA-seq reads. The rationale of the pipeline is to map the reads against a reference transcriptome composed by i) TE consensus sequences, ii) coding transcripts and iii) non-coding transcripts and to quantify the expression of TEs avoiding counting reads deriving from TE fragments embedded in coding/non-coding non-TE annotated transcripts.
+
+Techincally, TEspeX:
+* merges the 3 fasta files generating a reference transcriptome
+* builds the transcriptome index (STAR)
+* maps the reads to the transcriptome assigning the best alignment score (AS) to all the alignments showing the best AS
+* selects only the best scoring alignments (samtools)
+* discards all the reads mapping with best scoring alignments on coding transcripts/non-coding transcripts
+* counts only the TE-specific reads
+
 
 Possible scenarios:
-* A read maps with best alignment score on TE consensus sequences but not on coding/non-coding transcripts --> counted as TE-specific
-* A read maps with best alignment score on TE consensus sequences but not on coding/non-coding transcripts. However, the reads multi-map on >10 loci --> discarded as not assignable to a specific TE subfamily
-* A read maps with best alignment score on *BOTH* TE consensus sequences and coding/non-coding transcripts --> discarded as it may be generated from TE fragments embedded in coding/non-coding transcripts
-* A read mapps with best alignment score on coding/non-coding transcripts --> discarded as it is (probably) transcribed from coding/non-coding transcripts.
+* A read maps with best alignment score to TE consensus sequences but not on coding/non-coding transcripts --> counted as TE-specific
+* A read maps with best alignment score to TE consensus sequences but not on coding/non-coding transcripts. However, the reads multi-map to >10 loci and it is aligned to all of them with an alignment score (AS) ranging between the maxAS and the maxAS-1 --> discarded as not assignable to a specific TE subfamily
+* A read maps to *BOTH* TE consensus sequences and coding/non-coding transcripts. However, the alignment(s) on TEs is flagged as best whereas the one(s) on non-TE transcripts is not -->  counted as TE-specific
+* A read maps with best alignment score to *BOTH* TE consensus sequences and coding/non-coding transcripts --> discarded as it may be generated from TE fragments embedded in coding/non-coding transcripts
+* A read maps with best alignment score to coding/non-coding transcripts --> discarded as it is (probably) transcribed from coding/non-coding transcripts.
 
 
 
