@@ -12,8 +12,8 @@ Techincally, TEspeX:
 
 
 Possible scenarios:
-* A read maps with best alignment score to TE consensus sequences but not on coding/non-coding transcripts --> counted as TE-specific
-* A read maps with best alignment score to TE consensus sequences but not on coding/non-coding transcripts. However, the reads multi-map to >10 loci and it is aligned to all of them with an alignment score (AS) ranging between the maxAS and the maxAS-1 --> discarded as not assignable to a specific TE subfamily
+* A read maps with best alignment score to TE consensus sequences but not to coding/non-coding transcripts --> counted as TE-specific
+* A read maps with best alignment score to TE consensus sequences but not to coding/non-coding transcripts. However, the reads multi-map to >10 loci and it is aligned to all of them with an alignment score (AS) ranging between the maxAS and the maxAS-1 --> discarded as not assignable to a specific TE subfamily
 * A read maps to *BOTH* TE consensus sequences and coding/non-coding transcripts. However, the alignment(s) on TEs is flagged as best whereas the one(s) on non-TE transcripts is not -->  counted as TE-specific
 * A read maps with best alignment score to *BOTH* TE consensus sequences and coding/non-coding transcripts --> discarded as it may be generated from TE fragments embedded in coding/non-coding transcripts
 * A read maps with best alignment score to coding/non-coding transcripts --> discarded as it is (probably) transcribed from coding/non-coding transcripts.
@@ -28,6 +28,7 @@ The pipeline has been written in python3 so **YOU MUST** use python3 and it has 
 * Python3 (>=3.4.6)
 * pip3
 * java
+* zlib (properly installed and configured as in: http://jianghao.wang/post/2017-11-07-install-packages-on-hpc/#install-zlib)
 
 
 ## **Unix**
@@ -192,9 +193,9 @@ python3 TEspeX.py --help
 This command shows the help that should be something very similar to:
 ```
 usage: TEspeX.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE
-                      --paired PAIRED --length LENGTH --out OUT --strand
-                      STRAND [--num_threads NUM_THREADS] [--remove REMOVE]
-                      [--index INDEX]
+                 --paired PAIRED --length LENGTH --out OUT --strand STRAND
+                 [--num_threads NUM_THREADS] [--remove REMOVE] [--index INDEX]
+                 [--version]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -215,7 +216,7 @@ optional arguments:
                         [required]
   --length LENGTH       length of the read given as input. This is used to
                         calculate STAR index parameters. If your fq/fq.gz file
-                        contains reads with different length specify the most 
+                        contains reads with different length specify the most
                         frequent read length [required]
   --out OUT             directory where the output files will be written. This
                         directory is created by the pipeline, specificy a non-
@@ -232,6 +233,7 @@ optional arguments:
                         the default value [recommended]. Otherwise provide
                         FULL path to a directoray containing STAR indexes
                         [not_recommended] [F]
+  --version             show the version number and exit
 ```
 
 All the arguments, except fot ```--num_threads```, ```--remove``` and ```--index``` are required.\
