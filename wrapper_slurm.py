@@ -65,7 +65,7 @@ def help():
   parser.add_argument('--strand', type=str, help='strandeness of the RNAseq library. no = unstranded/htseqcount \'no\', yes = htseqcount \'yes\', reverse = htseqcount \'reverse\'', required=True)
   parser.add_argument('--job', type=str, help='number of jobs that can be run at the same time', required=True)
   parser.add_argument('--q', type=str,help='name of the the queue of your SLURM system you want TEspeX to be run (SBATCH -p parameter) [required]',required=True)
-  parser.add_argument('--num_threads', type=int, default=2, help='number of threads used by STAR and samtools [2]', required=False)
+  parser.add_argument('--num_threads', type=int, default=4, help='number of threads used by STAR and samtools. Minimum number of threads: 4 [4]', required=False)
   parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
   parser.add_argument('--version', action='version', version='%(prog)s ' + __version__, help='show the version number and exit')
 
@@ -122,6 +122,38 @@ def help():
   truefalse = [ 'T', 'F' ]
   if prd not in truefalse or rm not in truefalse:
     print("ERROR!\nunrecognized --paired or --remove parameters. Please specify T or F")
+    sys.exit(1)
+  # check that the file containing the fq path i) really contains fullpath and ii) the fq exist
+  with open(sample_file) as inpt:
+    for line in inpt:
+      line = line.strip("\n")
+      line = line.split("\t") # line is a list, if SE only 1 element is in the list, if PE 2
+      for ln in line:
+        # check is full path
+        if not os.path.isabs(ln):
+          print("ERROR: the file provided in --sample does not contain absolute paths to fastq/gz files. Please provide absolute paths to the fastq/gz and re-run TEspeX")
+          print("Exiting....")
+          sys.exit(1)
+        # check file exist
+        else:
+          if not os.path.isfile(ln):
+            print("ERROR: file %s does not exist" % (ln))
+            print("Exiting....")
+            sys.exit(1)
+  # check Pandas and pysam versions
+  pandas_ver = pandas.__version__
+  pysam_ver = pysam.__version__
+ # print(pandas_ver)#debug
+#  print(pysam_ver)#debug
+  if pandas_ver != "0.23.0":
+    print("ERROR: 0.23.0 pandas version is required, %s detected" % str(pandas_ver))
+    print("Please, install the correct version of pandas (pip3 install --user pandas==0.23.0) and re-run TEspeX")
+    print("Exiting....")
+    sys.exit(1)
+  if pysam_ver != "0.15.1":
+    print("ERROR: 0.15.1 pysam version is required, %s detected" % str(pysam_ver))
+    print("Please, install the correct version of pysam (pip3 install --user pysam==0.15.1) and re-run TEspeX")
+    print("Exiting....")
     sys.exit(1)
 
   return job_index, clean, pipeline, te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, njob, num_threads, rm, queue_pbs

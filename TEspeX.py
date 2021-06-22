@@ -148,8 +148,8 @@ def help():
   # check Pandas and pysam versions
   pandas_ver = pandas.__version__
   pysam_ver = pysam.__version__
-  print(pandas_ver)#debug
-  print(pysam_ver)#debug
+#  print(pandas_ver)#debug
+#  print(pysam_ver)#debug
   if pandas_ver != "0.23.0":
     print("ERROR: 0.23.0 pandas version is required, %s detected" % str(pandas_ver))
     print("Please, install the correct version of pandas (pip3 install --user pandas==0.23.0) and re-run TEspeX")
