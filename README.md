@@ -338,9 +338,10 @@ optional arguments:
   --version             show the version number and exit
 ```
 
-The parameters are exactly the same of TEspeX.py script except for 2 new parameters:
+The parameters are exactly the same of TEspeX.py script except for 3 parameters:
 * --script: it requires the path to TEspeX.py script
-* --job: it requires the number of jobs you want to run at the same time. This depends on the settings of your system. If you can run 40 jobs at the same time and you have 80 fq/fq.gz written in the txt file given as input to ```--sample``` the wrapper_slurm.py script will: 
+* --q the name of the SLURM queue to be used for the TEspeX job
+* --job: it requires the number of jobs you want to run at the same time. This depends on the settings of your system. If you can run 40 jobs at the same time and you set ```--job 40``` and you have 80 fq/fq.gz written in the txt file given as input to ```--sample``` the wrapper_slurm.py script will: 
     * subset the ```--sample``` file in 40 sub-files containing 2 (80/40) fq/fq.gz each (named: sample0, sample1, .., sample40)
     * create 40 folders (named: 0, 1, .., 40)
     * launch 40 different jobs (named: job_0, job_1, .., job_40)
@@ -369,7 +370,7 @@ If you are interested in the development of **the perfect tool** for testing for
 
 
 # Development and help
-The TEspeX pipeline has been developed by Federico Ansaloni, PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of prof. Remo Sanges.\
+The TEspeX pipeline has been developed by Federico Ansaloni, former PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of prof. Remo Sanges.\
 Nicolo' Gualandi developed the wrapper_slurm.py script.\
 To report bugs or suggestions please feel free to write to the TEspeX supporting group https://groups.google.com/g/tespex-help
 
