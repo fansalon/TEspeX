@@ -134,17 +134,19 @@ def help():
   with open(sample_file) as inpt:
     for line in inpt:
       line = line.strip("\n")
-      # check is full path
-      if not os.path.isabs(line):
-        print("ERROR: the file provided in --sample does not contain absolute paths to fastq/gz files. Please provide absolute paths to the fastq/gz and re-run TEspeX")
-        print("Exiting....")
-        sys.exit(1)
-      # check file exist
-      else:
-        if not os.path.isfile(line):
-          print("ERROR: file %s does not exist" % (line))
+      line = line.split("\t") # line is a list, if SE only 1 element is in the list, if PE 2
+      for ln in line:
+        # check is full path
+        if not os.path.isabs(ln):
+          print("ERROR: the file provided in --sample does not contain absolute paths to fastq/gz files. Please provide absolute paths to the fastq/gz and re-run TEspeX")
           print("Exiting....")
           sys.exit(1)
+        # check file exist
+        else:
+          if not os.path.isfile(ln):
+            print("ERROR: file %s does not exist" % (ln))
+            print("Exiting....")
+            sys.exit(1)
   # check Pandas and pysam versions
   pandas_ver = pandas.__version__
   pysam_ver = pysam.__version__
