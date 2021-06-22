@@ -371,7 +371,7 @@ If you are interested in the development of **the perfect tool** for testing for
 
 # Development and help
 The TEspeX pipeline has been developed by Federico Ansaloni, former PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of prof. Remo Sanges (https://www.sangeslab.eu). \
-Nicolo' Gualandi developed the wrapper_slurm.py script.\
+Nicolo' Gualandi and Mauro Esposito contributed to the pipeline testing.\
 To report bugs or suggestions please feel free to write to the TEspeX supporting group https://groups.google.com/g/tespex-help
 
 
