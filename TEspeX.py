@@ -29,11 +29,11 @@ import pandas
 from functools import reduce
 import csv
 
-__version__ = 'v0.2.1'
+__version__ = 'v1.0'
 
 # define the help function
 def help():
-  # define 2 global variables because they will be used by more than 2 functions
+  # define global variables that will be used by several functions
   global dir
   global num_threads
   global bin_path
@@ -97,7 +97,7 @@ def help():
       print("ERROR!\n%s: no such file or directory" % (argList[i]))
       sys.exit(1)
 
-  # check strand argument is 0, 1 or 2
+  # check strand argument is no, yes or reverse
   strand_list = [ "no", "yes", "reverse"]
   if strandeness not in strand_list:
     print("ERROR!\nunrecognized --strand parameter. Please specify no, yes or reverse")
@@ -130,6 +130,36 @@ def help():
       print("ERROR: %s no such file or directory" % (index))
       print("Please specify --index F [default] of an existing directory containing STAR indexes")
       sys.exit(1)
+  # check that the file containing the fq path i) really contains fullpath and ii) the fq exist
+  with open(sample_file) as inpt:
+    for line in inpt:
+      line = line.strip("\n")
+      # check is full path
+      if not os.path.isabs(line):
+        print("ERROR: the file provided in --sample does not contain absolute paths to fastq/gz files. Please provide absolute paths to the fastq/gz and re-run TEspeX")
+        print("Exiting....")
+        sys.exit(1)
+      # check file exist
+      else:
+        if not os.path.isfile(line):
+          print("ERROR: file %s does not exist" % (line))
+          print("Exiting....")
+          sys.exit(1)
+  # check Pandas and pysam versions
+  pandas_ver = pandas.__version__
+  pysam_ver = pysam.__version__
+  print(pandas_ver)#debug
+  print(pysam_ver)#debug
+  if pandas_ver != "0.23.0":
+    print("ERROR: 0.23.0 pandas version is required, %s detected" % str(pandas_ver))
+    print("Please, install the correct version of pandas (pip3 install --user pandas==0.23.0) and re-run TEspeX")
+    print("Exiting....")
+    sys.exit(1)
+  if pysam_ver != "0.15.1":
+    print("ERROR: 0.15.1 pysam version is required, %s detected" % str(pysam_ver))
+    print("Please, install the correct version of pysam (pip3 install --user pysam==0.15.1) and re-run TEspeX")
+    print("Exiting....")
+    sys.exit(1)
 
   return te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, num_threads, rm, bin_path, index
 
