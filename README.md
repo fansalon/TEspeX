@@ -293,8 +293,9 @@ This should print to screen:
 ```
 usage: wrapper_slurm.py [-h] --script SCRIPT --TE TE --cdna CDNA --ncrna NCRNA
                         --sample SAMPLE --paired PAIRED --length LENGTH --out
-                        OUT --strand STRAND --job JOB
+                        OUT --strand STRAND --job JOB --q Q
                         [--num_threads NUM_THREADS] [--remove REMOVE]
+                        [--version]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -317,7 +318,7 @@ optional arguments:
                         [required]
   --length LENGTH       length of the read given as input. This is used to
                         calculate STAR index parameters. If your fq/fq.gz file
-                        contains reads with different length specify the most 
+                        contains reads with different length specify the most
                         frequent read length [required]
   --out OUT             directory where the output files will be written. This
                         directory is created by the pipeline, specificy a non-
@@ -326,12 +327,15 @@ optional arguments:
                         unstranded/htseqcount 'no', yes = htseqcount 'yes',
                         reverse = htseqcount 'reverse'
   --job JOB             number of jobs that can be run at the same time
+  --q Q                 name of the the queue of your SLURM system you want
+                        TEspeX to be run (SBATCH -p parameter) [required]
   --num_threads NUM_THREADS
-                        number of threads used by STAR and samtools [2]
+                        number of threads used by STAR and samtools. Minimum
+                        number of threads: 4 [4]
   --remove REMOVE       T (true) or F (false). If this parameter is set to T
                         all the bam files are removed. If it is F they are not
                         removed [T]
-
+  --version             show the version number and exit
 ```
 
 The parameters are exactly the same of TEspeX.py script except for 2 new parameters:
