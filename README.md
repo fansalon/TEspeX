@@ -293,8 +293,8 @@ This should print to screen:
 ```
 usage: wrapper_slurm.py [-h] --script SCRIPT --TE TE --cdna CDNA --ncrna NCRNA
                         --sample SAMPLE --paired PAIRED --length LENGTH --out
-                        OUT --strand STRAND --job JOB --q Q
-                        [--num_threads NUM_THREADS] [--remove REMOVE]
+                        OUT --strand STRAND --job JOB --q Q --walltime
+                        WALLTIME [--num_threads NUM_THREADS] [--remove REMOVE]
                         [--version]
 
 optional arguments:
@@ -329,6 +329,9 @@ optional arguments:
   --job JOB             number of jobs that can be run at the same time
   --q Q                 name of the the queue of your SLURM system you want
                         TEspeX to be run (SBATCH -p parameter) [required]
+  --walltime WALLTIME   walltime of each job TEspeX will launch on your SLURM
+                        system reported in hh:mm:ss format (SBATCH -t
+                        parameter) [required]
   --num_threads NUM_THREADS
                         number of threads used by STAR and samtools. Minimum
                         number of threads: 4 [4]
@@ -340,7 +343,8 @@ optional arguments:
 
 The parameters are exactly the same of TEspeX.py script except for 3 parameters:
 * --script: it requires the path to TEspeX.py script
-* --q the name of the SLURM queue to be used for the TEspeX job
+* --q: the name of the SLURM queue to be used for the TEspeX job
+* --walltime: walltime of each job TEspeX will launch on your SLURM system reported in hh:mm:ss format (SBATCH -t parameter)
 * --job: it requires the number of jobs you want to run at the same time. This depends on the settings of your system. If you can run 40 jobs at the same time and you set ```--job 40``` and you have 80 fq/fq.gz written in the txt file given as input to ```--sample``` the wrapper_slurm.py script will: 
     * subset the ```--sample``` file in 40 sub-files containing 2 (80/40) fq/fq.gz each (named: sample0, sample1, .., sample40)
     * create 40 folders (named: 0, 1, .., 40)
