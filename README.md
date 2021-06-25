@@ -25,7 +25,7 @@ The pipeline has been written in python3 so **YOU MUST** use python3 and it has 
 # How to install TEspeX
 
 ## **Prerequisites**
-* Python3 (>=3.4.6)
+* Python3 (>=3.4.6 - tested on 3.4, 3.5 and 3.6. Please **avoid** >=3.7)
 * pip3
 * java
 * zlib (properly installed and configured as in: http://jianghao.wang/post/2017-11-07-install-packages-on-hpc/#install-zlib)
@@ -98,7 +98,7 @@ pip3 install --user pandas==0.23.0
 pip3 install --user pysam==0.15.1
 ```
 
-If errors at this stage occurs, double check the version of your Python installation. Some Python versions have some issues with these versions of pandas and pysam. In case of issues refer to the Prerequisites paragraph of this manual: https://github.com/fansalon/TEspeX#prerequisites
+If errors at this stage occur, double check the version of your Python installation. Some Python versions have some issues with these versions of pandas and pysam. In case of issues refer to the Prerequisites paragraph of this manual: https://github.com/fansalon/TEspeX#prerequisites
 
 
 ## **Mac OS**
@@ -168,7 +168,7 @@ pip3 install --user pandas==0.23.0
 pip3 install --user pysam==0.15.1
 ```
 
-If errors at this stage occurs, double check the version of your Python installation. Some Python versions have some issues with these versions of pandas and pysam. In case of issues refer to the Prerequisites paragraph of this manual: https://github.com/fansalon/TEspeX#prerequisites
+If errors at this stage occur, double check the version of your Python installation. Some Python versions have some issues with these versions of pandas and pysam. In case of issues refer to the Prerequisites paragraph of this manual: https://github.com/fansalon/TEspeX#prerequisites
 
 
 
