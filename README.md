@@ -98,6 +98,8 @@ pip3 install --user pandas==0.23.0
 pip3 install --user pysam==0.15.1
 ```
 
+If errors at this stage occurs, double check the version of your Python installation. Some Python versions have some issues with these versions of pandas and pysam. In case of issues refer to the Prerequisites paragraph of this manual: https://github.com/fansalon/TEspeX#prerequisites
+
 
 ## **Mac OS**
 
@@ -165,6 +167,8 @@ To install pysam and pandas please open a terminal and type:
 pip3 install --user pandas==0.23.0
 pip3 install --user pysam==0.15.1
 ```
+
+If errors at this stage occurs, double check the version of your Python installation. Some Python versions have some issues with these versions of pandas and pysam. In case of issues refer to the Prerequisites paragraph of this manual: https://github.com/fansalon/TEspeX#prerequisites
 
 
 
