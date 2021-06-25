@@ -65,6 +65,7 @@ def help():
   parser.add_argument('--strand', type=str, help='strandeness of the RNAseq library. no = unstranded/htseqcount \'no\', yes = htseqcount \'yes\', reverse = htseqcount \'reverse\'', required=True)
   parser.add_argument('--job', type=str, help='number of jobs that can be run at the same time', required=True)
   parser.add_argument('--q', type=str,help='name of the the queue of your SLURM system you want TEspeX to be run (SBATCH -p parameter) [required]',required=True)
+  parser.add_argument('--walltime', type=str,help='walltime of each job TEspeX will launch on your SLURM system reported in hh:mm:ss format (SBATCH -t parameter) [required]',required=True)
   parser.add_argument('--num_threads', type=int, default=4, help='number of threads used by STAR and samtools. Minimum number of threads: 4 [4]', required=False)
   parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
   parser.add_argument('--version', action='version', version='%(prog)s ' + __version__, help='show the version number and exit')
@@ -84,7 +85,8 @@ def help():
   njob = arg.job
   num_threads = arg.num_threads
   rm = arg.remove
-  queue_pbs = arg.q
+  queue_slurm = arg.q
+  wtime_slurm = arg.walltime
 
 #  global dir
 
@@ -156,7 +158,7 @@ def help():
     print("Exiting....")
     sys.exit(1)
 
-  return job_index, clean, pipeline, te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, njob, num_threads, rm, queue_pbs
+  return job_index, clean, pipeline, te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, njob, num_threads, rm, queue_slurm, wtime_slurm
 
 # 2.
 # this function writes the message to the log file in the output directory
@@ -224,9 +226,9 @@ def createSample(fq_file, jobs):
 
 
 # create index
-def createIndex(indexpy,te_fa,cdna_fa,ncrna_fa,read_lg,cpu,queue):
+def createIndex(indexpy,te_fa,cdna_fa,ncrna_fa,read_lg,cpu,queue,wallt):
   with open("index.job",'w') as ind:
-    ind.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket="+str(int(cpu/4))+ "\n#SBATCH -t 12:00:00\ncd $SLURM_SUBMIT_DIR\n\n")
+    ind.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket="+str(int(cpu/4))+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
     ind.write("time python3 "+indexpy+" --TE "+te_fa+" --cdna "+cdna_fa+" --ncrna "+ncrna_fa+" --length "+str(read_lg)+" --out "+dir+" --num_threads "+str(cpu)+"\n\n")
   cmd_index = "sbatch index.job"
   index_job_id = bash(cmd_index)
@@ -236,12 +238,12 @@ def createIndex(indexpy,te_fa,cdna_fa,ncrna_fa,read_lg,cpu,queue):
 
 
 # create the jobs
-def createJob(jobs, py, te, cDna, ncRna, prd, read_leng, strandn, threads, remove, indicix,queue):
+def createJob(jobs, py, te, cDna, ncRna, prd, read_leng, strandn, threads, remove, indicix,queue,wallt):
   job_list = []
   for i in range(0, int(jobs)):
     with open("job"+str(i), 'w') as outj:
       job_list.append("job"+str(i))
-      outj.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket="+str(int(threads/4))+ "\n#SBATCH -t 12:00:00\ncd $SLURM_SUBMIT_DIR\n\n")
+      outj.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket="+str(int(threads/4))+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
       outj.write("time python3 "+py+" --TE "+te+" --cdna "+cDna+" --ncrna "+ncRna+" --sample sample"+str(i)+".txt --paired "+prd+" --length "+str(read_leng)+" --out "+str(i)+ " --strand "+strandn+ " --num_threads "+str(threads)+" --remove "+remove+ " --index "+indicix+"\n\n")
 
   return job_list
@@ -260,7 +262,7 @@ def launchJob(jl,depend_index):
   return jobs
 
 # clean up. This function must wait all the job to finish, then it should clean and merge everything
-def cleanUP(job_id, cleanupy,queue):
+def cleanUP(job_id, cleanupy,queue,wallt):
   depend = ''
   for i in range(0, len(job_id)):
     if i != (len(job_id) - 1):
@@ -268,7 +270,7 @@ def cleanUP(job_id, cleanupy,queue):
     else:
       depend = depend + job_id[i]
   with open("cleanup.job", 'w') as out:
-      out.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket=1"+ "\n#SBATCH -t 12:00:00\ncd $SLURM_SUBMIT_DIR\n\n")
+      out.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket=1"+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
       out.write("time python3 " + cleanupy + " --wd " + dir + " --job " + str(len(job_id)) + "\n" )
   cmd1 = "sbatch --dependency=afterok:" + depend +" cleanup.job"
   bash(cmd1)
@@ -276,17 +278,17 @@ def cleanUP(job_id, cleanupy,queue):
 
 # main
 def main():
-  index_script, clean_script, pyscript, TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, pbs_q = help()
+  index_script, clean_script, pyscript, TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, slurm_q, slurm_wtime = help()
   os.chdir(dir)
-  print("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_job = %s\nnum_threads = %s \nremove = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove))
+  print("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_job = %s\nnum_threads = %s \nremove = %s\nq = %s\nwalltime = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, slurm_q, slurm_wtime))
   createSample(sample, num_job)
   print("You have asked to split the analysis in %s different jobs:" % (num_job))
   # create index
-  index_job_id = createIndex(index_script,TE,cdna,ncrna,read_length,num_threads,pbs_q)
+  index_job_id = createIndex(index_script,TE,cdna,ncrna,read_length,num_threads,slurm_q,slurm_wtime)
   #  create mapping jobs
-  jlist = createJob(num_job, pyscript, TE, cdna, ncrna, paired, read_length, strand, num_threads, remove, dir+"/index",pbs_q)
+  jlist = createJob(num_job, pyscript, TE, cdna, ncrna, paired, read_length, strand, num_threads, remove, dir+"/index",slurm_q,slurm_wtime)
   jid = launchJob(jlist,index_job_id)
-  cleanUP(jid, clean_script,pbs_q)
+  cleanUP(jid, clean_script,slurm_q,slurm_wtime)
 
 
 if __name__ == "__main__":
