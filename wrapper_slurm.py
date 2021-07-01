@@ -54,11 +54,11 @@ def checkSampleFile(sfile,paired):
       # check the expected number of fq is reported (2 if PE,1 if SE)
       if paired == "T":
         if len(line) != 2:
-          print("ERROR: --paired T is specified but the --sample file contains only 1 column at line %s" % (str(ct)))
+          print("ERROR: --paired T is specified therefore 2 columns are expected in the --sample file. However, %s are detected at line %s" % (str(len(line)),str(ct)))
           sys.exit()
       else:
         if len(line) != 1:
-          print("ERROR: --paired F is specified but the --sample file does not contain only 1 column at line %s" % (str(ct)))
+          print("ERROR: --paired F is specified therefore 1 column is expected in the --sample file. However, %s are detected at line %s" % (str(len(line)),str(ct)))
           sys.exit()
       for ln in line:
         # check is full path
