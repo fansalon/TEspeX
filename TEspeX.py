@@ -45,11 +45,22 @@ def checkPrdRm(paired,remove):
     print("ERROR!\nunrecognized --paired or --remove parameters. Please specify T or F")
     sys.exit(1)
 # Sample file
-def checkSampleFile(sfile):
+def checkSampleFile(sfile,paired):
+  ct = 0
   with open(sfile) as inpt:
     for line in inpt:
+      ct += 1
       line = line.strip("\n")
       line = line.split("\t") # line is a list, if SE only 1 element is in the list, if PE 2
+      # check the expected number of fq is reported (2 if PE,1 if SE)
+      if paired == "T":
+        if len(line) != 2:
+          print("ERROR: --paired T is specified but the --sample file contains only 1 column at line %s" % (str(ct)))
+          sys.exit()
+      else:
+        if len(line) != 1:
+          print("ERROR: --paired F is specified but the --sample file does not contain only 1 column at line %s" % (str(ct)))
+          sys.exit()
       for ln in line:
         # check is full path
         if not os.path.isabs(ln):
@@ -176,8 +187,8 @@ def help():
   checkStrand(strandeness)
   # check paired and rm  are T/F 
   checkPrdRm(prd,rm)
-  # check that the file containing the fq path i) really contains fullpath and ii) the fq exist
-  checkSampleFile(sample_file)
+  # check that the file containing the fq path i) really contains fullpath and ii) the fq exist and iii) contains two col if PE and one if SE
+  checkSampleFile(sample_file,prd)
   # check Pandas and pysam versions
   checkPy()
   # check input args and create the wd
