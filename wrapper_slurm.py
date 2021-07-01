@@ -181,6 +181,10 @@ def help():
   wtime_slurm = arg.walltime
 
   #### Check the parsed arguments fullfill the TEspeX requirments
+  # check number of threads
+  if num_threads < 4:
+    print("ERROR: when run in wrapper mode at lest 4 threads should be selected. %s selected." % (str(num_threads)))
+    sys.exit(1)
   # check strand argument is no, yes or reverse
   checkStrand(strandeness)
   # check paired and rm  are T/F 
