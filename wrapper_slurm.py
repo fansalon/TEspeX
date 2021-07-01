@@ -30,8 +30,90 @@ import math
 
 __version__ = 'part of TEspeX v1.0'
 
+######################################################## Functions used to check parsed arguments fullfil the TEspeX expectations
+# Strand
+def checkStrand(strand_param):
+  strand_list = [ "no", "yes", "reverse"]
+  if strand_param not in strand_list:
+    print("ERROR!\nunrecognized --strand parameter. Please specify no, yes or reverse")
+    sys.exit(1)
+# Paired, remove
+def checkPrdRm(paired,remove):
+  truefalse = [ 'T', 'F' ]
+  if paired not in truefalse or remove not in truefalse:
+    print("ERROR!\nunrecognized --paired or --remove parameters. Please specify T or F")
+    sys.exit(1)
+# Sample file
+def checkSampleFile(sfile):  
+  with open(sfile) as inpt:
+    for line in inpt:
+      line = line.strip("\n")
+      line = line.split("\t") # line is a list, if SE only 1 element is in the list, if PE 2
+      for ln in line:
+        # check is full path
+        if not os.path.isabs(ln):
+          print("ERROR: the file provided in --sample does not contain absolute paths to fastq/gz files. Please provide absolute paths to the fastq/gz and re-run TEspeX")
+          print("Exiting....")
+          sys.exit(1)
+        # check file exist
+        else:
+          if not os.path.isfile(ln):
+            print("ERROR: file %s does not exist" % (ln))
+            print("Exiting....")
+            sys.exit(1)
+# Check pysam and pandas version
+def checkPy():
+  pandas_ver = pandas.__version__
+  pysam_ver = pysam.__version__
+  if pandas_ver != "0.23.0":
+    print("ERROR: 0.23.0 pandas version is required, %s detected" % str(pandas_ver))
+    print("Please, install the correct version of pandas (pip3 install --user pandas==0.23.0) and re-run TEspeX")
+    print("Exiting....")
+    sys.exit(1)
+  if pysam_ver != "0.15.1":
+    print("ERROR: 0.15.1 pysam version is required, %s detected" % str(pysam_ver))
+    print("Please, install the correct version of pysam (pip3 install --user pysam==0.15.1) and re-run TEspeX")
+    print("Exiting....")
+    sys.exit(1)
+# Check walltime format
+def checkWallTime(wwtime):
+  if len(wwtime.split(":"))!= 3:
+    print("ERROR: value provided as --walltime is not formatted as expected. TEspeX expects the walltime to be reported in hh:mm:ss format (e.g. 12:00:00) whereas you provided: %s" % str(wwtime))
+    print("Please, provide --walltime as required and re-run TEspeX")
+    print("Exiting....")
+    sys.exit(1)
+# check input files/dirs exist
+def checkInputs(dir,ppipeline,tte,ccDNA,nncRNA,ssample_file):
+  # create a list with the arguments that are files
+  argList = []
+  argList.append(ppipeline)
+  argList.append(tte)
+  argList.append(ccDNA)
+  argList.append(nncRNA)
+  argList.append(ssample_file)
+  # check that the input files exist
+  for i in range(0, len(argList)):
+    if os.path.isfile(argList[i]):
+      continue
+    else:
+      print("ERROR!\n%s: no such file or directory" % (argList[i]))
+      sys.exit()
+  # check the basename of the outdir exists - if yes, create outdir
+  dname = os.path.dirname(dir)
+  if os.path.isdir(dname):
+    try:
+      os.mkdir(dir)
+    except FileExistsError:
+      print("ERROR: "+dir+" directory already exists")
+      sys.exit()
+  else:
+    print("ERROR: dirname of the --out parameter does not exist: %s"  % (dname))
+    print("Please, specify the name of a non-existing directory, in an already existing path and retry")
+    sys.exit()
+######################################################## End checks
+
 # 1.
-# define the help function
+# define the help function - parse input args
 def help():
   # define 2 global variables because they will be used by more than 2 functions
   global dir
@@ -70,7 +152,6 @@ def help():
   parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
   parser.add_argument('--version', action='version', version='%(prog)s ' + __version__, help='show the version number and exit')
 
-
   # create arguments
   arg = parser.parse_args()
   pipeline = os.path.abspath(arg.script)
@@ -88,75 +169,19 @@ def help():
   queue_slurm = arg.q
   wtime_slurm = arg.walltime
 
-#  global dir
-
-  # create the outDir
-  while True:
-    try:
-      os.mkdir(dir)
-      break
-    except FileExistsError:
-      print("ERROR: "+dir+" directory already exists")
-      sys.exit()
-
-
-  # create a list with the arguments that are files
-  argList = []
-  argList.append(pipeline)
-  argList.append(te)
-  argList.append(cDNA)
-  argList.append(ncRNA)
-  argList.append(sample_file)
-  # check that the input files exist
-  for i in range(0, len(argList)):
-    if os.path.isfile(argList[i]):
-      continue
-    else:
-      print("ERROR!\n%s: no such file or directory" % (argList[i]))
-      sys.exit()
-
-  # check strand argument is 0, 1 or 2
-  strand_list = [ "no", "yes", "reverse"]
-  if strandeness not in strand_list:
-    print("ERROR!\nunrecognized --strand parameter. Please specify no, yes or reverse")
-    sys.exit(1)
-  # check T F args
-  truefalse = [ 'T', 'F' ]
-  if prd not in truefalse or rm not in truefalse:
-    print("ERROR!\nunrecognized --paired or --remove parameters. Please specify T or F")
-    sys.exit(1)
+  #### Check the parsed arguments fullfill the TEspeX requirments
+  # check strand argument is no, yes or reverse
+  checkStrand(strandeness)
+  # check paired and rm  are T/F 
+  checkPrdRm(prd,rm)
   # check that the file containing the fq path i) really contains fullpath and ii) the fq exist
-  with open(sample_file) as inpt:
-    for line in inpt:
-      line = line.strip("\n")
-      line = line.split("\t") # line is a list, if SE only 1 element is in the list, if PE 2
-      for ln in line:
-        # check is full path
-        if not os.path.isabs(ln):
-          print("ERROR: the file provided in --sample does not contain absolute paths to fastq/gz files. Please provide absolute paths to the fastq/gz and re-run TEspeX")
-          print("Exiting....")
-          sys.exit(1)
-        # check file exist
-        else:
-          if not os.path.isfile(ln):
-            print("ERROR: file %s does not exist" % (ln))
-            print("Exiting....")
-            sys.exit(1)
+  checkSampleFile(sample_file)
   # check Pandas and pysam versions
-  pandas_ver = pandas.__version__
-  pysam_ver = pysam.__version__
- # print(pandas_ver)#debug
-#  print(pysam_ver)#debug
-  if pandas_ver != "0.23.0":
-    print("ERROR: 0.23.0 pandas version is required, %s detected" % str(pandas_ver))
-    print("Please, install the correct version of pandas (pip3 install --user pandas==0.23.0) and re-run TEspeX")
-    print("Exiting....")
-    sys.exit(1)
-  if pysam_ver != "0.15.1":
-    print("ERROR: 0.15.1 pysam version is required, %s detected" % str(pysam_ver))
-    print("Please, install the correct version of pysam (pip3 install --user pysam==0.15.1) and re-run TEspeX")
-    print("Exiting....")
-    sys.exit(1)
+  checkPy()
+  # check wall time formatting is the correct one hh:mm:ss
+  checkWallTime(wtime_slurm)
+  # check input args and create the wd
+  checkInputs(dir,pipeline,te,cDNA,ncRNA,sample_file)
 
   return job_index, clean, pipeline, te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, njob, num_threads, rm, queue_slurm, wtime_slurm
 
