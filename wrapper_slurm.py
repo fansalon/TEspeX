@@ -28,7 +28,7 @@ import pandas
 from functools import reduce
 import math
 
-__version__ = 'part of TEspeX v1.0'
+__version__ = 'part of TEspeX v1.0.1'
 
 ######################################################## Functions used to check parsed arguments fullfil the TEspeX expectations
 # Strand
@@ -269,6 +269,8 @@ def createSample(fq_file, jobs):
 def createIndex(indexpy,te_fa,cdna_fa,ncrna_fa,read_lg,cpu,queue,wallt):
   with open("index.job",'w') as ind:
     ind.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket="+str(int(cpu/4))+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
+    ind.write("set -e\n\n")
+    ind.write("source activate TEspeX_deps\n\n")
     ind.write("time python3 "+indexpy+" --TE "+te_fa+" --cdna "+cdna_fa+" --ncrna "+ncrna_fa+" --length "+str(read_lg)+" --out "+dir+" --num_threads "+str(cpu)+"\n\n")
   cmd_index = "sbatch index.job"
   index_job_id = bash(cmd_index)
@@ -284,6 +286,8 @@ def createJob(jobs, py, te, cDna, ncRna, prd, read_leng, strandn, threads, remov
     with open("job"+str(i), 'w') as outj:
       job_list.append("job"+str(i))
       outj.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket="+str(int(threads/4))+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
+      outj.write("set -e\n\n")
+      outj.write("source activate TEspeX_deps\n\n")
       outj.write("time python3 "+py+" --TE "+te+" --cdna "+cDna+" --ncrna "+ncRna+" --sample sample"+str(i)+".txt --paired "+prd+" --length "+str(read_leng)+" --out "+str(i)+ " --strand "+strandn+ " --num_threads "+str(threads)+" --remove "+remove+ " --index "+indicix+"\n\n")
 
   return job_list
@@ -311,6 +315,8 @@ def cleanUP(job_id, cleanupy,queue,wallt):
       depend = depend + job_id[i]
   with open("cleanup.job", 'w') as out:
       out.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket=1"+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
+      out.write("set -e\n\n")
+      out.write("source activate TEspeX_deps\n\n")
       out.write("time python3 " + cleanupy + " --wd " + dir + " --job " + str(len(job_id)) + "\n" )
   cmd1 = "sbatch --dependency=afterok:" + depend +" cleanup.job"
   bash(cmd1)

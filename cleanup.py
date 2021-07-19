@@ -23,7 +23,7 @@ import argparse
 import subprocess
 import pandas as pd
 
-__version__ = 'part of TEspeX v1.0'
+__version__ = 'part of TEspeX v1.0.1'
 
 # 1.
 # define the help function

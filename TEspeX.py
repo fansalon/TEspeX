@@ -29,7 +29,7 @@ import pandas
 from functools import reduce
 import csv
 
-__version__ = 'v1.0'
+__version__ = 'v1.0.1'
 
 ######################################################## Functions used to check parsed arguments fullfil the TEspeX expectations
 # Strand
