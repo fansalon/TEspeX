@@ -96,7 +96,7 @@ To create the conda environment and install the required libraries type:
 ```
 # create the environment using python 3.6
 conda create -n TEspeX_deps python=3.6
-# 
+## --> you will be asked to let conda download and install new packages: type Y
 
 # activate the environment - to be done every time TEspeX is used
 source activate TEspeX_deps
