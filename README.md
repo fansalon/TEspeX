@@ -99,7 +99,7 @@ conda create -n TEspeX_deps python=3.6
 ## --> you will be asked to let conda download and install new packages: type Y
 
 # activate the environment - to be done every time TEspeX is used
-# **PLEASE DO NOT CHANGE THE ENVIRONMENT NAME**
+# **PLEASE DO NOT CHANGE THE ENVIRONMENT NAME AS IT WILL COMPROMISE THE FUNCTIONING OF THE PIPELINE**
 source activate TEspeX_deps
 
 # install the required version of pandas and pysam
