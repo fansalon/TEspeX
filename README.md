@@ -310,6 +310,7 @@ The file while wrapper_slurm.py is the **SLURM** wrapper file. The  wrapper file
 Once these parameters have been modified, you can proceed and use the wrapper_slurm.py script. To see the help, type:
 ```
 cd $tespex
+source activate TEspeX_deps
 python3 wrapper_slurm.py -h
 ```
 
