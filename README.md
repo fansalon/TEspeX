@@ -327,7 +327,7 @@ If nothing is printed it means all went fine. Otherwise, error has rose.
 
 # TEspeX in wrapper mode
 
-The file while wrapper_slurm.py is the **SLURM** wrapper file. 
+The file wrapper_slurm.py is the **SLURM** wrapper file. 
 
 To see the help, type:
 ```
