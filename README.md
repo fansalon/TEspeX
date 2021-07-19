@@ -89,16 +89,31 @@ Copyright (C) 2016 Genome Research Ltd.
 ```
 
 
-TEspeX takes also advantage of the python3 libraries: sys, time, os, argparse, gzip, subprocess, math, pysam and pandas.
-Except for pysam and pandas, all the libraries are python standard libraries that do not require installation.
+In order to ensure that TEspeX is used with the python3 version/python3 library versions it has been tested with, a conda environment is created and within the environment all the required libraries are installed. The conda environment needs to be activated every time TEspeX is used.
 
-To install pysam and pandas please open a terminal and type:
+To create the conda environment and install the required libraries type:
 ```
+# create the environment using python 3.6
+conda create -n TEspeX_deps python=3.6
+# 
+# activate the environment - to be done every time TEspeX is used
+source activate TEspeX_deps
+# install the required version of pandas and pysam
 pip3 install --user pandas==0.23.0
 pip3 install --user pysam==0.15.1
+# to check everything properly worked
+which python3
+## --> /path/to/envs/TEspeX_deps/bin/python3
+which pip3
+## --> /path/to/envs/TEspeX_deps/bin/pip3
+python3 --version
+## --> Python 3.6.13 :: Anaconda, Inc.
+pip3 --version
+## --> pip 21.1.3 from /path/to/envs/TEspeX_deps/lib/python3.6/site-packages/pip (python 3.6)
+# deactivate the environment
+conda deactivate
 ```
 
-If errors at this stage occur, double check the version of your Python installation. Some Python versions have some issues with these versions of pandas and pysam. In case of issues refer to the Prerequisites paragraph of this manual: https://github.com/fansalon/TEspeX#prerequisites
 
 
 ## **Mac OS**
