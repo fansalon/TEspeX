@@ -211,6 +211,7 @@ TEspeX can be run calling directly the script from the command line. However, fo
 All the dependencies should have been installed properly. To test this, type:
 ```
 cd $tespex
+source activate TEspeX_deps
 python3 TEspeX.py --help
 ```
 
