@@ -97,11 +97,14 @@ To create the conda environment and install the required libraries type:
 # create the environment using python 3.6
 conda create -n TEspeX_deps python=3.6
 # 
+
 # activate the environment - to be done every time TEspeX is used
 source activate TEspeX_deps
+
 # install the required version of pandas and pysam
 pip3 install --user pandas==0.23.0
 pip3 install --user pysam==0.15.1
+
 # to check everything properly worked
 which python3
 ## --> /path/to/envs/TEspeX_deps/bin/python3
@@ -111,6 +114,7 @@ python3 --version
 ## --> Python 3.6.13 :: Anaconda, Inc.
 pip3 --version
 ## --> pip 21.1.3 from /path/to/envs/TEspeX_deps/lib/python3.6/site-packages/pip (python 3.6)
+
 # deactivate the environment
 conda deactivate
 ```
