@@ -24,9 +24,8 @@ The pipeline has been written in python3 so **YOU MUST** use python3 and it has 
 
 # How to install TEspeX
 
-## **Prerequisites**
-* Python3 (>=3.4.6 - tested on 3.4, 3.5 and 3.6. Please **avoid** >=3.7)
-* pip3
+## **Prerequisites (installed and in $PATH)**
+* conda
 * java
 * zlib (properly installed and configured as in: http://jianghao.wang/post/2017-11-07-install-packages-on-hpc/#install-zlib)
 
