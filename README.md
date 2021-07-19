@@ -89,6 +89,7 @@ Copyright (C) 2016 Genome Research Ltd.
 
 
 In order to ensure that TEspeX is used with the python3 version/python3 library versions it has been tested with, a conda environment is created and within the environment all the required libraries are installed.\
+
 **The conda environment needs to be activated every time TEspeX is used.**
 
 To create the conda environment and install the required libraries type:
@@ -98,6 +99,7 @@ conda create -n TEspeX_deps python=3.6
 ## --> you will be asked to let conda download and install new packages: type Y
 
 # activate the environment - to be done every time TEspeX is used
+# **PLEASE DO NOT CHANGE THE ENVIRONMENT NAME AS TESPEX EXPECTS THE ENVIRONMENT TO BE CALLED \'TEspeX_deps\'**
 source activate TEspeX_deps
 
 # install the required version of pandas and pysam
