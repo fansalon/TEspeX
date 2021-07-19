@@ -20,7 +20,7 @@ Possible scenarios:
 
 
 
-The pipeline has been written in python3 so **YOU MUST** use python3 and it has been tested on Ubuntu, CentOS and Mac OS X systems.
+The pipeline has been written in python3 and it has been tested on Ubuntu, CentOS and Mac OS X systems.
 
 # How to install TEspeX
 
@@ -324,9 +324,9 @@ If nothing is printed it means all went fine. Otherwise, error has rose.
 
 # TEspeX in wrapper mode
 
-The file while wrapper_slurm.py is the **SLURM** wrapper file. The  wrapper files have been written to fit the requirements of our system. Modify parameters as queue name, walltime, .., according to your machine settings.
+The file while wrapper_slurm.py is the **SLURM** wrapper file. 
 
-Once these parameters have been modified, you can proceed and use the wrapper_slurm.py script. To see the help, type:
+To see the help, type:
 ```
 cd $tespex
 source activate TEspeX_deps
