@@ -1,5 +1,7 @@
 # TEspeX
 
+# Overview
+
 TEspeX (Transposable Elements SPEcific eXpression) is a tool for the TE expression quantification from Illummina short RNA-seq reads. The rationale of the pipeline is to map the reads against a reference transcriptome composed by i) TE consensus sequences, ii) coding transcripts and iii) non-coding transcripts and to quantify the expression of TEs avoiding counting reads deriving from TE fragments embedded in coding/non-coding non-TE annotated transcripts.
 
 Techincally, TEspeX:
@@ -24,7 +26,7 @@ The pipeline has been written in python3 and it has been tested on Ubuntu, CentO
 
 # How to install TEspeX on Unix systems
 
-## **Prerequisites (installed and in $PATH)**
+## ** 1. Install prerequisites - if not already installed**
 1. conda: 
   * first check if conda, activate and deactivate are already installed and in $PATH typing:
   * ```which conda```
