@@ -32,7 +32,9 @@ The pipeline has been written in python3 and it has been tested on Ubuntu, CentO
     * ```which conda```
     * ```which activate```
     * ```which deactivate```\
+   
 If paths are printed, you can directly go to 2., otherwise follow the steps below:
+
   * download the installer ```wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh```
   * install it ```bash Miniconda3-latest-Linux-x86_64.sh```
   * follow the prompts on the installer screens
