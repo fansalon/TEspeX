@@ -26,7 +26,7 @@ The pipeline has been written in python3 and it has been tested on Ubuntu, CentO
 
 ## **Prerequisites (installed and in $PATH)**
 * conda
-* java
+* java (JDK)
 * zlib (properly installed and configured as in: http://jianghao.wang/post/2017-11-07-install-packages-on-hpc/#install-zlib)
 
 
