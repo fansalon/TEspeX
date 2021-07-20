@@ -45,8 +45,13 @@ If paths are printed, you can directly go to 2., otherwise follow the steps belo
 **2. java (JDK)**
   * ```conda install -c anaconda openjdk```
   
-**4. git**
-  *
+**3. git**
+  * test if git is already installed:
+    * ```git --version```
+
+If the git version is printed you can directly go to 4., otherwise type:
+
+  * ```conda install git```
 
 
 ## **Unix**
