@@ -26,7 +26,7 @@ The pipeline has been written in python3 and it has been tested on Ubuntu, CentO
 
 # How to install TEspeX on Unix systems
 
-## ** 1. Install prerequisites - if not already installed**
+## **1. Install prerequisites - if not already installed**
 1. conda: 
   * first check if conda, activate and deactivate are already installed and in $PATH typing:
   * ```which conda```
