@@ -53,21 +53,13 @@ If the git version is printed you can directly go to 4., otherwise type:
 
   * ```conda install git```
 
+**4. clone TEspeX and create working directory variable**
 
-## **Unix**
+  * ```git clone https://github.com/fansalon/TEspeX```
+  * ```cd TEspeX/```
+  * ```tespex=$PWD```
 
-open a Terminal and type:
-```
-git clone https://github.com/fansalon/TEspeX
-```
 
-This should download locally TEspeX.
-
-Copy the downloaded folder in the directory you wish TEspeX to be installed, move to that directory and type:
-```
-cd TEspeX/
-tespex=$PWD
-```
 A file called 'picard.jar' is contained in the 'bin/picard' directory.\
 To check whether java is properly installed on your machine and picard properly works, type:
 ```
