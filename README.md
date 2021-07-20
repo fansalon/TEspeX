@@ -26,7 +26,7 @@ The pipeline has been written in python3 and it has been tested on Ubuntu, CentO
 
 # How to install TEspeX on Unix systems
 
-## **Install prerequisites - if not already installed**
+## **Install TEspeX and TEspeX prerequisites**
 **1. conda:**
   * first check if conda, activate and deactivate are already installed and in $PATH typing:
     * ```which conda```
@@ -59,17 +59,18 @@ If the git version is printed you can directly go to 4., otherwise type:
   * ```cd TEspeX/```
   * ```tespex=$PWD```
 
-
+**5. Picard**
 A file called 'picard.jar' is contained in the 'bin/picard' directory.\
 To check whether java is properly installed on your machine and picard properly works, type:
-```
-java -jar $tespex/bin/picard/picard.jar
-```
-If the picard help is printed everything is fine. If an error rises java is not (properly) installed on your machine. Install Java and retry.
+  *```java -jar $tespex/bin/picard/picard.jar```
+  
+If the picard help is printed everything is fine. If an error rises java is not (properly) installed on your machine. Possible solutions: i) go back to 2. and check conda has successfully installed java, ii) check that the java installed by conda in in $PATH and iii) check that the invoked java is really the one installed by conda.
 
-All the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.15.1) have now to be installed in the bin/ directory within the TEspeX/ directory.\
+
 Please install STAR, samtools, pandas and pysam even if they are already installed on your machine. TEspeX has been tested on these specific versions and the use of different versions of these softwares may generate different and unpredictable results.
 
+
+**5. STAR**
 install STAR2.6.0c:
 ```
 cd $tespex/bin
@@ -84,6 +85,7 @@ cd tespex/
 this should return:
 ```STAR_2.6.0c``` 
 
+**5. samtools**
 install samtools-1.3.1
 ```
 cd $tespex/bin
