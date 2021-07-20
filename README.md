@@ -62,8 +62,8 @@ If the git version is printed you can directly go to 4., otherwise type:
 **5. Picard**
 
 A file called 'picard.jar' is contained in the 'bin/picard' directory.\
-To check whether java is properly installed on your machine and picard properly works, type:
-  *```java -jar $tespex/bin/picard/picard.jar```
+To check whether java is properly installed on your machine and picard properly works, type:\
+```java -jar $tespex/bin/picard/picard.jar```
   
 If the picard help is printed everything is fine. If an error rises java is not (properly) installed on your machine. Possible solutions: i) go back to 2. and check conda has successfully installed java, ii) check that the java installed by conda in in $PATH and iii) check that the invoked java is really the one installed by conda.
 
