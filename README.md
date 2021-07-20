@@ -68,10 +68,9 @@ To check whether java is properly installed on your machine and picard properly 
 If the picard help is printed everything is fine. If an error rises java is not (properly) installed on your machine. Possible solutions: i) go back to 2. and check conda has successfully installed java, ii) check that the java installed by conda in in $PATH and iii) check that the invoked java is really the one installed by conda.
 
 
-Please install STAR, samtools, pandas and pysam even if they are already installed on your machine. TEspeX has been tested on these specific versions and the use of different versions of these softwares may generate different and unpredictable results.
-
-
 **5. STAR**
+
+Please install STAR, samtools, pandas and pysam even if they are already installed on your machine. TEspeX has been tested on these specific versions and the use of different versions of these softwares may generate different and unpredictable results.
 
 install STAR2.6.0c:
 ```
