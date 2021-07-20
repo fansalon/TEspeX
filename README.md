@@ -60,6 +60,7 @@ If the git version is printed you can directly go to 4., otherwise type:
   * ```tespex=$PWD```
 
 **5. Picard**
+
 A file called 'picard.jar' is contained in the 'bin/picard' directory.\
 To check whether java is properly installed on your machine and picard properly works, type:
   *```java -jar $tespex/bin/picard/picard.jar```
@@ -71,6 +72,7 @@ Please install STAR, samtools, pandas and pysam even if they are already install
 
 
 **5. STAR**
+
 install STAR2.6.0c:
 ```
 cd $tespex/bin
@@ -86,6 +88,7 @@ this should return:
 ```STAR_2.6.0c``` 
 
 **5. samtools**
+
 install samtools-1.3.1
 ```
 cd $tespex/bin
