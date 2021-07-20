@@ -27,7 +27,7 @@ The pipeline has been written in python3 and it has been tested on Ubuntu, CentO
 # How to install TEspeX on Unix systems
 
 ## **Install prerequisites - if not already installed**
-1. conda: 
+**1. conda:**
   * first check if conda, activate and deactivate are already installed and in $PATH typing:
     * ```which conda```
     * ```which activate```
@@ -36,15 +36,16 @@ The pipeline has been written in python3 and it has been tested on Ubuntu, CentO
 If paths are printed, you can directly go to 2., otherwise follow the steps below:
 
   * download and install miniconda
-    * the installer ```wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh```
+    * download the installer ```wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh```
     * install it ```bash Miniconda3-latest-Linux-x86_64.sh```
     * follow the prompts on the installer screens
     * there is no need to run conda init. What is, however, required is the /path/to/miniconda3/bin to be in $PATH
 
 
-2. java (JDK)
+**2. java (JDK)**
   * ```conda install -c anaconda openjdk```
-4. git
+  
+**4. git**
   *
 
 
