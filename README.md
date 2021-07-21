@@ -33,6 +33,7 @@ The pipeline has been written in python3 and it has been tested on Ubuntu, CentO
 Please note how this manual assumes you have already installed and in $PATH:
   * gcc
   * make
+  * bash
 
 You can easily check this by typing ```which <name>```. If they are not installed, please install them before installing TEspeX.
 
@@ -49,7 +50,7 @@ If paths are printed, you can directly go to 2., otherwise follow the steps belo
     * install it ```bash Miniconda3-latest-Linux-x86_64.sh```
     * follow the prompts on the installer screens
     * there is no need to run conda init. What is, however, required is the add /path/to/miniconda3/bin to the $PATH
-    * this depends on where you have installed miniconda3 so first declare where the miniconda3/bin is  ```conda_bin=/path/to/miniconda3/bin```
+    * this depends on where you have installed miniconda3 so first declare where the miniconda3/bin is  ```conda_bin=</path/to/miniconda3/bin>```
     * then add it to the .bashrc   ```echo "export PATH=\${PATH}:${conda_bin}" >> ~/.bashrc```
     * refresh it ```source ~/.bashrc```
     * check conda is in $PATH ```which conda```
@@ -88,6 +89,7 @@ It is likely that you already have zlib installed and properly configured somewh
 If paths to zlib lib and include folders are returned, everything should be OK - skip to 5.
 
 Otherwise:
+  * ```cd $conda_bin```
   * ```wget http://zlib.net/zlib-1.2.11.tar.gz```
   * ```tar -zxvf zlib-1.2.11.tar.gz```
   * ```cd zlib-1.2.11/```
@@ -100,7 +102,7 @@ Otherwise:
 
 **5. clone TEspeX and create working directory variable**
 
-  * ```cd /path/where/install/TEspeX```
+  * ```cd </path/where/install/TEspeX>```
   * ```git clone https://github.com/fansalon/TEspeX```
   * ```cd TEspeX/```
   * ```tespex=$PWD```
