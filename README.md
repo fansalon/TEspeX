@@ -132,17 +132,12 @@ Copyright (C) 2016 Genome Research Ltd.
 
 To create the conda environment and install the required libraries type:
 ```
-# create the environment using python 3.6
-conda create -n TEspeX_deps python=3.6
+conda create -n TEspeX_deps python=3.6 pandas=0.23.0 pysam=0.15.1
 ## --> you will be asked to let conda download and install new packages: type Y
 
 # activate the environment - to be done every time TEspeX is used
 # **PLEASE DO NOT CHANGE THE ENVIRONMENT NAME AS IT WILL COMPROMISE THE FUNCTIONING OF THE PIPELINE**
 source activate TEspeX_deps
-
-# install the required versionS of pandas and pysam
-pip3 install --user pandas==0.23.0
-pip3 install --user pysam==0.15.1
 
 # to check everything properly worked
 which python3
