@@ -53,13 +53,33 @@ If the git version is printed you can directly go to 4., otherwise type:
 
   * ```conda install git```
 
-**4. clone TEspeX and create working directory variable**
+**4. zlib**
+
+It is likely that you already have zlib installed and properly configured somewhere. To check this type:\
+  * ```echo $LD_LIBRARY_PATH```
+  * ```echo $CFLAGS```
+  * ```echo $LDFLAGS```
+
+If paths to zlib lib and include folders are returned, everything should be OK - skip to 5.
+
+Otherwise:
+  * ```wget http://zlib.net/zlib-1.2.11.tar.gz```
+  * ```tar -zxvf zlib-1.2.11.tar.gz```
+  * ```cd zlib-1.2.11/```
+  * ```./configure --prefix=$PWD/packages```
+  * ```make```
+  * ```make install```
+  * ```export LD_LIBRARY_PATH=$PWD/packages/lib/:$LD_LIBRARY_PATH ```
+  * ```export CFLAGS="-I$PWD/packages/include"```
+  * ```export LDFLAGS="-L$PWD/packages/lib"```
+
+**5. clone TEspeX and create working directory variable**
 
   * ```git clone https://github.com/fansalon/TEspeX```
   * ```cd TEspeX/```
   * ```tespex=$PWD```
 
-**5. Picard**
+**6. Picard**
 
 A file called 'picard.jar' is contained in the 'bin/picard' directory.\
 To check whether java is properly installed on your machine and picard properly works, type:\
@@ -68,7 +88,7 @@ To check whether java is properly installed on your machine and picard properly 
 If the picard help is printed everything is fine. If an error rises java is not (properly) installed on your machine. Possible solutions: i) go back to 2. and check conda has successfully installed java, ii) check that the java installed by conda in in $PATH and iii) check that the invoked java is really the one installed by conda.
 
 
-**5. STAR**
+**7. STAR**
 
 Please install STAR, samtools, pandas and pysam even if they are already installed on your machine. TEspeX has been tested on these specific versions and the use of different versions of these softwares may generate different and unpredictable results.
 
@@ -86,7 +106,7 @@ cd tespex/
 this should return:
 ```STAR_2.6.0c``` 
 
-**5. samtools**
+**8. samtools**
 
 install samtools-1.3.1
 ```
@@ -107,10 +127,7 @@ Using htslib 1.3.1
 Copyright (C) 2016 Genome Research Ltd.
 ```
 
-
-In order to ensure that TEspeX is used with the python3 version/python3 library versions it has been tested with, a conda environment is created and within the environment all the required libraries are installed.\
-
-**The conda environment needs to be activated every time TEspeX is used.**
+**9. create a conda environment where the required version of python, pysam and pandas are installed**
 
 To create the conda environment and install the required libraries type:
 ```
