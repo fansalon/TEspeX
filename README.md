@@ -172,33 +172,10 @@ In the folder 'example' a copy of the files used to perform the TE expression an
     * ```diff test/outfile.txt example/outfile.txt```
     * ```diff test/mapping_stats.txt example/mapping_stats.txt```
     
-    cccccc
+    If nothing is printed it means all went fine. Otherwise, error has rose.
     
     
     
-    
-    
-    
-Launching this command the pipeline will first merge together the three fasta file creating a reference transcriptome (TE_transc_reference.fa) and then it will create a STAR index of this file using the ```--length``` parameter for the calculation of genomeSAindexNbase and genomeChrBinNbits. The TE_transc_reference.fa is written in the directory indicated with ```--out```  while the index files are contained in the  ```index``` folder within the  ```--out``` folder.\
-Then reads of the first fastq sample (SRR3170296_partial.fastq.gz, in this case) are mapped, filtered and counted. In this example, the ```--paired``` parameter is set to F, and so the pipeline is expecting one fastq/fastq.gz file per row in the  ```reads.txt``` file. If you have paired-end data please write the fastq_1 and fastq_2 on the same raw separating them with \t and set ```--paired``` to T.\
-All the output files generated during this step are written in the test/SRR3170296_partial folder.\
-Then the second sample (SRR3170297_partial.fastq.gz, in this case) will be analyzed and the output files are written in the test/SRR3170297_partial folder.\
-When all the samples contained in the ```--sample``` file are analyzed, the  output files are merged together. The raw read counts for each TE, for each sample, are written in a file called outfile.txt in the ```--out``` directory. The file contains in the first column the names of the TEs (as they are in the fasta file) and a column with the raw read counts for each fastq analyzed.\
-Moreover a file called mapping_stats.txt containing i) total number of reads, ii) number of mapped reads, iii) number of reads mapping with best alignment score against TEs contained in the ```--TE``` file (please beaware: for each read there could be more than 1 best alignment), iv) number of TE specific reads (reads mapping with best alignment score only on TEs) and v) number of TE aspecific reads (reads mapping with best alignment score on both TEs and coding/noncoding transcripts) is provided.\
-The pipeline prints in the Log.final.out all the commands that are launched in real-time, the user can read it to follow all the opearation the pipeline is doing.
-
-The pipeline launched on the example files should take less than 5 minutes and it should create 5 files (TE_transc_reference.fa, TE_transc_reference.fai, Log.file.out, outfile.txt and mapping_stats.txt) and 3 directories (index/, SRR3170296_partial and SRR3170297_partial) within the ```--out``` directory.\
-To check the pipeline run correctly, please test there are no differences between the 2 .txt files contained in your ```--out``` folder and the ones conteined in the example one typing:
-```
-cd $tespex
-diff test/outfile.txt example/outfile.txt
-diff test/mapping_stats.txt example/mapping_stats.txt
-```
-If nothing is printed it means all went fine. Otherwise, error has rose.
-
-
-
-
 # Input files
 * TE consensus sequences in fasta (fa/fa.gz) format (--TE argument). Follow these instructions to generate a proper TE consensus sequences input file (https://github.com/fansalon/TEconsensus)
 * coding transcripts in fasta format (we suggest the 'cdna.fa.gz' fasta file downloaded from ensembl) (--cdna argument)
