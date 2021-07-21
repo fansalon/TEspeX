@@ -39,7 +39,9 @@ If paths are printed, you can directly go to 2., otherwise follow the steps belo
     * download the installer ```wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh```
     * install it ```bash Miniconda3-latest-Linux-x86_64.sh```
     * follow the prompts on the installer screens
-    * there is no need to run conda init. What is, however, required is the /path/to/miniconda3/bin to be in $PATH
+    * there is no need to run conda init. What is, however, required is the add /path/to/miniconda3/bin to the $PATH
+    * this depends on where you have installed miniconda3 so please modify the following command accordingly
+    * ```echo "export PATH=\${PATH}:/PATH/TO/miniconda3/bin/" >> ~/.bashrc```
 
 
 **2. java (JDK)**
@@ -171,6 +173,8 @@ In the folder 'example' a copy of the files used to perform the TE expression an
   * change to TEspeX  dir and create the list of fq/fq.gz to be analysed:
     * ```cd $tespex```
     * ```ls $tespex/example/*.fastq.gz > $tespex/example/reads.txt```
+  * activate TEspeX, **this has to be done every time TEspeX is launched**
+    * ```source activate TEspeX_deps```
   * launch the pipeline typing the following command:
     ```
     python3 TEspeX.py --TE example/ce.Dfam.fa.gz \
