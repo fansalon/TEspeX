@@ -55,7 +55,7 @@ If the git version is printed you can directly go to 4., otherwise type:
 
 **4. zlib**
 
-It is likely that you already have zlib installed and properly configured somewhere. To check this type:\
+It is likely that you already have zlib installed and properly configured somewhere. To check this type:
   * ```echo $LD_LIBRARY_PATH```
   * ```echo $CFLAGS```
   * ```echo $LDFLAGS```
@@ -75,6 +75,7 @@ Otherwise:
 
 **5. clone TEspeX and create working directory variable**
 
+  * ```cd /path/where/install/TEspeX```
   * ```git clone https://github.com/fansalon/TEspeX```
   * ```cd TEspeX/```
   * ```tespex=$PWD```
@@ -83,7 +84,7 @@ Otherwise:
 
 A file called 'picard.jar' is contained in the 'bin/picard' directory.\
 To check whether java is properly installed on your machine and picard properly works, type:\
-```java -jar $tespex/bin/picard/picard.jar```
+  * ```java -jar $tespex/bin/picard/picard.jar```
   
 If the picard help is printed everything is fine. If an error rises java is not (properly) installed on your machine. Possible solutions: i) go back to 2. and check conda has successfully installed java, ii) check that the java installed by conda in in $PATH and iii) check that the invoked java is really the one installed by conda.
 
