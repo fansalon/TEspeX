@@ -167,7 +167,7 @@ In the folder 'example' a copy of the files used to perform the TE expression an
     --ncrna example/Caenorhabditis_elegans.WBcel235.ncrna.fa.gz \
     --sample example/reads.txt --paired F --length 50 --out test --strand no
     ```
-    * check the output files are as expected:
+  * check the output files are as expected:
     * ```cd $tespex```
     * ```diff test/outfile.txt example/outfile.txt```
     * ```diff test/mapping_stats.txt example/mapping_stats.txt```
