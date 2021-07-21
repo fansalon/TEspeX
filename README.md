@@ -29,6 +29,7 @@ The pipeline has been written in python3 and it has been tested on Ubuntu, CentO
 ## **Install TEspeX and TEspeX prerequisites**
 
 **0. Prerequisites**
+
 Please note how this manual assumes you have already installed and in $PATH:
   * gcc
   * make
