@@ -153,96 +153,44 @@ pip3 --version
 conda deactivate
 ```
 
+**10. Test TEspeX has been successfully installed**
 
+In the folder 'example' a copy of the files used to perform the TE expression analysis on 2 *C. elegans* embryonic fastq files (Tintori SC, et al. - Dev. Cell - 2016 - https://www.ncbi.nlm.nih.gov/pubmed/27554860) is deposited. Please, **please**, **DO** test whether the pipeline is working properly following the steps below:
 
-## **Mac OS**
+  * create the list of fq/fq.gz to be analysed:
+    * ```ls $tespex/example/*.fastq.gz > $tespex/example/reads.txt```
+  * launch the pipeline typing the following command:
+    ```
+    python3 TEspeX.py --TE example/ce.Dfam.fa.gz \
+    --cdna example/Caenorhabditis_elegans.WBcel235.cdna.all.fa.gz \
+    --ncrna example/Caenorhabditis_elegans.WBcel235.ncrna.fa.gz \
+    --sample example/reads.txt --paired F --length 50 --out test --strand no```
+    
+    
+    
+    
+    
+    
+    
+    
+    
+Launching this command the pipeline will first merge together the three fasta file creating a reference transcriptome (TE_transc_reference.fa) and then it will create a STAR index of this file using the ```--length``` parameter for the calculation of genomeSAindexNbase and genomeChrBinNbits. The TE_transc_reference.fa is written in the directory indicated with ```--out```  while the index files are contained in the  ```index``` folder within the  ```--out``` folder.\
+Then reads of the first fastq sample (SRR3170296_partial.fastq.gz, in this case) are mapped, filtered and counted. In this example, the ```--paired``` parameter is set to F, and so the pipeline is expecting one fastq/fastq.gz file per row in the  ```reads.txt``` file. If you have paired-end data please write the fastq_1 and fastq_2 on the same raw separating them with \t and set ```--paired``` to T.\
+All the output files generated during this step are written in the test/SRR3170296_partial folder.\
+Then the second sample (SRR3170297_partial.fastq.gz, in this case) will be analyzed and the output files are written in the test/SRR3170297_partial folder.\
+When all the samples contained in the ```--sample``` file are analyzed, the  output files are merged together. The raw read counts for each TE, for each sample, are written in a file called outfile.txt in the ```--out``` directory. The file contains in the first column the names of the TEs (as they are in the fasta file) and a column with the raw read counts for each fastq analyzed.\
+Moreover a file called mapping_stats.txt containing i) total number of reads, ii) number of mapped reads, iii) number of reads mapping with best alignment score against TEs contained in the ```--TE``` file (please beaware: for each read there could be more than 1 best alignment), iv) number of TE specific reads (reads mapping with best alignment score only on TEs) and v) number of TE aspecific reads (reads mapping with best alignment score on both TEs and coding/noncoding transcripts) is provided.\
+The pipeline prints in the Log.final.out all the commands that are launched in real-time, the user can read it to follow all the opearation the pipeline is doing.
 
-open a Terminal and type:
+The pipeline launched on the example files should take less than 5 minutes and it should create 5 files (TE_transc_reference.fa, TE_transc_reference.fai, Log.file.out, outfile.txt and mapping_stats.txt) and 3 directories (index/, SRR3170296_partial and SRR3170297_partial) within the ```--out``` directory.\
+To check the pipeline run correctly, please test there are no differences between the 2 .txt files contained in your ```--out``` folder and the ones conteined in the example one typing:
 ```
-git clone https://github.com/fansalon/TEspeX
+cd $tespex
+diff test/outfile.txt example/outfile.txt
+diff test/mapping_stats.txt example/mapping_stats.txt
 ```
+If nothing is printed it means all went fine. Otherwise, error has rose.
 
-This should download locally TEspeX.
-
-Copy the downoloaded folder in the directory you wish TEspeX to be installed, move to that directory and type:
-```
-cd TEspeX/
-tespex=$PWD
-```
-A file called 'picard.jar' should be contained in the 'bin/picard' directory.\
-To check whether java is properly installed on your machine and picard properly works, type:
-```
-java -jar $tespex/bin/picard/picard.jar
-```
-If the picard help is printed everything is fine. If an error rises java is not (properly) installed on your machine. Install Java and retry.
-
-All the dependencies (STAR2.6.0c, samtools-1.3.1, pandas 0.23.0 and pysam 0.15.1) have now to be installed in the bin/ directory within the TEspeX/ directory.\
-Please install STAR, samtools, pandas and pysam even if they are already installed on your machine. TEspeX has been tested on these specific versions and the use of different versions of these softwares may generate different and unpredictable results.
-
-
-install STAR2.6.0c:
-```
-cd $tespex/bin
-curl -L -o STAR-2.6.0c.tar.gz https://github.com/alexdobin/STAR/archive/2.6.0c.tar.gz
-tar -zxvf STAR-2.6.0c.tar.gz
-cd STAR-2.6.0c/bin/
-mkdir tespex/
-cp MacOSX_x86_64/STAR tespex/
-cd tespex/
-./STAR --version
-```
-this should return:
-```STAR_2.6.0c``` 
-
-install samtools-1.3.1
-```
-cd $tespex/bin
-curl -L -o samtools-1.3.1.tar.bz2 https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2
-tar xjf samtools-1.3.1.tar.bz2
-cd samtools-1.3.1
-./configure --prefix=$PWD/
-(if during the --configure step you encounter an error like: "configure: error: curses development files not found" please relaunch the command adding the "--without-curses" flag)
-make
-make install
-bin/samtools --version
-```
-this should return something like:
-```
-samtools 1.3.1
-Using htslib 1.3.1
-Copyright (C) 2016 Genome Research Ltd.
-```
-
-In order to ensure that TEspeX is used with the python3 version/python3 library versions it has been tested with, a conda environment is created and within the environment all the required libraries are installed.\
-**The conda environment needs to be activated every time TEspeX is used.**
-
-To create the conda environment and install the required libraries type:
-```
-# create the environment using python 3.6
-conda create -n TEspeX_deps python=3.6
-## --> you will be asked to let conda download and install new packages: type Y
-
-# activate the environment - to be done every time TEspeX is used
-# **PLEASE DO NOT CHANGE THE ENVIRONMENT NAME AS IT WILL COMPROMISE THE FUNCTIONING OF THE PIPELINE**
-source activate TEspeX_deps
-
-# install the required version of pandas and pysam
-pip3 install --user pandas==0.23.0
-pip3 install --user pysam==0.15.1
-
-# to check everything properly worked
-which python3
-## --> /path/to/envs/TEspeX_deps/bin/python3
-which pip3
-## --> /path/to/envs/TEspeX_deps/bin/pip3
-python3 --version
-## --> Python 3.6.13 :: Anaconda, Inc.
-pip3 --version
-## --> pip 21.1.3 from /path/to/envs/TEspeX_deps/lib/python3.6/site-packages/pip (python 3.6)
-
-# deactivate the environment
-conda deactivate
-```
 
 
 
