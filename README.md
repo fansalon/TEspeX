@@ -49,13 +49,11 @@ If paths are printed, you can directly go to 2., otherwise follow the steps belo
     * install it ```bash Miniconda3-latest-Linux-x86_64.sh```
     * follow the prompts on the installer screens
     * there is no need to run conda init. What is, however, required is the add /path/to/miniconda3/bin to the $PATH
-    * this depends on where you have installed miniconda3 so first declare where the miniconda3/bin is, then add the .bashrc and refresh it:
+    * this depends on where you have installed miniconda3 so first declare where the miniconda3/bin is  ```conda_bin=/path/to/miniconda3/bin```
+    * then add it to the .bashrc   ```echo "export PATH=\${PATH}:${conda_bin}" >> ~/.bashrc```
+    * refresh it ```source ~/.bashrc```
+    * check conda is in $PATH ```which conda```
     
-     ```
-     conda_bin=/path/to/miniconda3/bin
-     echo "export PATH=\${PATH}:${conda_bin}" >> ~/.bashrc
-     source ~/.bashrc
-     ```
 
 
 **2. java (JDK)**
