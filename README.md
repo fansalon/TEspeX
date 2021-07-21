@@ -157,7 +157,7 @@ Copyright (C) 2016 Genome Research Ltd.
 
 To create the conda environment and install the required libraries type:
 ```
-conda create -n TEspeX_deps --override-channels -c bioconda -c defaults python=3.6 pandas=0.23.0 pysam=0.15.0
+conda create -n TEspeX_deps --override-channels -c bioconda -c defaults python=3.6 pandas=0.23.0 pysam'>=0.15.0,<=0.15.1'
 ## --> you will be asked to let conda download and install new packages: type Y
 
 # activate the environment - to be done every time TEspeX is used
