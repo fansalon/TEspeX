@@ -28,7 +28,7 @@ import pandas
 from functools import reduce
 import math
 
-__version__ = 'part of TEspeX v1.0.1'
+__version__ = 'part of TEspeX v1.0.2'
 
 ######################################################## Functions used to check parsed arguments fullfil the TEspeX expectations
 # Strand
