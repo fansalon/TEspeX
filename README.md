@@ -37,6 +37,8 @@ If paths are printed, you can directly go to 2., otherwise follow the steps belo
 
   * download and install miniconda
     * download the installer ```wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh```
+    * declare $wd as the variable where you wish conda to be installed:
+      * ```wd=/path/to/where/wish/conda/```
     * install it ```bash Miniconda3-latest-Linux-x86_64.sh```
     * follow the prompts on the installer screens
     * there is no need to run conda init. What is, however, required is the add /path/to/miniconda3/bin to the $PATH
