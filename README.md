@@ -34,7 +34,7 @@ Please note how this manual assumes you have already installed and in $PATH:
   * make
   * git
 
-You can easily check this by typing ```which <name>```. If they are not installed, please install them. Here (), you can find some tips.
+You can easily check this by typing ```which <name>```. If they are not installed, please install them before installing TEspeX.
 
 **1. conda:**
   * first check if conda, activate and deactivate are already installed and in $PATH typing:
