@@ -82,8 +82,8 @@ def checkPy():
     print("Please, install the correct version of pandas (pip3 install --user pandas==0.23.0) and re-run TEspeX")
     print("Exiting....")
     sys.exit(1)
-  if pysam_ver != "0.15.0":
-    print("ERROR: 0.15.0 pysam version is required, %s detected" % str(pysam_ver))
+  if pysam_ver != "0.15.0" and pysam_ver != "0.15.1":
+    print("ERROR: 0.15.0 or 0.15.1 pysam version is required, %s detected" % str(pysam_ver))
     print("Please, install the correct version of pysam and re-run TEspeX")
     print("Exiting....")
     sys.exit(1)
