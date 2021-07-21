@@ -43,6 +43,16 @@ If paths are printed, you can directly go to 2., otherwise follow the steps belo
 
 
 **2. java (JDK)**
+  * test if java JDK is already installed and in path:
+    * ```java -version```
+  
+If this prints something like:
+```openjdk version "11.0.11" 2021-04-20
+OpenJDK Runtime Environment (build 11.0.11+9-Ubuntu-0ubuntu2.18.04)
+OpenJDK 64-Bit Server VM (build 11.0.11+9-Ubuntu-0ubuntu2.18.04, mixed mode, sharing)
+```
+
+Skip to 3.; otherwise:
   * ```conda install -c anaconda openjdk```
   
 **3. git**
