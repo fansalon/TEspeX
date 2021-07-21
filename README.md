@@ -47,7 +47,8 @@ If paths are printed, you can directly go to 2., otherwise follow the steps belo
     * ```java -version```
   
 If this prints something like:
-```openjdk version "11.0.11" 2021-04-20
+```
+openjdk version "11.0.11" 2021-04-20
 OpenJDK Runtime Environment (build 11.0.11+9-Ubuntu-0ubuntu2.18.04)
 OpenJDK 64-Bit Server VM (build 11.0.11+9-Ubuntu-0ubuntu2.18.04, mixed mode, sharing)
 ```
