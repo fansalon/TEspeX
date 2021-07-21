@@ -157,17 +157,19 @@ conda deactivate
 
 In the folder 'example' a copy of the files used to perform the TE expression analysis on 2 *C. elegans* embryonic fastq files (Tintori SC, et al. - Dev. Cell - 2016 - https://www.ncbi.nlm.nih.gov/pubmed/27554860) is deposited. Please, **please**, **DO** test whether the pipeline is working properly following the steps below:
 
-  * create the list of fq/fq.gz to be analysed:
+  * change to TEspeX  dir and create the list of fq/fq.gz to be analysed:
+    * ```cd $tespex```
     * ```ls $tespex/example/*.fastq.gz > $tespex/example/reads.txt```
   * launch the pipeline typing the following command:
     ```
     python3 TEspeX.py --TE example/ce.Dfam.fa.gz \
     --cdna example/Caenorhabditis_elegans.WBcel235.cdna.all.fa.gz \
     --ncrna example/Caenorhabditis_elegans.WBcel235.ncrna.fa.gz \
-    --sample example/reads.txt --paired F --length 50 --out test --strand no```
+    --sample example/reads.txt --paired F --length 50 --out test --strand no
+    ```
     
     
-    
+    cccccc
     
     
     
