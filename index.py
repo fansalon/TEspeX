@@ -17,6 +17,11 @@
 
 
 import sys
+# ensure that only the modules installed within the TEspeX_deps env are loaded - this basically deletes from sys.path all the paths not containing TEspeX_deps
+for path in sys.path:
+  if "TEspeX_deps" not in path:
+    sys.path.remove(path)
+# now import other paths
 import time
 import os
 from os import listdir
