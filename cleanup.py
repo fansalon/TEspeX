@@ -29,14 +29,8 @@ try:
   # now import other paths
   import time
   import os
-  from os import listdir
-  import gzip
   import subprocess
-  import math
-  import pysam
-  import pandas
-  from functools import reduce
-  import csv
+  import pandas as pd
 except ModuleNotFoundError:
   print("ERROR: it seems like none of your sys.path paths contains the TEspeX_deps one...")
   print("Did you forget to activate TEspeX_deps environment through source activate TEspeX_deps?")
