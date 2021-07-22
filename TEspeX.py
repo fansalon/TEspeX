@@ -15,32 +15,32 @@
 # You should have received a copy of the GNU General Public License
 # along with TEspeX.  If not, see <http://www.gnu.org/licenses/>.
 
-
-import sys
-# ensure that only the modules installed within the TEspeX_deps env are loaded - this basically deletes from sys.path all the paths not containing TEspeX_deps
-new_path = []
-for path in sys.path:
-  l = path.find("TEspeX")
-  if l != -1:
-    new_path.append(path)
-if len(new_path) > 0:
-  sys.path = new_path
-else:
+try:
+  import argparse
+  import sys
+  # ensure that only the modules installed within the TEspeX_deps env are loaded - this basically deletes from sys.path all the paths not containing TEspeX_deps
+  new_path = []
+  for path in sys.path:
+    l = path.find("TEspeX")
+    if l != -1:
+      new_path.append(path)
+  if len(new_path) > 0:
+    sys.path = new_path
+  # now import other paths
+  import time
+  import os
+  from os import listdir
+  import gzip
+  import subprocess
+  import math
+  import pysam
+  import pandas
+  from functools import reduce
+  import csv
+except ModuleNotFoundError:
   print("ERROR: it seems like none of your sys.path paths contains the TEspeX_deps one...")
   print("Did you forget to activate TEspeX_deps environment through source activate TEspeX_deps?")
   sys.exit(1)
-# now import other paths
-import time
-import os
-from os import listdir
-import argparse
-import gzip
-import subprocess
-import math
-import pysam
-import pandas
-from functools import reduce
-import csv
 
 __version__ = 'v1.0.2'
 
