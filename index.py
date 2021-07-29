@@ -21,11 +21,11 @@ try:
   # ensure that only the modules installed within the TEspeX_deps env are loaded - this basically deletes from sys.path all the paths not containing TEspeX_deps
   new_path = []
   for path in sys.path:
-    l = path.find("TEspeX")
+    l = path.find("TEspeX_deps")
     if l != -1:
       new_path.append(path)
-  if len(new_path) > 0:
-    sys.path = new_path
+  # sys.path is now equal to new_path --> if TEspeX_deps env has not been activated sys.path will be an empty list
+  sys.path = new_path
   # now import other paths
   import time
   import os
