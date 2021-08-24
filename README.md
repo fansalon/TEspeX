@@ -110,7 +110,8 @@ Otherwise:
 **6. Picard**
 
 A file called 'picard.jar' is contained in the 'bin/picard' directory.\
-To check whether java is properly installed on your machine and picard properly works, type:\
+To check whether java is properly installed on your machine and picard properly works, type:
+
   * ```java -jar $tespex/bin/picard/picard.jar```
   
 If the picard help is printed everything is fine. If an error rises java is not (properly) installed on your machine. Possible solutions: i) go back to 2. and check conda has successfully installed java, ii) check that the java installed by conda is in $PATH and iii) check that the invoked java is really the one installed by conda.
@@ -119,10 +120,10 @@ If the picard help is printed everything is fine. If an error rises java is not 
 **7. STAR**
 
 STAR executables should be in the 'bin/STAR-2.6.0c' directory.\
-To check whether STAR is properly working, type:\
+To check whether STAR is properly working, type:
+
  * ```$tespex/bin/STAR-2.6.0c/STAR --version```
- 
-```
+
 this should return:
 ```STAR_2.6.0c``` 
 
