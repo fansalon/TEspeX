@@ -246,7 +246,7 @@ This command shows the help that should be something very similar to:
 usage: TEspeX.py [-h] --TE TE --cdna CDNA --ncrna NCRNA --sample SAMPLE
                  --paired PAIRED --length LENGTH --out OUT --strand STRAND
                  [--num_threads NUM_THREADS] [--remove REMOVE] [--index INDEX]
-                 [--version]
+                 [--mask MASK] [--version]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -284,6 +284,18 @@ optional arguments:
                         the default value [recommended]. Otherwise provide
                         FULL path to a directoray containing STAR indexes
                         [not_recommended] [F]
+  --mask MASK           fasta file containing sequences to be masked. If this
+                        file is provided, the sequences contained within it
+                        are considered as coding/non-coding transcripts and
+                        are added to the --cdna and --ncrna fasta files. This
+                        might be of help if the users wish to consider some
+                        specific regions as belonging to coding/non-coding
+                        transcripts even though they are not reported in
+                        --cdna and --ncrna fasta files. (e.g., N kb downstream
+                        to the transcript TTS for a better handling of
+                        readthrough process or non-genic TE-derived sequences
+                        known to be passively transcribed from criptic
+                        promoters). [F]
   --version             show the version number and exit
 ```
 
@@ -312,7 +324,7 @@ usage: wrapper_slurm.py [-h] --script SCRIPT --TE TE --cdna CDNA --ncrna NCRNA
                         --sample SAMPLE --paired PAIRED --length LENGTH --out
                         OUT --strand STRAND --job JOB --q Q --walltime
                         WALLTIME [--num_threads NUM_THREADS] [--remove REMOVE]
-                        [--version]
+                        [--mask MASK] [--version]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -355,6 +367,18 @@ optional arguments:
   --remove REMOVE       T (true) or F (false). If this parameter is set to T
                         all the bam files are removed. If it is F they are not
                         removed [T]
+  --mask MASK           fasta file containing sequences to be masked. If this
+                        file is provided, the sequences contained within it
+                        are considered as coding/non-coding transcripts and
+                        are added to the --cdna and --ncrna fasta files. This
+                        might be of help if the users wish to consider some
+                        specific regions as belonging to coding/non-coding
+                        transcripts even though they are not reported in
+                        --cdna and --ncrna fasta files. (e.g., N kb downstream
+                        to the transcript TTS for a better handling of
+                        readthrough process or non-genic TE-derived sequences
+                        known to be passively transcribed from criptic
+                        promoters). [F]
   --version             show the version number and exit
 ```
 
