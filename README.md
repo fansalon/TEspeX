@@ -118,18 +118,10 @@ If the picard help is printed everything is fine. If an error rises java is not 
 
 **7. STAR**
 
-Please install STAR, samtools, pandas and pysam even if they are already installed on your machine. TEspeX has been tested on these specific versions and the use of different versions of these softwares may generate different and unpredictable results.
-
-install STAR2.6.0c:
-```
-cd $tespex/bin
-wget -O STAR-2.6.0c.tar.gz https://github.com/alexdobin/STAR/archive/2.6.0c.tar.gz
-tar -zxvf STAR-2.6.0c.tar.gz
-cd STAR-2.6.0c/bin/
-mkdir tespex/
-cp Linux_x86_64_static/STAR tespex/
-cd tespex/
-./STAR --version
+STAR executables should be in the 'bin/STAR-2.6.0c' directory.\
+To check whether STAR is properly working, type:\
+ * ```$tespex/bin/STAR-2.6.0c/STAR --version```
+ 
 ```
 this should return:
 ```STAR_2.6.0c``` 
