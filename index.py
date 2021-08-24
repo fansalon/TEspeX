@@ -42,7 +42,7 @@ except ModuleNotFoundError:
   print("Did you forget to activate TEspeX_deps environment through source activate TEspeX_deps?")
   sys.exit(1)
 
-__version__ = 'part of TEspeX v1.0.3'
+__version__ = 'part of TEspeX v1.0.4'
 
 # 1.
 # define the help function
@@ -64,6 +64,7 @@ def help():
   parser.add_argument('--length', type=int, help='length of the read given as input. This is used to calculate STAR index parameters. If your fq/fq.gz file contains reads with different length specify the shorter length [required]', required=True)
   parser.add_argument('--out', type=str, help='directory where the output files will be written. This directory is created by the pipeline, specificy a non-yet-existing directory', required=True)
   parser.add_argument('--num_threads', type=int, default=2, help='number of threads used by STAR and samtools [2]', required=False)
+  parser.add_argument('--mask', type=str, default='F', help='fasta file containing sequences to be masked. If this file is provided, the sequences contained within it are considered as coding/non-coding transcripts and are added to the --cdna and --ncrna fasta files. This might be of help if the users wish to consider some specific regions as belonging to coding/non-coding transcripts even though they are not reported in --cdna and --ncrna fasta files. (e.g., N kb downstream to the transcript TTS for a better handling of readthrough process or non-genic TE-derived sequences known to be passively transcribed from criptic promoters). [F]', required=False)
   parser.add_argument('--version', action='version', version='%(prog)s ' + __version__, help='show the version number and exit')
 
   # create arguments
@@ -74,12 +75,17 @@ def help():
   rl = arg.length
   dir = os.path.abspath(arg.out)
   num_threads = arg.num_threads
+  mask = arg.mask
+  if mask != "F":
+    mask = os.path.abspath(arg.mask)
 
   # create a list with the arguments that are files
   argList = []
   argList.append(te)
   argList.append(cDNA)
   argList.append(ncRNA)
+  if mask != "F":
+    argList.append(mask)
   # check that the input files exist
   for i in range(0, len(argList)):
     if os.path.isfile(argList[i]):
@@ -88,7 +94,7 @@ def help():
       print("ERROR!\n%s: no such file or directory" % (argList[i]))
       sys.exit(1)
 
-  return te, cDNA, ncRNA, rl, dir, num_threads, bin_path
+  return te, cDNA, ncRNA, rl, dir, num_threads, bin_path, mask
 
 
 # 2.
@@ -183,13 +189,17 @@ def star_ind(genome, r_length):
 
 # main
 def main():
-  TE, cdna, ncrna, read_length, dir, num_threads, bin_path = help()
+  TE, cdna, ncrna, read_length, dir, num_threads, bin_path, maskfile = help()
   os.chdir(dir)
-  writeLog("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nreadLength = %s\noutDir = %s\nnum_threads = %s " % (TE, cdna, ncrna, read_length, dir, num_threads))
+  writeLog("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nreadLength = %s\noutDir = %s\nnum_threads = %s\nmask file = %s " % (TE, cdna, ncrna, read_length, dir, num_threads, maskfile))
   writeLog("creating reference file %s/TE_transc_reference.fa" % (dir))
-  createReference(TE, "_transp")
-  createReference(cdna, "_transc")
+  reference = createReference(TE, "_transp")
+  reference = createReference(cdna, "_transc")
   reference = createReference(ncrna, "_transc")
+  if maskfile == "F":
+    writeLog("\nNo masked fasta sequence provided.\n")
+  else:
+    reference = createReference(maskfile, "_transc")
   star_ind(reference, read_length)
   writeLog("index job has done!")
 

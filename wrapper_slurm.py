@@ -42,7 +42,7 @@ except ModuleNotFoundError:
   print("Did you forget to activate TEspeX_deps environment through source activate TEspeX_deps?")
   sys.exit(1)
 
-__version__ = 'part of TEspeX v1.0.3'
+__version__ = 'part of TEspeX v1.0.4'
 
 ######################################################## Functions used to check parsed arguments fullfil the TEspeX expectations
 # Strand
@@ -108,20 +108,14 @@ def checkWallTime(wwtime):
     print("Exiting....")
     sys.exit(1)
 # check input files/dirs exist
-def checkInputs(dir,ppipeline,tte,ccDNA,nncRNA,ssample_file):
-  # create a list with the arguments that are files
+def checkInputs(dir,*args):
+  # check every arg
   argList = []
-  argList.append(ppipeline)
-  argList.append(tte)
-  argList.append(ccDNA)
-  argList.append(nncRNA)
-  argList.append(ssample_file)
-  # check that the input files exist
-  for i in range(0, len(argList)):
-    if os.path.isfile(argList[i]):
+  for arg in args:
+    if os.path.isfile(arg):
       continue
     else:
-      print("ERROR!\n%s: no such file or directory" % (argList[i]))
+      print("ERROR!\n%s: no such file or directory" % (arg))
       sys.exit()
   # check the basename of the outdir exists - if yes, create outdir
   dname = os.path.dirname(dir)
@@ -175,6 +169,7 @@ def help():
   parser.add_argument('--walltime', type=str,help='walltime of each job TEspeX will launch on your SLURM system reported in hh:mm:ss format (SBATCH -t parameter) [required]',required=True)
   parser.add_argument('--num_threads', type=int, default=4, help='number of threads used by STAR and samtools. Minimum number of threads: 4 [4]', required=False)
   parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
+  parser.add_argument('--mask', type=str, default='F', help='fasta file containing sequences to be masked. If this file is provided, the sequences contained within it are considered as coding/non-coding transcripts and are added to the --cdna and --ncrna fasta files. This might be of help if the users wish to consider some specific regions as belonging to coding/non-coding transcripts even though they are not reported in --cdna and --ncrna fasta files. (e.g., N kb downstream to the transcript TTS for a better handling of readthrough process or non-genic TE-derived sequences known to be passively transcribed from criptic promoters). [F]', required=False)
   parser.add_argument('--version', action='version', version='%(prog)s ' + __version__, help='show the version number and exit')
 
   # create arguments
@@ -193,6 +188,9 @@ def help():
   rm = arg.remove
   queue_slurm = arg.q
   wtime_slurm = arg.walltime
+  mask = arg.mask
+  if mask != "F":
+    mask = os.path.abspath(arg.mask)
 
   #### Check the parsed arguments fullfill the TEspeX requirments
   # check number of threads
@@ -201,7 +199,7 @@ def help():
     sys.exit(1)
   # check strand argument is no, yes or reverse
   checkStrand(strandeness)
-  # check paired and rm  are T/F 
+  # check paired and rm  are T/F
   checkPrdRm(prd,rm)
   # check that the file containing the fq path i) really contains fullpath and ii) the fq exist
   checkSampleFile(sample_file,prd)
@@ -210,9 +208,12 @@ def help():
   # check wall time formatting is the correct one hh:mm:ss
   checkWallTime(wtime_slurm)
   # check input args and create the wd
-  checkInputs(dir,pipeline,te,cDNA,ncRNA,sample_file)
+  if mask != "F":
+    checkInputs(dir,pipeline,te,cDNA,ncRNA,sample_file,mask)
+  else:
+    checkInputs(dir,pipeline,te,cDNA,ncRNA,sample_file)
 
-  return job_index, clean, pipeline, te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, njob, num_threads, rm, queue_slurm, wtime_slurm
+  return job_index, clean, pipeline, te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, njob, num_threads, rm, queue_slurm, wtime_slurm, mask
 
 # 2.
 # this function writes the message to the log file in the output directory
@@ -280,12 +281,12 @@ def createSample(fq_file, jobs):
 
 
 # create index
-def createIndex(indexpy,te_fa,cdna_fa,ncrna_fa,read_lg,cpu,queue,wallt):
+def createIndex(indexpy,te_fa,cdna_fa,ncrna_fa,mask_fa,read_lg,cpu,queue,wallt):
   with open("index.job",'w') as ind:
     ind.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket="+str(int(cpu/4))+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
     ind.write("set -e\n\n")
     ind.write("source activate TEspeX_deps\n\n")
-    ind.write("time python3 "+indexpy+" --TE "+te_fa+" --cdna "+cdna_fa+" --ncrna "+ncrna_fa+" --length "+str(read_lg)+" --out "+dir+" --num_threads "+str(cpu)+"\n\n")
+    ind.write("time python3 "+indexpy+" --TE "+te_fa+" --cdna "+cdna_fa+" --ncrna "+ncrna_fa+" --mask "+mask_fa+" --length "+str(read_lg)+" --out "+dir+" --num_threads "+str(cpu)+"\n\n")
   cmd_index = "sbatch index.job"
   index_job_id = bash(cmd_index)
   index_job_id_list = [ index_job_id.split(" ")[3].strip("\n") ]
@@ -338,13 +339,13 @@ def cleanUP(job_id, cleanupy,queue,wallt):
 
 # main
 def main():
-  index_script, clean_script, pyscript, TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, slurm_q, slurm_wtime = help()
+  index_script, clean_script, pyscript, TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, slurm_q, slurm_wtime, maskfile = help()
   os.chdir(dir)
-  print("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_job = %s\nnum_threads = %s \nremove = %s\nq = %s\nwalltime = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, slurm_q, slurm_wtime))
+  print("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_job = %s\nnum_threads = %s \nremove = %s\nq = %s\nwalltime = %s\nmask file= %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, slurm_q, slurm_wtime, maskfile))
   createSample(sample, num_job)
   print("You have asked to split the analysis in %s different jobs:" % (num_job))
   # create index
-  index_job_id = createIndex(index_script,TE,cdna,ncrna,read_length,num_threads,slurm_q,slurm_wtime)
+  index_job_id = createIndex(index_script,TE,cdna,ncrna,maskfile,read_length,num_threads,slurm_q,slurm_wtime)
   #  create mapping jobs
   jlist = createJob(num_job, pyscript, TE, cdna, ncrna, paired, read_length, strand, num_threads, remove, dir+"/index",slurm_q,slurm_wtime)
   jid = launchJob(jlist,index_job_id)

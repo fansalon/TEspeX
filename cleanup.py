@@ -36,7 +36,7 @@ except ModuleNotFoundError:
   print("Did you forget to activate TEspeX_deps environment through source activate TEspeX_deps?")
   sys.exit(1)
 
-__version__ = 'part of TEspeX v1.0.3'
+__version__ = 'part of TEspeX v1.0.4'
 
 # 1.
 # define the help function

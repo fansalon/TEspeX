@@ -42,7 +42,7 @@ except ModuleNotFoundError:
   print("Did you forget to activate TEspeX_deps environment through source activate TEspeX_deps?")
   sys.exit(1)
 
-__version__ = 'v1.0.3'
+__version__ = 'v1.0.4'
 
 ######################################################## Functions used to check parsed arguments fullfil the TEspeX expectations
 # Strand
@@ -101,19 +101,14 @@ def checkPy():
     print("Exiting....")
     sys.exit(1)
 # check input files/dirs exist
-def checkInputs(dir,tte,ccDNA,nncRNA,ssample_file):
-  # create a list with the arguments that are files
+def checkInputs(dir,*args):
+  # check every arg
   argList = []
-  argList.append(tte)
-  argList.append(ccDNA)
-  argList.append(nncRNA)
-  argList.append(ssample_file)
-  # check that the input files exist
-  for i in range(0, len(argList)):
-    if os.path.isfile(argList[i]):
+  for arg in args:
+    if os.path.isfile(arg):
       continue
     else:
-      print("ERROR!\n%s: no such file or directory" % (argList[i]))
+      print("ERROR!\n%s: no such file or directory" % (arg))
       sys.exit()
   # check the basename of the outdir exists - if yes, create outdir
   dname = os.path.dirname(dir)
@@ -177,6 +172,7 @@ def help():
   parser.add_argument('--num_threads', type=int, default=2, help='number of threads used by STAR and samtools [2]', required=False)
   parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
   parser.add_argument('--index', type=str, default='F', help='If you want TEspeX to build the index for you, leave the default value [recommended]. Otherwise provide FULL path to a directoray containing STAR indexes [not_recommended] [F]', required=False)
+  parser.add_argument('--mask', type=str, default='F', help='fasta file containing sequences to be masked. If this file is provided, the sequences contained within it are considered as coding/non-coding transcripts and are added to the --cdna and --ncrna fasta files. This might be of help if the users wish to consider some specific regions as belonging to coding/non-coding transcripts even though they are not reported in --cdna and --ncrna fasta files. (e.g., N kb downstream to the transcript TTS for a better handling of readthrough process or non-genic TE-derived sequences known to be passively transcribed from criptic promoters). [F]', required=False)
   parser.add_argument('--version', action='version', version='%(prog)s ' + __version__, help='show the version number and exit')
 
   # create arguments
@@ -194,22 +190,28 @@ def help():
   index = arg.index
   if index != "F":
     index = os.path.abspath(arg.index)
+  mask = arg.mask
+  if mask != "F":
+    mask = os.path.abspath(arg.mask)
 
   #### Check the parsed arguments fullfill the TEspeX requirments
   # check strand argument is no, yes or reverse
   checkStrand(strandeness)
-  # check paired and rm  are T/F 
+  # check paired and rm  are T/F
   checkPrdRm(prd,rm)
   # check that the file containing the fq path i) really contains fullpath and ii) the fq exist and iii) contains two col if PE and one if SE
   checkSampleFile(sample_file,prd)
   # check Pandas and pysam versions
   checkPy()
   # check input args and create the wd
-  checkInputs(dir,te,cDNA,ncRNA,sample_file)
+  if mask != "F":
+    checkInputs(dir,te,cDNA,ncRNA,sample_file,mask)
+  else:
+    checkInputs(dir,te,cDNA,ncRNA,sample_file)
   # check index arg
   checkIndex(index)
 
-  return te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, num_threads, rm, bin_path, index
+  return te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, num_threads, rm, bin_path, index, mask
 
 
 # this function writes the message to the log file in the output directory
@@ -305,7 +307,7 @@ def star_aln(fq_list, strandn, fastaReference, pair, rm, *index_dir):
   output_names = []				# this is the list that will contain the names of the bedtools coverage output files
   statOut = []					# this is the list that will contain mapping statistics
   statOut.append("SRR\ttot\tmapped\tTE-best\tspecificTE\tnot_specificTE")
-  
+
   # define the general command (no reads and no zcat)
   # if  optional arg index_dir is passed it means that indexes have aady been generated and are in index_dir directory
   # otherwise each directory has its own index
@@ -489,23 +491,34 @@ def createOut(out, stat):
 
 # main
 def main():
-  TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, bin_path, indici = help()
+  TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, bin_path, indici, maskfile = help()
   os.chdir(dir)
-  writeLog("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_threads = %s \nremove = %s\nindex = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, indici))
+  writeLog("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_threads = %s \nremove = %s\nindex = %s\nmask file = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, indici, maskfile))
 
   # create reference transcriptome and STAR index
   if indici == 'F':
     writeLog("creating reference file %s/TE_transc_reference.fa" % (dir))
-    createReference(TE, "_transp")
-    createReference(cdna, "_transc")
+    # Create reference transcriptome, if indici is False
+    reference = createReference(TE, "_transp")
+    reference = createReference(cdna, "_transc")
     reference = createReference(ncrna, "_transc")
+    # if maskfile==F, the final reference only contains TE, cdna and ncrna
+    if maskfile == "F":
+      writeLog("\nNo masked fasta sequence provided.\n")
+    # otherwise, maskfile is supposed to be a fasta file and is added to the reference
+    else:
+      reference = createReference(maskfile, "_transc")
+    # STAR index of the reference transcriptome
     star_ind(reference, read_length)
+    # Map reads to reference and count TE-specific reads
     outfile, statfile = star_aln(sample, strand, reference, paired, remove)
   else:
+    # if indici is not set to F, it means that a pre-existing index is provided. Threfore, there is no need to generate the reference and index
     writeLog("reading index in %s" % (indici))
     prev_dir = '/'.join(indici.split("/")[:-1])
     reference = prev_dir+"/TE_transc_reference.fa"
     writeLog("reading reference in %s" % (reference))
+    # Map reads to reference and count TE-specific reads
     outfile, statfile = star_aln(sample, strand, reference, paired, remove, indici)
   createOut(outfile, statfile)
 
