@@ -182,7 +182,7 @@ def star_ind(genome, r_length):
   os.mkdir("index")
   os.chdir("index")
   # then we can call the STAR index function using the number of threads that is passed from command line
-  starCmd = bin_path + "STAR-2.6.0c/bin/tespex/STAR --runThreadN " +str(num_threads)+ " --runMode genomeGenerate --genomeDir " +os.path.abspath(".")+ " --genomeFastaFiles " +genome+ " --genomeSAindexNbases " +str(genomeSAindexNbase)+ " --genomeChrBinNbits " +str(genomeChrBinNbits)
+  starCmd = bin_path + "STAR-2.6.0c/STAR --runThreadN " +str(num_threads)+ " --runMode genomeGenerate --genomeDir " +os.path.abspath(".")+ " --genomeFastaFiles " +genome+ " --genomeSAindexNbases " +str(genomeSAindexNbase)+ " --genomeChrBinNbits " +str(genomeChrBinNbits)
   bash(starCmd)
 
   os.chdir(dir)
