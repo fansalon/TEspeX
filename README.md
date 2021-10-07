@@ -89,7 +89,7 @@ It is likely that you already have zlib installed and properly configured somewh
 If paths to zlib lib and include folders are returned, everything should be OK - skip to 5.
 
 Otherwise:
-  * ```cd $conda_dir```
+  * ```cd </path/to/miniconda3/>```
   * ```wget http://zlib.net/zlib-1.2.11.tar.gz```
   * ```tar -zxvf zlib-1.2.11.tar.gz```
   * ```cd zlib-1.2.11/```
