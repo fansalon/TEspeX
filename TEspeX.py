@@ -42,7 +42,7 @@ except ModuleNotFoundError:
   print("Did you forget to activate TEspeX_deps environment through source activate TEspeX_deps?")
   sys.exit(1)
 
-__version__ = 'v1.0.4'
+__version__ = 'v1.1.0'
 
 ######################################################## Functions used to check parsed arguments fullfil the TEspeX expectations
 # Strand
@@ -361,20 +361,42 @@ def star_aln(fq_list, strandn, fastaReference, pair, rm, *index_dir):
     # extract primary alignments (best score alignments)
       if pair == "F":
         if strandn == "no":
+          # exclude (-F) not primary alignment (-F 0x100)
           prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
         elif strandn == "yes":
+          # exclude read reverse strand (-F 0x10) and exclude not primary alignment (-F 0x100)
           prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -F 0x10 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
         elif strandn == "reverse":
+          # include read reverse strand (-f 0x10) and exclude not primary alignment (-F 0x100)
           prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x10 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
       elif pair == "T":
         if strandn == "no":
-          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x40 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
+          # exclude not primary alignment (-F 0x100)
+          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
         elif strandn == "yes":
-          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x40 -f 0x20 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
+          # include first in pair (-f 0x40), include  mate reverse strand (0x20) and exclude not primary alignment (-F 0x100)
+          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x40 -f 0x20 -F 0x100 -o " +filename+ "_mappedPrim_1st.bam " +filename+ ".bam"
+          # include second in pair (-f 0x80), include read reverse strand (0x10) and exclude not primary alignment (-F 0x100)
+          prim_cmd1 = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x80 -f 0x10 -F 0x100 -o " +filename+ "_mappedPrim_2nd.bam " +filename+ ".bam"
         elif strandn == "reverse":
-          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x40 -f 0x10 -F 0x100 -o " +filename+ "_mappedPrim.bam " +filename+ ".bam"
+          # include first in pair (-f 0x40), include read reverse strand (0x10) and exclude not primary alignment (-F 0x100)
+          prim_cmd = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x40 -f 0x10 -F 0x100 -o " +filename+ "_mappedPrim_1st.bam " +filename+ ".bam"
+          # include second in pair (-f 0x80), include mate reverse strand (0x20) and exclude not primary alignment (-F 0x100)
+          prim_cmd1 = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -b -f 0x80 -f 0x20 -F 0x100 -o " +filename+ "_mappedPrim_2nd.bam " +filename+ ".bam"
 
       bash(prim_cmd)
+      # if existing launch also prim_cmd1
+      if pair == "T":
+        if strandn == "yes" or strandn == "reverse":
+          bash(prim_cmd1)
+          # merge the two bams
+          mergin_cmd = bin_path + "samtools-1.3.1/bin/samtools merge -@ " +str(num_threads)+ " " +filename+"_mappedPrim.bam " +filename+ "_mappedPrim_1st.bam "+filename+ "_mappedPrim_2nd.bam "
+          bash(mergin_cmd)
+          rm_cmd1 = "rm "+filename+ "_mappedPrim_1st.bam"
+          rm_cmd2 = "rm "+filename+ "_mappedPrim_2nd.bam"
+          bash(rm_cmd1)
+          bash(rm_cmd2)
+      
 
     # create list containing name of the reads mapping with best score alignmets only on TEs. These reads are mapping specifically on TEs
       writeLog("selecting reads mapping specifically on TEs")
@@ -406,7 +428,7 @@ def star_aln(fq_list, strandn, fastaReference, pair, rm, *index_dir):
         header_bam = bin_path + "samtools-1.3.1/bin/samtools view -@ " +str(num_threads)+ " -H " +filename+ "_mappedPrim.bam -b -o " +filename+"_specificTE.bam"
         bash(header_bam)
 
-    # count the reads mapping specifically on TEs using htseqcount
+    # count the reads mapping specifically on TEs
       writeLog("counting TE expression levels considering TE-specific reads containded in " + filename + "_specificTE.bam")
       def counts(bam,fa):
         name = filename
@@ -426,7 +448,15 @@ def star_aln(fq_list, strandn, fastaReference, pair, rm, *index_dir):
         with open(name+"_counts",'w') as output:
           output.write("TE\t%s\n" % (name))
           for chr in fa_chr:
-            output.write("%s\t%s\n" % (chr, bam_chr.count(chr)))
+            # count how many time each TE occurrs in the bam file - this is the number of reads that are specifically mapped on each TE
+            count_raw = bam_chr.count(chr)
+            # if the reads are pair, the pairs rather than the reads have to be counted --> divide by 2
+            # single pair should be discarded by STAR so shouldn't be here. At least this can happen in situation when reads have been trimmed
+            # doing this the mapping given by a complete read pair is counted 1 whereas the mapping of a singleton is counted .5
+            if pair == "T":
+              count_raw = round( count_raw / 2 )
+
+            output.write("%s\t%s\n" % (chr, count_raw))
       counts(filename+"_specificTE.bam", fastaReference)
 #      # append the name of the bedtools coverage output in the list
       output_names.append(os.path.abspath(".")+"/"+filename+ "_counts")
