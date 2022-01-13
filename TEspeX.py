@@ -42,7 +42,7 @@ except ModuleNotFoundError:
   print("Did you forget to activate TEspeX_deps environment through source activate TEspeX_deps?")
   sys.exit(1)
 
-__version__ = 'v1.1.0'
+__version__ = 'v1.1.1'
 
 ######################################################## Functions used to check parsed arguments fullfil the TEspeX expectations
 # Strand
