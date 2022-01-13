@@ -293,29 +293,29 @@ def addModules(filen,mod):
 # create index
 def createIndex(indexpy,te_fa,cdna_fa,ncrna_fa,mask_fa,read_lg,cpu,queue,wallt,mdl):
   with open("index.job",'w') as ind:
-    ind.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket="+str(int(cpu/4))+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
+    ind.write("#!/bin/bash\n#\n#PBS -q "+queue+"\n#PBS -j oe\n#PBS -l select=1:ncpus="+str(cpu)+"\n#PBS -l walltime="+wallt+"\ncd $PBS_O_WORKDIR\n\n")
     ind = addModules(ind,mdl)
     ind.write("set -e\n\n")
     ind.write("source activate TEspeX_deps\n\n")
     ind.write("time python3 "+indexpy+" --TE "+te_fa+" --cdna "+cdna_fa+" --ncrna "+ncrna_fa+" --mask "+mask_fa+" --length "+str(read_lg)+" --out "+dir+" --num_threads "+str(cpu)+"\n\n")
-  cmd_index = "sbatch index.job"
+  cmd_index = "qsub index.job"
   index_job_id = bash(cmd_index)
-  index_job_id_list = [ index_job_id.split(" ")[3].strip("\n") ]
+  index_job_id_list = [ index_job_id.split(".")[0] ]
 
   return index_job_id_list
 
 
 # create the jobs
-def createJob(jobs, py, te, cDna, ncRna, prd, read_leng, strandn, threads, remove, indicix,queue,wallt,mdl):
+def createJob(jobs, py, te, cDna, ncRna, prd, read_leng, strandn, cpu, remove, indicix,queue,wallt,mdl):
   job_list = []
   for i in range(0, int(jobs)):
     with open("job"+str(i), 'w') as outj:
       job_list.append("job"+str(i))
-      outj.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket="+str(int(threads/4))+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
+      outj.write("#!/bin/bash\n#\n#PBS -q "+queue+"\n#PBS -j oe\n#PBS -l select=1:ncpus="+str(cpu)+"\n#PBS -l walltime="+wallt+"\ncd $PBS_O_WORKDIR\n\n")
       outj = addModules(outj,mdl)
       outj.write("set -e\n\n")
       outj.write("source activate TEspeX_deps\n\n")
-      outj.write("time python3 "+py+" --TE "+te+" --cdna "+cDna+" --ncrna "+ncRna+" --sample sample"+str(i)+".txt --paired "+prd+" --length "+str(read_leng)+" --out "+str(i)+ " --strand "+strandn+ " --num_threads "+str(threads)+" --remove "+remove+ " --index "+indicix+"\n\n")
+      outj.write("time python3 "+py+" --TE "+te+" --cdna "+cDna+" --ncrna "+ncRna+" --sample sample"+str(i)+".txt --paired "+prd+" --length "+str(read_leng)+" --out "+str(i)+ " --strand "+strandn+ " --num_threads "+str(cpu)+" --remove "+remove+ " --index "+indicix+"\n\n")
 
   return job_list
 
@@ -323,9 +323,9 @@ def createJob(jobs, py, te, cDna, ncRna, prd, read_leng, strandn, threads, remov
 def launchJob(jl,depend_index):
   jobs = []
   for j in jl:
-    command = "sbatch --dependency=afterok:" + depend_index[0] +" " +j
+    command = "qsub -W depend=afterok:" + depend_index[0] +" " +j
     jobID = bash(command)
-    jobs.append(jobID.split(" ")[3].strip("\n"))
+    jobs.append(jobID.split(".")[0])
     job_number = j.split("job")[1]
     full_path = os.getcwd()+"/"+str(job_number)+"/"
     print("please refer to %sLog.file.out" % (full_path))
@@ -341,12 +341,12 @@ def cleanUP(job_id, cleanupy,queue,wallt,mdl):
     else:
       depend = depend + job_id[i]
   with open("cleanup.job", 'w') as out:
-      out.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket=1"+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
+      out.write("#!/bin/bash\n#\n#PBS -q "+queue+"\n#PBS -j oe\n#PBS -l select=1:ncpus=1\n#PBS -l walltime="+wallt+"\ncd $PBS_O_WORKDIR\n\n")
       out = addModules(out,mdl)
       out.write("set -e\n\n")
       out.write("source activate TEspeX_deps\n\n")
       out.write("time python3 " + cleanupy + " --wd " + dir + " --job " + str(len(job_id)) + "\n" )
-  cmd1 = "sbatch --dependency=afterok:" + depend +" cleanup.job"
+  cmd1 = "qsub -W depend=afterok:" + depend +" cleanup.job"
   bash(cmd1)
   print("launched the cleanup.job job that will wait all the jobs to finish and then make the clean up of everything. Cross the fingers!")
 
@@ -354,7 +354,7 @@ def cleanUP(job_id, cleanupy,queue,wallt,mdl):
 def main():
   index_script, clean_script, pyscript, TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, slurm_q, slurm_wtime, maskfile, mod = help()
   os.chdir(dir)
-  print("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_job = %s\nnum_threads = %s \nremove = %s\nq = %s\nwalltime = %s\nmask file= %s\nmodules = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, slurm_q, slurm_wtime, maskfile, mod))
+  print("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_job = %s\nnum_threads = %s \nremove = %s\nq = %s\nwalltime = %s\nmask file= %s\nmodules = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, slurm_q, slurm_wtime, maskfile,mod))
   createSample(sample, num_job)
   print("You have asked to split the analysis in %s different jobs:" % (num_job))
   # create index
