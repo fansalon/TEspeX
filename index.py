@@ -183,6 +183,7 @@ def star_ind(genome, r_length):
   os.chdir("index")
   # then we can call the STAR index function using the number of threads that is passed from command line
   starCmd = bin_path + "STAR-2.6.0c/STAR --runThreadN " +str(num_threads)+ " --runMode genomeGenerate --genomeDir " +os.path.abspath(".")+ " --genomeFastaFiles " +genome+ " --genomeSAindexNbases " +str(genomeSAindexNbase)+ " --genomeChrBinNbits " +str(genomeChrBinNbits)
+#  starCmd = starCmd + " --limitGenomeGenerateRAM 500000000000" #delete
   bash(starCmd)
 
   os.chdir(dir)
@@ -192,7 +193,10 @@ def main():
   TE, cdna, ncrna, read_length, dir, num_threads, bin_path, maskfile = help()
   os.chdir(dir)
   writeLog("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nreadLength = %s\noutDir = %s\nnum_threads = %s\nmask file = %s " % (TE, cdna, ncrna, read_length, dir, num_threads, maskfile))
-  writeLog("creating reference file %s/TE_transc_reference.fa" % (dir))
+  if maskfile == "F":
+    writeLog("creating reference file %s/TE_transc_reference.fa concatenating %s, %s and %s" % (dir,TE,cdna,ncrna))
+  else:
+    writeLog("creating reference file %s/TE_transc_reference.fa concatenating %s, %s, %s and %s" % (dir,TE,cdna,ncrna,maskfile))
   reference = createReference(TE, "_transp")
   reference = createReference(cdna, "_transc")
   reference = createReference(ncrna, "_transc")
