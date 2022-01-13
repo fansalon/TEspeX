@@ -317,7 +317,7 @@ usage: wrapper_slurm.py [-h] --script SCRIPT --TE TE --cdna CDNA --ncrna NCRNA
                         --sample SAMPLE --paired PAIRED --length LENGTH --out
                         OUT --strand STRAND --job JOB --q Q --walltime
                         WALLTIME [--num_threads NUM_THREADS] [--remove REMOVE]
-                        [--mask MASK] [--version]
+                        [--mask MASK] [--module MODULE] [--version]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -339,7 +339,7 @@ optional arguments:
                         sample file is expected to contain 1 single column
                         [required]
   --length LENGTH       length of the read given as input. This is used to
-                        calculate STAR index parameters. If your fq/fq.gz file
+                        calculateSTAR index parameters. If your fq/fq.gz file
                         contains reads with different length specify the most
                         frequent read length [required]
   --out OUT             directory where the output files will be written. This
@@ -372,10 +372,17 @@ optional arguments:
                         readthrough process or non-genic TE-derived sequences
                         known to be passively transcribed from criptic
                         promoters). [F]
+  --module MODULE       list of modules to be uploaded within each job by
+                        'module load'. If more than one modules need to be
+                        loaded provide a comma separated list (e.g.,
+                        java,samtools) Reported modules should be available
+                        through the 'module av' command. [F]
   --version             show the version number and exit
+
 ```
 
 The parameters are exactly the same of TEspeX.py script except for 3 parameters:
+* --module: it might be that while running job some installed modules need to be upoloaded. If this is the case, provide the list of modules to this parameter. TEspeX will then take care to upload the listed modules in each job by ```module load <module name>```
 * --script: it requires the path to TEspeX.py script
 * --q: the name of the SLURM queue to be used for the TEspeX job
 * --walltime: walltime of each job TEspeX will launch on your SLURM system reported in hh:mm:ss format (SBATCH -t parameter)
