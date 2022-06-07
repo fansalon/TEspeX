@@ -42,7 +42,7 @@ except ModuleNotFoundError:
   print("Did you forget to activate TEspeX_deps environment through source activate TEspeX_deps?")
   sys.exit(1)
 
-__version__ = 'v1.1.1'
+__version__ = 'v1.2.0'
 
 ######################################################## Functions used to check parsed arguments fullfil the TEspeX expectations
 # Strand
@@ -173,6 +173,7 @@ def help():
   parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
   parser.add_argument('--index', type=str, default='F', help='If you want TEspeX to build the index for you, leave the default value [recommended]. Otherwise provide FULL path to a directoray containing STAR indexes [not_recommended] [F]', required=False)
   parser.add_argument('--mask', type=str, default='F', help='fasta file containing sequences to be masked. If this file is provided, the sequences contained within it are considered as coding/non-coding transcripts and are added to the --cdna and --ncrna fasta files. This might be of help if the users wish to consider some specific regions as belonging to coding/non-coding transcripts even though they are not reported in --cdna and --ncrna fasta files. (e.g., N kb downstream to the transcript TTS for a better handling of readthrough process or non-genic TE-derived sequences known to be passively transcribed from criptic promoters). [F]', required=False)
+  parser.add_argument('--multimap', type=int, default=10, help='maximum number of loci a read/read pair is allowed to map to. This value will be provided to STAR --outFilterMultimapNmax and --winAnchorMultimapNmax parameters. It is warmly suggested not to change the default value [10]', required=False)
   parser.add_argument('--version', action='version', version='%(prog)s ' + __version__, help='show the version number and exit')
 
   # create arguments
@@ -193,6 +194,7 @@ def help():
   mask = arg.mask
   if mask != "F":
     mask = os.path.abspath(arg.mask)
+  multimap = arg.multimap
 
   #### Check the parsed arguments fullfill the TEspeX requirments
   # check strand argument is no, yes or reverse
@@ -211,7 +213,7 @@ def help():
   # check index arg
   checkIndex(index)
 
-  return te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, num_threads, rm, bin_path, index, mask
+  return te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, num_threads, rm, bin_path, index, mask, multimap
 
 
 # this function writes the message to the log file in the output directory
@@ -300,22 +302,35 @@ def star_ind(genome, r_length):
 
   os.chdir(dir)
 
+
+# count reads/read pairs that map to TE, regardless of the strand and of the best AS
+def CountReadsonTE(bamfile):
+  TE = []
+  bamfile = pysam.AlignmentFile(bamfile, "rb")
+  for aln in bamfile.fetch(until_eof=True):
+    if "_transp" in aln.reference_name:
+      TE.append(aln.query_name)
+  bamfile.close()
+  count_te = len(list(set(TE)))
+  return count_te
+
+
 # map the reads to the reference. The argument of this function is a file with the full path to the reads
 # if the reads are paired they are written on the same line separated by \t
 #def star_aln(fq_list, bedReference, pair, rm):
-def star_aln(fq_list, strandn, fastaReference, pair, rm, *index_dir):
+def star_aln(fq_list, strandn, fastaReference, pair, rm, mm, *index_dir):
   output_names = []				# this is the list that will contain the names of the bedtools coverage output files
   statOut = []					# this is the list that will contain mapping statistics
-  statOut.append("SRR\ttot\tmapped\tTE-best\tspecificTE\tnot_specificTE")
+  statOut.append("SRR\ttot\tmapped\tmapped-TE\tTE-best\tspecificTE\tnot_specificTE")
 
   # define the general command (no reads and no zcat)
   # if  optional arg index_dir is passed it means that indexes have aady been generated and are in index_dir directory
   # otherwise each directory has its own index
   if index_dir:
     index = index_dir[0]
-    command = bin_path + "STAR-2.6.0c/STAR --outSAMunmapped None --outSAMprimaryFlag AllBestScore --outFilterMismatchNoverLmax 0.04 --outMultimapperOrder Random --outSAMtype BAM Unsorted --outStd BAM_Unsorted --runThreadN " +str(num_threads)+ " --genomeDir " +index
+    command = bin_path + "STAR-2.6.0c/STAR --outSAMunmapped None --outSAMprimaryFlag AllBestScore --outFilterMismatchNoverLmax 0.04 --outMultimapperOrder Random --outSAMtype BAM Unsorted --outStd BAM_Unsorted --outFilterMultimapNmax " +str(mm)+ " --winAnchorMultimapNmax " +str(mm)+ " --runThreadN " +str(num_threads)+ " --genomeDir " +index
   else:
-    command = bin_path + "STAR-2.6.0c/STAR --outSAMunmapped None --outSAMprimaryFlag AllBestScore --outFilterMismatchNoverLmax 0.04 --outMultimapperOrder Random --outSAMtype BAM Unsorted --outStd BAM_Unsorted --runThreadN " +str(num_threads)+ " --genomeDir " +os.path.abspath("index")
+    command = bin_path + "STAR-2.6.0c/STAR --outSAMunmapped None --outSAMprimaryFlag AllBestScore --outFilterMismatchNoverLmax 0.04 --outMultimapperOrder Random --outSAMtype BAM Unsorted --outStd BAM_Unsorted --outFilterMultimapNmax " +str(mm)+ " --winAnchorMultimapNmax " +str(mm)+ " --runThreadN " +str(num_threads)+ " --genomeDir " +os.path.abspath("index")
   # for every line of the file launch the analysis
   with open(fq_list) as reads:
     for line in reads:
@@ -482,13 +497,15 @@ def star_aln(fq_list, strandn, fastaReference, pair, rm, *index_dir):
       tot, map = starFinalHandling("Log.final.out")
 
       # reads mapped on TEs
+      mapTEtot = CountReadsonTE(filename+".bam")
+      # reads mapped on TEs with best aln score
       mapTE = len(final) + len(not_specific)
       # reads specifically mapped against TE
       specific = len(final)
       # reads not specifically mapped against TE
       not_spec = len(not_specific)
       # write into output list
-      riga_stat = str(filename)+"\t"+str(tot)+"\t"+str(map)+"\t"+str(mapTE)+"\t"+str(specific)+"\t"+str(not_spec)
+      riga_stat = str(filename)+"\t"+str(tot)+"\t"+str(map)+"\t"+str(mapTEtot)+"\t"+str(mapTE)+"\t"+str(specific)+"\t"+str(not_spec)
       statOut.append(riga_stat)
 
       # remove the bam files
@@ -521,9 +538,9 @@ def createOut(out, stat):
 
 # main
 def main():
-  TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, bin_path, indici, maskfile = help()
+  TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, bin_path, indici, maskfile, multimappers = help()
   os.chdir(dir)
-  writeLog("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_threads = %s \nremove = %s\nindex = %s\nmask file = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, indici, maskfile))
+  writeLog("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_threads = %s \nremove = %s\nindex = %s\nmask file = %s\nmultimappers = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, indici, maskfile,multimappers))
 
   # create reference transcriptome and STAR index
   if indici == 'F':
@@ -541,7 +558,7 @@ def main():
     # STAR index of the reference transcriptome
     star_ind(reference, read_length)
     # Map reads to reference and count TE-specific reads
-    outfile, statfile = star_aln(sample, strand, reference, paired, remove)
+    outfile, statfile = star_aln(sample, strand, reference, paired, remove, multimappers)
   else:
     # if indici is not set to F, it means that a pre-existing index is provided. Threfore, there is no need to generate the reference and index
     writeLog("reading index in %s" % (indici))
@@ -549,7 +566,7 @@ def main():
     reference = prev_dir+"/TE_transc_reference.fa"
     writeLog("reading reference in %s" % (reference))
     # Map reads to reference and count TE-specific reads
-    outfile, statfile = star_aln(sample, strand, reference, paired, remove, indici)
+    outfile, statfile = star_aln(sample, strand, reference, paired, remove, multimappers, indici)
   createOut(outfile, statfile)
 
 

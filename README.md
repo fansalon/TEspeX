@@ -289,10 +289,15 @@ optional arguments:
                         readthrough process or non-genic TE-derived sequences
                         known to be passively transcribed from criptic
                         promoters). [F]
+  --multimap MULTIMAP   maximum number of loci a read/read pair is allowed to
+                        map to. This value will be provided to STAR
+                        --outFilterMultimapNmax and --winAnchorMultimapNmax
+                        parameters. It is warmly suggested not to change the
+                        default value [10]
   --version             show the version number and exit
 ```
 
-All the arguments, except fot ```--num_threads```, ```--remove``` and ```--index``` are required.\
+All the arguments, except fot ```--num_threads```, ```--remove```, ```--index```, ```--mask``` and ```--multimap``` are required.\
 We suggest to use as argument of ```--TE``` argument a fasta file containing TE consensus sequences and as arguments of the ```--cdna``` and ```--ncrna``` arguments the transcriptome files containing cdna and ncrna from ensembl (or genecode if working with human or mouse data).\
 The ```--length``` of the read is only needed to build the index of the reference transcriptome - in case of trimmed reads just provide the most frequent read lenght.\
 As ```--strand``` TEspeX expects the same nomenclature as the one used by htseq-count (if you are unsure about the strandedness of your data please take a look at: https://chipster.csc.fi/manual/library-type-summary.html) .\
@@ -377,6 +382,11 @@ optional arguments:
                         loaded provide a comma separated list (e.g.,
                         java,samtools) Reported modules should be available
                         through the 'module av' command. [F]
+  --multimap MULTIMAP   maximum number of loci a read/read pair is allowed to
+                        map to. This value will be provided to STAR
+                        --outFilterMultimapNmax and --winAnchorMultimapNmax
+                        parameters. It is warmly suggested not to change the
+                        default value [10]
   --version             show the version number and exit
 
 ```

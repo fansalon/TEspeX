@@ -42,7 +42,7 @@ except ModuleNotFoundError:
   print("Did you forget to activate TEspeX_deps environment through source activate TEspeX_deps?")
   sys.exit(1)
 
-__version__ = 'part of TEspeX v1.1.1'
+__version__ = 'part of TEspeX v1.2.0'
 
 ######################################################## Functions used to check parsed arguments fullfil the TEspeX expectations
 # Strand
@@ -171,6 +171,7 @@ def help():
   parser.add_argument('--remove', type=str, default='T', help='T (true) or F (false). If this parameter is set to T all the bam files are removed. If it is F they are not removed [T]', required=False)
   parser.add_argument('--mask', type=str, default='F', help='fasta file containing sequences to be masked. If this file is provided, the sequences contained within it are considered as coding/non-coding transcripts and are added to the --cdna and --ncrna fasta files. This might be of help if the users wish to consider some specific regions as belonging to coding/non-coding transcripts even though they are not reported in --cdna and --ncrna fasta files. (e.g., N kb downstream to the transcript TTS for a better handling of readthrough process or non-genic TE-derived sequences known to be passively transcribed from criptic promoters). [F]', required=False)
   parser.add_argument('--module', type=str, default='F', help='list of modules to be uploaded within each job by \'module load\'. If more than one modules need to be loaded provide a comma separated list (e.g., java,samtools) Reported modules should be available through the \'module av\' command. [F]', required=False)
+  parser.add_argument('--multimap', type=int, default=10, help='maximum number of loci a read/read pair is allowed to map to. This value will be provided to STAR --outFilterMultimapNmax and --winAnchorMultimapNmax parameters. It is warmly suggested not to change the default value [10]', required=False)
   parser.add_argument('--version', action='version', version='%(prog)s ' + __version__, help='show the version number and exit')
 
   # create arguments
@@ -193,6 +194,7 @@ def help():
   module = arg.module
   if mask != "F":
     mask = os.path.abspath(arg.mask)
+  multimap = arg.multimap
 
   #### Check the parsed arguments fullfill the TEspeX requirments
   # check number of threads
@@ -215,7 +217,7 @@ def help():
   else:
     checkInputs(dir,pipeline,te,cDNA,ncRNA,sample_file)
 
-  return job_index, clean, pipeline, te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, njob, num_threads, rm, queue_slurm, wtime_slurm, mask, module
+  return job_index, clean, pipeline, te, cDNA, ncRNA, sample_file, prd, rl, dir, strandeness, njob, num_threads, rm, queue_slurm, wtime_slurm, mask, module, multimap
 
 # 2.
 # this function writes the message to the log file in the output directory
@@ -293,7 +295,7 @@ def addModules(filen,mod):
 # create index
 def createIndex(indexpy,te_fa,cdna_fa,ncrna_fa,mask_fa,read_lg,cpu,queue,wallt,mdl):
   with open("index.job",'w') as ind:
-    ind.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket="+str(int(cpu/4))+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
+    ind.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=1\n#SBATCH --threads-per-core=1\n#SBATCH --cores-per-socket="+str(cpu)+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
     ind = addModules(ind,mdl)
     ind.write("set -e\n\n")
     ind.write("source activate TEspeX_deps\n\n")
@@ -306,16 +308,16 @@ def createIndex(indexpy,te_fa,cdna_fa,ncrna_fa,mask_fa,read_lg,cpu,queue,wallt,m
 
 
 # create the jobs
-def createJob(jobs, py, te, cDna, ncRna, prd, read_leng, strandn, threads, remove, indicix,queue,wallt,mdl):
+def createJob(jobs, py, te, cDna, ncRna, prd, read_leng, strandn, threads, remove, indicix,queue,wallt,mdl,mm):
   job_list = []
   for i in range(0, int(jobs)):
     with open("job"+str(i), 'w') as outj:
       job_list.append("job"+str(i))
-      outj.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=2\n#SBATCH --threads-per-core=2\n#SBATCH --cores-per-socket="+str(int(threads/4))+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
+      outj.write("#!/bin/bash\n#\n#SBATCH -p "+ queue +"\n#SBATCH -N 1\n#SBATCH --sockets-per-node=1\n#SBATCH --threads-per-core=1\n#SBATCH --cores-per-socket="+str(threads)+ "\n#SBATCH -t "+ wallt +"\ncd $SLURM_SUBMIT_DIR\n\n")
       outj = addModules(outj,mdl)
       outj.write("set -e\n\n")
       outj.write("source activate TEspeX_deps\n\n")
-      outj.write("time python3 "+py+" --TE "+te+" --cdna "+cDna+" --ncrna "+ncRna+" --sample sample"+str(i)+".txt --paired "+prd+" --length "+str(read_leng)+" --out "+str(i)+ " --strand "+strandn+ " --num_threads "+str(threads)+" --remove "+remove+ " --index "+indicix+"\n\n")
+      outj.write("time python3 "+py+" --TE "+te+" --cdna "+cDna+" --ncrna "+ncRna+" --sample sample"+str(i)+".txt --paired "+prd+" --length "+str(read_leng)+" --out "+str(i)+ " --strand "+strandn+ " --num_threads "+str(threads)+" --remove "+remove+ " --index "+indicix+ " --multimap "+str(mm)+"\n\n")
 
   return job_list
 
@@ -352,15 +354,15 @@ def cleanUP(job_id, cleanupy,queue,wallt,mdl):
 
 # main
 def main():
-  index_script, clean_script, pyscript, TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, slurm_q, slurm_wtime, maskfile, mod = help()
+  index_script, clean_script, pyscript, TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, slurm_q, slurm_wtime, maskfile, mod, multimappers = help()
   os.chdir(dir)
-  print("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_job = %s\nnum_threads = %s \nremove = %s\nq = %s\nwalltime = %s\nmask file= %s\nmodules = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, slurm_q, slurm_wtime, maskfile, mod))
+  print("\nuser command line arguments:\nTE file = %s\ncdna file = %s\nncrna file = %s\nsampleFile file = %s\npaired = %s\nreadLength = %s\noutDir = %s\nstrand = %s\nnum_job = %s\nnum_threads = %s \nremove = %s\nq = %s\nwalltime = %s\nmask file= %s\nmodules = %s\nmultimappers = %s\n" % (TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_job, num_threads, remove, slurm_q, slurm_wtime, maskfile, mod, multimappers))
   createSample(sample, num_job)
   print("You have asked to split the analysis in %s different jobs:" % (num_job))
   # create index
   index_job_id = createIndex(index_script,TE,cdna,ncrna,maskfile,read_length,num_threads,slurm_q,slurm_wtime,mod)
   #  create mapping jobs
-  jlist = createJob(num_job, pyscript, TE, cdna, ncrna, paired, read_length, strand, num_threads, remove, dir+"/index",slurm_q,slurm_wtime,mod)
+  jlist = createJob(num_job, pyscript, TE, cdna, ncrna, paired, read_length, strand, num_threads, remove, dir+"/index",slurm_q,slurm_wtime,mod,multimappers)
   jid = launchJob(jlist,index_job_id)
   cleanUP(jid, clean_script,slurm_q,slurm_wtime,mod)
 
