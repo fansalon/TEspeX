@@ -286,9 +286,11 @@ def createSample(fq_file, jobs):
 
 # handle the modules provided by --module arg and add it to job
 def addModules(filen,mod):
-  modlist = mod.split(",")
-  for modu in modlist:
-    filen.write("module load %s\n" % (modu))
+  # add module only if --module is not F
+  if mod!="F":
+    modlist = mod.split(",")
+    for modu in modlist:
+      filen.write("module load %s\n" % (modu))
   return filen
 
 

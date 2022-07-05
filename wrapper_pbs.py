@@ -286,11 +286,12 @@ def createSample(fq_file, jobs):
 
 # handle the modules provided by --module arg and add it to job
 def addModules(filen,mod):
-  modlist = mod.split(",")
-  for modu in modlist:
-    filen.write("module load %s\n" % (modu))
+  # add module only if --module is not F
+  if mod!="F":
+    modlist = mod.split(",")
+    for modu in modlist:
+      filen.write("module load %s\n" % (modu))
   return filen
-
 
 # create index
 def createIndex(indexpy,te_fa,cdna_fa,ncrna_fa,mask_fa,read_lg,cpu,queue,wallt,mdl):
