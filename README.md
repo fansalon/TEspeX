@@ -1,5 +1,10 @@
 # TEspeX
 
+Read about TEspeX in:
+
+Ansaloni *et al.*, Bioinformatics, 2022: https://doi.org/10.1093/bioinformatics/btac526<br />
+Ansaloni *et al.*, BMC Bioinformatics, 2019: https://doi.org/10.1186/s12859-019-3088-7
+
 # Overview
 
 TEspeX (Transposable Elements SPEcific eXpression) is a tool for the TE expression quantification from Illummina short RNA-seq reads. The rationale of the pipeline is to map the reads against a reference transcriptome composed by i) TE consensus sequences, ii) coding transcripts and iii) non-coding transcripts and to quantify the expression of TEs avoiding counting reads deriving from TE fragments embedded in coding/non-coding non-TE annotated transcripts.
@@ -428,5 +433,12 @@ If you are interested in the development of **the perfect tool** for testing for
 The TEspeX pipeline has been developed by Federico Ansaloni, former PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of prof. Remo Sanges (https://www.sangeslab.eu). \
 Nicolo' Gualandi and Mauro Esposito contributed to the pipeline testing.\
 To report bugs or suggestions please feel free to write to the TEspeX supporting group https://groups.google.com/g/tespex-help
+
+
+# Overview
+If you found TEspeX usefull for your research, please cite:
+
+Ansaloni *et al.*, Bioinformatics, 2022: https://doi.org/10.1093/bioinformatics/btac526<br />
+Ansaloni *et al.*, BMC Bioinformatics, 2019: https://doi.org/10.1186/s12859-019-3088-7
 
 
