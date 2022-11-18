@@ -42,7 +42,7 @@ except ModuleNotFoundError:
   print("Did you forget to activate TEspeX_deps environment through source activate TEspeX_deps?")
   sys.exit(1)
 
-__version__ = 'v1.2.1'
+__version__ = 'v2.0.0'
 
 ######################################################## Functions used to check parsed arguments fullfil the TEspeX expectations
 # Strand
@@ -69,11 +69,11 @@ def checkSampleFile(sfile,paired):
       if paired == "T":
         if len(line) != 2:
           print("ERROR: --paired T is specified therefore 2 columns are expected in the --sample file. However, %s are detected at line %s" % (str(len(line)),str(ct)))
-          sys.exit()
+          sys.exit(1)
       else:
         if len(line) != 1:
           print("ERROR: --paired F is specified therefore 1 column is expected in the --sample file. However, %s are detected at line %s" % (str(len(line)),str(ct)))
-          sys.exit()
+          sys.exit(1)
       for ln in line:
         # check is full path
         if not os.path.isabs(ln):
@@ -109,7 +109,7 @@ def checkInputs(dir,*args):
       continue
     else:
       print("ERROR!\n%s: no such file or directory" % (arg))
-      sys.exit()
+      sys.exit(1)
   # check the basename of the outdir exists - if yes, create outdir
   dname = os.path.dirname(dir)
   if os.path.isdir(dname):
@@ -117,11 +117,11 @@ def checkInputs(dir,*args):
       os.mkdir(dir)
     except FileExistsError:
       print("ERROR: "+dir+" directory already exists")
-      sys.exit()
+      sys.exit(1)
   else:
     print("ERROR: dirname of the --out parameter does not exist: %s"  % (dname))
     print("Please, specify the name of a non-existing directory, in an already existing path and retry")
-    sys.exit()
+    sys.exit(1)
 # Check index is formatted as required - when provided from cmd line
 def checkIndex(index):
   if index == 'F':
@@ -536,6 +536,21 @@ def createOut(out, stat):
   writeLog("DONE")
   writeLog("output files "+dir+"/outfile.txt and "+dir+"/mapping_stats.txt have been correctly created")
 
+# check there are no duplicated seq in the reference file
+def checkReference(file_name):
+  names = []
+  with open(file_name) as inpf:
+    for line in inpf:
+      if line.startswith(">"):
+        names.append(line[:-1])
+  if len(names) != len(list(set(names))):
+    writeLog("ERROR: duplicated sequences found in fasta reference file %s" % (file_name))
+    writeLog("This is likely due to the selection of the wrong files from Ensembl/Gencode")
+    writeLog("Be sure to have downloaded the *pc_transcripts.fa and the *.lncRNA_transcripts.fa, and NOT the *transcripts.fa, as *transcripts.fa and *.lncRNA_transcripts.fa contain duplicated sequences\n\n")
+    sys.exit(1)
+  else:
+    writeLog("index file is OK")
+
 # main
 def main():
   TE, cdna, ncrna, sample, paired, read_length, dir, strand, num_threads, remove, bin_path, indici, maskfile, multimappers = help()
@@ -551,10 +566,12 @@ def main():
     reference = createReference(ncrna, "_transc")
     # if maskfile==F, the final reference only contains TE, cdna and ncrna
     if maskfile == "F":
-      writeLog("\nNo masked fasta sequence provided.\n")
+      writeLog("No masked fasta sequence provided.")
     # otherwise, maskfile is supposed to be a fasta file and is added to the reference
     else:
       reference = createReference(maskfile, "_transc")
+    # check the reference file does not contain any duplicataed sequences
+    checkReference(reference)
     # STAR index of the reference transcriptome
     star_ind(reference, read_length)
     # Map reads to reference and count TE-specific reads
@@ -565,6 +582,8 @@ def main():
     prev_dir = '/'.join(indici.split("/")[:-1])
     reference = prev_dir+"/TE_transc_reference.fa"
     writeLog("reading reference in %s" % (reference))
+    # check the reference file does not contain any duplicataed sequences
+    checkReference(reference)
     # Map reads to reference and count TE-specific reads
     outfile, statfile = star_aln(sample, strand, reference, paired, remove, multimappers, indici)
   createOut(outfile, statfile)

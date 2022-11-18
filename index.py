@@ -42,7 +42,7 @@ except ModuleNotFoundError:
   print("Did you forget to activate TEspeX_deps environment through source activate TEspeX_deps?")
   sys.exit(1)
 
-__version__ = 'part of TEspeX v1.2.1'
+__version__ = 'part of TEspeX v2.0.0'
 
 # 1.
 # define the help function
@@ -100,7 +100,7 @@ def help():
 # 2.
 # this function writes the message to the log file in the output directory
 def writeLog(message):
-  #print(message)
+  print(message)
   with open(dir+"/index.log.out", 'a') as logfile:
     logfile.write("[%s] " % (time.asctime()))
     logfile.write("%s\n" % (message))
@@ -188,6 +188,23 @@ def star_ind(genome, r_length):
 
   os.chdir(dir)
 
+
+# check there are no duplicated seq in the reference file
+def checkReference(file_name):
+  names = []
+  with open(file_name) as inpf:
+    for line in inpf:
+      if line.startswith(">"):
+        names.append(line[:-1])
+  if len(names) != len(list(set(names))):
+    writeLog("ERROR: duplicated sequences found in fasta reference file %s" % (file_name))
+    writeLog("This is likely due to the selection of the wrong files from Ensembl/Gencode")
+    writeLog("Be sure to have downloaded the *pc_transcripts.fa and the *.lncRNA_transcripts.fa, and NOT the *transcripts.fa, as *transcripts.fa and *.lncRNA_transcripts.fa contain duplicated sequences\n\n")
+    sys.exit(1)
+  else:
+    writeLog("index file is OK")
+
+
 # main
 def main():
   TE, cdna, ncrna, read_length, dir, num_threads, bin_path, maskfile = help()
@@ -204,6 +221,8 @@ def main():
     writeLog("\nNo masked fasta sequence provided.\n")
   else:
     reference = createReference(maskfile, "_transc")
+  # check the reference file does not contain any duplicataed sequences
+  checkReference(reference)
   star_ind(reference, read_length)
   writeLog("index job has done!")
 

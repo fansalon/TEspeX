@@ -1,5 +1,10 @@
 # TEspeX
 
+Read about TEspeX in:
+
+Ansaloni *et al.*, Bioinformatics, 2022: https://doi.org/10.1093/bioinformatics/btac526<br />
+Ansaloni *et al.*, BMC Bioinformatics, 2019: https://doi.org/10.1186/s12859-019-3088-7
+
 # Overview
 
 TEspeX (Transposable Elements SPEcific eXpression) is a tool for the TE expression quantification from Illummina short RNA-seq reads. The rationale of the pipeline is to map the reads against a reference transcriptome composed by i) TE consensus sequences, ii) coding transcripts and iii) non-coding transcripts and to quantify the expression of TEs avoiding counting reads deriving from TE fragments embedded in coding/non-coding non-TE annotated transcripts.
@@ -200,8 +205,9 @@ In the folder 'example' a copy of the files used to perform the TE expression an
     
 # Input files
 * TE consensus sequences in fasta (fa/fa.gz) format (--TE argument). Follow these instructions to generate a proper TE consensus sequences input file (https://github.com/fansalon/TEconsensus)
-* coding transcripts in fasta format (we suggest the 'cdna.fa.gz' fasta file downloaded from ensembl) (--cdna argument)
-* non coding trasncripts in fasta format (we suggest the 'ncrna.fa.gz' fasta file downloaded from ensembl) (--ncrna argument)
+* coding transcripts in fasta format (we suggest the '*pc_transcripts.fa' fasta file downloaded from gencode) (--cdna argument)
+* non coding trasncripts in fasta format (we suggest the '*.lncRNA_transcripts.fa' fasta file downloaded from gencode) (--ncrna argument)
+* please, pay specific attention to the selection of the input files. In gencode, the *transcripts.fa and *.lncRNA_transcripts.fa contain duplicated sequences. TEspeX requires no duplicated sequence headers are found across the 3 input fasta files. To this end, prior to start the analysys, TEspeX will check for duplicated sequence headers across the 3 input fasta files and stop the run if found
 * RNA-seq data in fastq (fq/fq.gz) format. TEspeX expects the full path of the fq/fq.gz files to be written in a plain txt file (1 file per row. If paired-end files, TEspeX expects the fq/fq.gz to be listed in two tab-separated columns - PE1 in column 1, PE2 of the same fq/fq.gz in column 2)
 ```
 # If single-ended
@@ -428,5 +434,12 @@ If you are interested in the development of **the perfect tool** for testing for
 The TEspeX pipeline has been developed by Federico Ansaloni, former PhD student in the Computational Genomics lab (SISSA/ISAS - Trieste - Italy) of prof. Remo Sanges (https://www.sangeslab.eu). \
 Nicolo' Gualandi and Mauro Esposito contributed to the pipeline testing.\
 To report bugs or suggestions please feel free to write to the TEspeX supporting group https://groups.google.com/g/tespex-help
+
+
+# Overview
+If you found TEspeX usefull for your research, please cite:
+
+Ansaloni *et al.*, Bioinformatics, 2022: https://doi.org/10.1093/bioinformatics/btac526<br />
+Ansaloni *et al.*, BMC Bioinformatics, 2019: https://doi.org/10.1186/s12859-019-3088-7
 
 
