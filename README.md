@@ -95,7 +95,7 @@ If paths to zlib lib and include folders are returned, everything should be OK -
 
 Otherwise:
   * ```cd </path/to/miniconda3/>```
-  * ```wget http://zlib.net/zlib-1.2.11.tar.gz```
+  * ```wget https://www.zlib.net/fossils/zlib-1.2.11.tar.gz```
   * ```tar -zxvf zlib-1.2.11.tar.gz```
   * ```cd zlib-1.2.11/```
   * ```./configure --prefix=$PWD/packages```
